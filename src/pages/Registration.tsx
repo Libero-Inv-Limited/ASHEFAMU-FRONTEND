@@ -62,6 +62,21 @@ const Registration: React.FC<RegistrationProps> = () => {
           }}
         />
 
+        {/* USERNAME */}
+        <AuthInput 
+          control={control}
+          name="username"
+          Icon={IoPersonOutline}
+          label="Username"
+          rules={{
+            required: "Username is required",
+            minLength: {
+              value: 3,
+              message: "Username should be at least 3 characters "
+            }
+          }}
+        />
+
         {/* EMAIL */}
         <AuthInput 
           control={control}

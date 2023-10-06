@@ -30,7 +30,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
         <VStack spacing={4}>
           <Image src={mailIcon} maxW={16} objectFit={"contain"} />
           <Heading mt={2} size={"md"}>Enter your email address</Heading>
-          <Text textAlign={"center"} fontSize={"sm"} color={TEXT_GRAY}>A password reset OTP code will be sent to your email to continue the reset process</Text>
+          <Text textAlign={"center"} fontSize={"14px"} color={TEXT_GRAY}>A password reset OTP code will be sent to your email to continue the reset process</Text>
         </VStack>
 
         {/* EMAIL */}

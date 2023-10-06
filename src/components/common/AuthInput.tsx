@@ -34,7 +34,7 @@ const AuthInput: React.FC<AuthInputProps> = ({ label, rules, control, isPassword
           <InputRightElement variant={"link"}
             as={IconButton} h={"full"} w={12} color={isOpen ? "brand.500" : "gray.400"} fontSize={"lg"}
             onClick={onToggle}
-            aria-label='Show password' icon={isOpen ? <ChakraIcon fontSize={"24px"} as={IoEyeOffOutline} /> : <ChakraIcon fontSize={"24px"} as={IoEyeOutline} />}
+            aria-label='Show password' icon={isOpen ? <ChakraIcon fontSize={"20px"} as={IoEyeOffOutline} /> : <ChakraIcon fontSize={"20px"} as={IoEyeOutline} />}
           />
         )}
         <Input h={"40px"} {...field} size="lg" fontSize={"md"} rounded={6} fontFamily={"body"} boxShadow="none !important" _focus={{ borderColor: "brand.500", boxShadow: "none" }} {...rest} type={isPassword ? isOpen ? "text" : "password" : rest.type} />

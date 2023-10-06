@@ -32,12 +32,12 @@ const Login: React.FC<LoginProps> = () => {
         {/* EMAIL */}
         <AuthInput
           control={control}
-          name="email"
-          type="email"
+          name="username"
+          type="text"
           Icon={IoMailOutline}
-          label="Email"
+          label="Username / Email"
           rules={{
-            required: "Email is required"
+            required: "Username or email is required"
           }}
         />
 
