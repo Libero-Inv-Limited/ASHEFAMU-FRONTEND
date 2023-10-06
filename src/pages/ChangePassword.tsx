@@ -22,7 +22,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = () => {
     start()
   }, [])
   const { control, watch } = useForm<ChangePasswordData>({
-    mode: "onTouched",
+    mode: "onSubmit",
   })
   const password = watch("password")
 

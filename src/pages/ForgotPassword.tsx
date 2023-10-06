@@ -1,6 +1,6 @@
 import React from "react"
 import AuthLayout from "../components/layouts/AuthLayout"
-import { Heading, Stack, Text, VStack, Image, FormControl, InputGroup, InputLeftElement, Center, Input, FormErrorMessage } from "@chakra-ui/react"
+import { Heading, Stack, Text, VStack, Image, FormControl, InputGroup, InputLeftElement, Center, Input, FormErrorMessage, HStack, Link, Icon } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { IoMailOutline } from "react-icons/io5"
 import CustomButton from "../components/common/CustomButton"
@@ -8,11 +8,13 @@ import { TEXT_GRAY } from "../utils/color"
 import mailIcon from "../assets/icons/mail.png"
 import { useNavigate } from "react-router-dom"
 import ROUTES from "../utils/routeNames"
+import { Link as ReactLink } from "react-router-dom"
+import {BiArrowBack} from "react-icons/bi"
 
 interface ForgotPasswordProps { }
 const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
   const { trigger, register, getValues, formState: { errors } } = useForm<{ email: string; }>({
-    mode: "onTouched"
+    mode: "onSubmit"
   })
   const navigate = useNavigate()
 
@@ -38,12 +40,18 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
               <IoMailOutline />
             </InputLeftElement>
 
-            <Input {...register("email", { required: "Email is required" })} size="lg" fontSize={"md"} rounded={6} fontFamily={"body"} boxShadow="none !important" _focus={{ borderColor: "brand.500", boxShadow: "none" }}/>
+            <Input h={"40px"} {...register("email", { required: "Email is required" })} size="lg" fontSize={"md"} rounded={6} fontFamily={"body"} boxShadow="none !important" _focus={{ borderColor: "brand.500", boxShadow: "none" }} />
           </InputGroup>
           {Boolean(errors.email) && <FormErrorMessage fontSize={"xs"}>{errors.email?.message}</FormErrorMessage>}
         </FormControl>
 
-        <CustomButton mt={2} onClick={handleContinue} colorScheme="brand">Continue</CustomButton>
+        <CustomButton onClick={handleContinue} colorScheme="brand">Continue</CustomButton>
+        <Link as={ReactLink} to={ROUTES.LOGIN_ROUTE} color={"brand.500"}>
+          <HStack alignItems={"center"} spacing={1}>
+            <Icon as={BiArrowBack} fontSize={"xl"} color={"brand.500"} />
+            <Text fontWeight={"semibold"} color={"brand.500"} fontSize={"14px"}>Back to login</Text>
+          </HStack>
+        </Link>
       </Stack>
     </AuthLayout>
   )

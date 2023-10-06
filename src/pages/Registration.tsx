@@ -13,7 +13,7 @@ import ROUTES from "../utils/routeNames"
 interface RegistrationProps { }
 const Registration: React.FC<RegistrationProps> = () => {
   const { control, watch, trigger, getValues } = useForm({
-    mode: "onTouched"
+    mode: "onSubmit"
   })
   const navigate = useNavigate()
   const password = watch("password")
@@ -30,7 +30,7 @@ const Registration: React.FC<RegistrationProps> = () => {
 
   return (
     <AuthLayout>
-      <Heading fontSize={"1.8rem"} textShadow={["none", "none", "0 5px rgba(0, 0, 0, .1)"]} color={"gray.700"} fontWeight={"semibold"} fontFamily={"rubik"}>Create an account</Heading>
+      <Heading fontSize={"1.8rem"} color={"gray.700"} fontWeight={"semibold"} fontFamily={"rubik"}>Create an account</Heading>
       <Stack mt={8} spacing={4} mb={16}>
         {/* FIRSTNAME */}
         <AuthInput 
@@ -129,9 +129,8 @@ const Registration: React.FC<RegistrationProps> = () => {
             }
           }}
         />
-
-        <CustomButton mt={6} colorScheme="brand" onClick={handleRegister}>Create account</CustomButton>
-        <HStack alignItems={"center"} mt={2} spacing={1}>
+        <CustomButton colorScheme="brand" onClick={handleRegister}>Create account</CustomButton>
+        <HStack alignItems={"center"} spacing={1}>
           <Text fontSize={"sm"} color={TEXT_DARK}>Already have an account?</Text>
           <Link fontSize={"sm"} as={ReactLink} to={ROUTES.LOGIN_ROUTE} fontWeight={"semibold"} color={"brand.500"}>Sign in</Link>
         </HStack>

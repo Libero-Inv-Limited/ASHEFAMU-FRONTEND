@@ -18,7 +18,7 @@ const VerifyEmailAndPhone: React.FC<VerifyEmailAndPhoneProps> = () => {
     return { phone, email }
   })
   const { control, trigger } = useForm<{ emailOTP: string; phoneOTP: string; }>({
-    mode: "onTouched"
+    mode: "onSubmit"
   })
   const navigate = useNavigate()
 
@@ -68,7 +68,7 @@ const VerifyEmailAndPhone: React.FC<VerifyEmailAndPhoneProps> = () => {
           />
         </Stack>
 
-        <CustomButton mt={2} onClick={handleVerify} colorScheme="brand">Verify Contact</CustomButton>
+        <CustomButton onClick={handleVerify} colorScheme="brand">Verify Contact</CustomButton>
       </Stack>
     </AuthLayout>
   )
