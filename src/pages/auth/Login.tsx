@@ -1,14 +1,14 @@
 import React from "react"
-import AuthLayout from "../components/layouts/AuthLayout"
+import AuthLayout from "../../components/layouts/AuthLayout"
 import { HStack, Heading, Link, Spacer, Stack, Text } from "@chakra-ui/react"
 import { Link as ReactLink, useNavigate } from "react-router-dom"
-import AuthInput from "../components/common/AuthInput"
+import AuthInput from "../../components/common/AuthInput"
 import { useForm } from "react-hook-form"
 import { IoMailOutline } from "react-icons/io5"
 import { MdOutlineLock } from "react-icons/md"
-import CustomButton from "../components/common/CustomButton"
-import { TEXT_DARK } from "../utils/color"
-import ROUTES from "../utils/routeNames"
+import CustomButton from "../../components/common/CustomButton"
+import { TEXT_DARK } from "../../utils/color"
+import ROUTES from "../../utils/routeNames"
 
 interface LoginProps { }
 const Login: React.FC<LoginProps> = () => {

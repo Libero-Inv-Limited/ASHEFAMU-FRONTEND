@@ -1,12 +1,12 @@
 import React, { useEffect } from "react"
 import { Heading, Stack, Text, VStack, Image, Center, Container, HStack, Button } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
-import CustomButton from "../components/common/CustomButton"
-import { TEXT_GRAY } from "../utils/color"
-import lockIcon from "../assets/icons/lock.png"
-import Header from "../components/common/Header"
-import PasswordInput from "../components/common/PasswordInput"
-import useTimer from "../hooks/useTimer"
+import CustomButton from "../../components/common/CustomButton"
+import { TEXT_GRAY } from "../../utils/color"
+import lockIcon from "../../assets/icons/lock.png"
+import Header from "../../components/common/Header"
+import PasswordInput from "../../components/common/PasswordInput"
+import useTimer from "../../hooks/useTimer"
 
 type ChangePasswordData = {
   password: string,

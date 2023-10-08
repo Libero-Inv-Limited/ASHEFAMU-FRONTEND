@@ -1,9 +1,9 @@
 import React from "react"
 import { useParams } from "react-router-dom"
-import SuccessLayout from "../components/layouts/SuccessLayout"
-import CustomButton from "../components/common/CustomButton"
+import SuccessLayout from "../../components/layouts/SuccessLayout"
+import CustomButton from "../../components/common/CustomButton"
 import { Text } from "@chakra-ui/react"
-import { TEXT_GRAY } from "../utils/color"
+import { TEXT_GRAY } from "../../utils/color"
 import { IoReturnDownBackOutline } from "react-icons/io5"
 
 interface SuccessPageProps { }

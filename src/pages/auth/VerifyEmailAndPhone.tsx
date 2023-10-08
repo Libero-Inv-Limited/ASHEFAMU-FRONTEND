@@ -1,15 +1,15 @@
 import React, { useState } from "react"
-import AuthLayout from "../components/layouts/AuthLayout"
+import AuthLayout from "../../components/layouts/AuthLayout"
 import { Heading, Stack, Text, VStack, Image } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
-import CustomButton from "../components/common/CustomButton"
-import { TEXT_GRAY } from "../utils/color"
-import mailIcon from "../assets/icons/mail.png"
-import { hideString } from "../utils/helpers"
-import AuthInput from "../components/common/AuthInput"
-import TimerComponent from "../components/common/TimerComponent"
+import CustomButton from "../../components/common/CustomButton"
+import { TEXT_GRAY } from "../../utils/color"
+import mailIcon from "../../assets/icons/mail.png"
+import { hideString } from "../../utils/helpers"
+import AuthInput from "../../components/common/AuthInput"
+import TimerComponent from "../../components/common/TimerComponent"
 import { useNavigate } from "react-router-dom"
-import ROUTES from "../utils/routeNames"
+import ROUTES from "../../utils/routeNames"
 
 interface VerifyEmailAndPhoneProps { }
 const VerifyEmailAndPhone: React.FC<VerifyEmailAndPhoneProps> = () => {
