@@ -1,9 +1,18 @@
-import React from "react"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect, useRef } from "react"
 import DashboardLayout from "../../components/layouts/DashboardLayout"
-import { HStack, Icon, IconProps, SimpleGrid, Stack, Text } from "@chakra-ui/react"
-import { DARK, TEXT_DARK_GRAY } from "../../utils/color"
+import { Center, HStack, Icon, IconButton, IconProps, Stack, Text, Wrap, WrapItem } from "@chakra-ui/react"
+import { DARK, TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color"
 import CustomButton from "../../components/common/CustomButton"
 import DashboardCard from "../../components/common/DashboardCard"
+import { dashboardCards } from "../../utils/data"
+import DashboardQRCard from "../../components/common/DashboardQRCard"
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import NotificationCard from "../../components/common/NotificationCard"
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 
 interface CustomizeIconProps extends IconProps { }
 const CustomizeIcon = (props: CustomizeIconProps) => (
@@ -17,16 +26,84 @@ const CustomizeIcon = (props: CustomizeIconProps) => (
 
 interface DashboardProps { }
 const Dashboard: React.FC<DashboardProps> = () => {
+  const swiper = useRef(null)
+
+  useEffect(() => {
+    console.log("SWIPER", swiper)
+  }, [swiper])
   return (
     <DashboardLayout>
-      <Stack>
-        <HStack justifyContent={"space-between"}>
-          <Text alignSelf={"flex-end"} noOfLines={1} fontSize={"0.875rem"} fontWeight={500} color={TEXT_DARK_GRAY}>Registered on 02 Sept 2023</Text>
-          <CustomButton fontSize={"0.875rem"} borderColor={"#C9CFD8"} _hover={{ borderColor: "brand.500", color:"brand.500"  }} color={DARK} bg={"white"} variant={"outline"} leftIcon={<CustomizeIcon fontSize={"1.5rem"} />}>Customize</CustomButton>
+      <Stack spacing={10} pb={10}>
+        <Stack spacing={4}>
+          <HStack justifyContent={"space-between"}>
+            <Text alignSelf={"flex-end"} noOfLines={1} fontSize={"0.875rem"} fontWeight={500} color={TEXT_DARK_GRAY}>Registered on 02 Sept 2023</Text>
+            <CustomButton fontSize={"0.875rem"} p={4} borderColor={"#C9CFD8"} _hover={{ borderColor: "brand.500", color: "brand.500" }} color={DARK} bg={"white"} variant={"outline"} leftIcon={<CustomizeIcon fontSize={"1.5rem"} />}>
+              <Text display={["none", "none", "block"]}>Customize</Text>
+            </CustomButton>
+          </HStack>
+
+          {/* CARDS SECTION */}
+          <Wrap spacing={3}>
+            {dashboardCards.map((cardItem, index) => (
+              <WrapItem key={`dash-card-${cardItem.name}-${index}`} flex={1}>
+                <DashboardCard {...cardItem} />
+              </WrapItem>
+            ))}
+            <WrapItem flex={1}>
+              <DashboardQRCard />
+            </WrapItem>
+          </Wrap>
+        </Stack>
+
+        {/* NOTIFICATIONS */}
+        <HStack p={4} pr={2} bg={"white"} alignItems={"stretch"} rounded={"md"}>
+          <Swiper
+            ref={swiper}
+            slidesPerView={1}
+            spaceBetween={20}
+            style={{ width: "100%" }}
+            breakpoints={{
+              640: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+              992: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 20,
+              },
+            }}
+          >
+            {["error", "info", "error", "info", "warning", "warning", "info", "warning"].map((type) => (
+              <SwiperSlide key={type}>
+                <NotificationCard type={type as any} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          <Center>
+            <Stack spacing={6}>
+              <IconButton 
+                size={"xs"}
+                onClick={() => (swiper as any).current.swiper.slideNext()}
+                aria-label="next"
+                variant={"ghost"}
+                icon={<Icon fontSize={"2xl"} color={TEXT_GRAY} as={IoIosArrowForward} />}
+              />
+
+              <IconButton 
+                size={"xs"}
+                onClick={() => (swiper as any).current.swiper.slidePrev()}
+                aria-label="prev"
+                variant={"ghost"}
+                icon={<Icon fontSize={"2xl"} color={TEXT_GRAY} as={IoIosArrowBack} />}
+              />
+            </Stack>
+          </Center>
         </HStack>
-        <SimpleGrid columns={[1, 2, 3, 4]}>
-          <DashboardCard />
-        </SimpleGrid>
       </Stack>
     </DashboardLayout>
   )

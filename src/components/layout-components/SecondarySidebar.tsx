@@ -19,7 +19,7 @@ const SecondarySidebar: React.FC<SecondarySidebarProps> = () => {
           { decodeSlug((param as any).name!) }
         </Flex>
         <Stack mt={2}>
-          { secondarySidebarContents.map(sidebarContents => <SecondarySidebarItem {...sidebarContents} />) }
+          { secondarySidebarContents.map((sidebarContents, index) => <SecondarySidebarItem key={`secondary-sidebar-${sidebarContents.name}-${index}`} {...sidebarContents} />) }
         </Stack>
       </Stack>
     </Collapse>

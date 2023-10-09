@@ -21,7 +21,7 @@ const FacilityLists: React.FC<FacilityListsProps> = () => {
           </InputGroup>
         </Flex>
         <Stack mt={2}>
-          {facilities.map(sidebarContents => <FacilityListItem {...sidebarContents} />)}
+          {facilities.map((sidebarContents, index) => <FacilityListItem key={`facility-${sidebarContents.name}-${index}`} {...sidebarContents} />)}
         </Stack>
       </Stack>
     </Collapse>

@@ -46,32 +46,32 @@ export const sidebarContents = [
 export const secondarySidebarContents = [
   {
     name: "dashboard",
-    link: "/facilities",
+    link: "/facilities/:name",
     icon: RiApps2Line,
   },
   {
     name: "documents",
-    link: "/facilities/documents",
+    link: "/facilities/:name/documents",
     icon: FaRegFileAlt,
   },
   {
     name: "members",
-    link: "/facilities/members",
+    link: "/facilities/:name/members",
     icon: FaUsers,
   },
   {
     name: "profile",
-    link: "/facilities/profile",
+    link: "/facilities/:name/profile",
     icon: FaRegUser,
   },
   {
     name: "analytics",
-    link: "/facilities/analytics",
+    link: "/facilities/:name/analytics",
     icon: BiBarChartSquare,
   },
   {
     name: "notifications",
-    link: "/notifications",
+    link: "/facilities/:name/notifications",
     icon: IoMdNotificationsOutline,
   },
 ]
@@ -111,5 +111,46 @@ export const facilities = [
       category: "Body",
       status: "Active",
     }
+  },
+]
+
+export const dashboardCards = [
+  {
+    name: "Penalties/fines",
+    amount: 6,
+    isGreen: true
+  },
+  {
+    name: "Penalties/fines",
+    amount: 6,
+    isGreen: true
+  },
+  {
+    name: "No of accredited facilities",
+    amount: 6,
+    isGreen: true
+  },
+  {
+    name: "No of accredited facilities",
+    amount: 6,
+    isGreen: true
+  },
+  {
+    name: "Renewal deadline",
+    amount: "2d 03h",
+    isGreen: false,
+    isActive: true
+  },
+  {
+    name: "Renewal deadline",
+    amount: "2d 03h",
+    isGreen: false,
+    isActive: false
+  },
+  {
+    name: "Renewal deadline",
+    amount: "2d 03h",
+    isGreen: false,
+    isActive: true
   },
 ]

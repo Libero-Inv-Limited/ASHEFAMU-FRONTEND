@@ -5,13 +5,15 @@ import { Flex } from "@chakra-ui/react"
 import { useParams } from "react-router-dom"
 import FacilityLists from "./FacilityLists"
 
-interface SideNavigationProps {}
-const SideNavigation: React.FC<SideNavigationProps> = () => {
+interface SideNavigationProps {
+  onClose?: () => void;
+}
+const SideNavigation: React.FC<SideNavigationProps> = ({ onClose }) => {
   const param = useParams()
   const isFacility = !!param.name
   return (
     <Flex h={"full"}>
-      <Sidebar />
+      <Sidebar onClose={onClose} />
       {isFacility ? <SecondarySidebar /> : <FacilityLists />}
     </Flex>
   )

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Container, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react"
+import { Box, Container, Flex, Stack, useDisclosure, useMediaQuery } from "@chakra-ui/react"
 import React, { ReactNode } from "react"
 import DashboardHeader from "../layout-components/DashboardHeader";
 import SideNavigation from "../layout-components/SideNavigation";
@@ -11,15 +11,17 @@ interface DashboardLayoutProps {
 }
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const data = useTheme()
-  const [isMobile] = useMediaQuery(`(max-width: ${(data as any).sizes?.container?.sm})`)
+  const [isMobile] = useMediaQuery(`(max-width: ${(data as any).sizes?.container?.lg})`)
   const { isOpen, onClose, onOpen } = useDisclosure()
   return (
-    <Flex h={"100vh"}>
+    <Flex h={"100vh"} overflowX={"hidden"}>
       {isMobile ? <MobileSideBar isOpen={isOpen} onClose={onClose} /> : <SideNavigation />}
-      <Box flex={1} bg={"#F4F7F4"} >
+      <Stack flex={1} bg={"#F4F7F4"} w={"full"} height={"full"} pos={"relative"}>
         <DashboardHeader onOpen={onOpen} />
-        <Container pt={10} maxW={"container.xl"}>{children}</Container>
-      </Box>
+        <Box flex={1} h={`calc(100vh-93px)`} w={"full"} overflowY={"auto"} >
+          <Container pt={10} w={"full"} maxW={"container.xl"}>{children}</Container>
+        </Box>
+      </Stack>
     </Flex>
   )
 }

@@ -15,7 +15,7 @@ const MobileSideBar: React.FC<MobileSideBarProps> = ({ isOpen, onClose }) => {
     >
       <DrawerOverlay />
       <DrawerContent minW={"fit-content"} maxW={"fit-content"}>
-       <SideNavigation />
+       <SideNavigation onClose={onClose} />
       </DrawerContent>
     </Drawer>
   )

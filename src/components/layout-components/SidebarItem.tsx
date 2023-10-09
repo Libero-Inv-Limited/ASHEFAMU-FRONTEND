@@ -1,7 +1,7 @@
 import { Link, Center, Icon, Popover, PopoverTrigger, Portal, PopoverContent, PopoverBody } from "@chakra-ui/react"
 import React from "react"
 import { IconType } from "react-icons";
-import { Link as ReactLink, useLocation } from "react-router-dom"
+import { Link as ReactLink, useLocation, useParams } from "react-router-dom"
 import { LIGHT_GREEN, TEXT_GRAY } from "../../utils/color";
 
 interface SidebarItemProps {
@@ -12,7 +12,11 @@ interface SidebarItemProps {
 }
 const SidebarItem: React.FC<SidebarItemProps> = (item) => {
   const { pathname } = useLocation()
-  const isActive = pathname.toLowerCase().includes(item.name.toLowerCase())
+  const param = useParams()
+  const isActive = param?.name ? 
+    pathname.split(param.name)[0].toLowerCase().includes(item.name) : 
+    pathname.includes(item.name.toLowerCase()) ||
+    item.name.toLowerCase() === "dashboard" && pathname === "/"
 
   return (
     <Popover placement="right" strategy="absolute" trigger="hover">
