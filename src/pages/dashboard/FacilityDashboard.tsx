@@ -13,12 +13,12 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import NotificationCard from "../../components/common/NotificationCard"
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
-import { useAppContext } from "../../contexts/AppContext"
+// import { useAppContext } from "../../contexts/AppContext"
 
 interface FacilityDashboardProps { }
 const FacilityDashboard: React.FC<FacilityDashboardProps> = () => {
   const swiper = useRef(null)
-  const { containerWidth } = useAppContext()
+  // const { containerWidth } = useAppContext()
 
   useEffect(() => {
     console.log("SWIPER", swiper)
@@ -48,7 +48,7 @@ const FacilityDashboard: React.FC<FacilityDashboardProps> = () => {
         </Stack>
 
         {/* NOTIFICATIONS */}
-        <HStack p={4} pr={2} bg={"white"} alignItems={"stretch"} rounded={"md"} maxW={containerWidth}>
+        <HStack p={4} pr={2} bg={"white"} alignItems={"stretch"} rounded={"md"}>
           <Swiper
             ref={swiper}
             slidesPerView={1}
@@ -62,7 +62,7 @@ const FacilityDashboard: React.FC<FacilityDashboardProps> = () => {
                 slidesPerView: 2,
                 spaceBetween: 20,
               },
-              1440: {
+              1024: {
                 slidesPerView: 3,
                 spaceBetween: 20,
               },
@@ -77,7 +77,7 @@ const FacilityDashboard: React.FC<FacilityDashboardProps> = () => {
 
           <Center>
             <Stack spacing={6}>
-              <IconButton
+              <IconButton 
                 size={"xs"}
                 onClick={() => (swiper as any).current.swiper.slideNext()}
                 aria-label="next"
@@ -85,7 +85,7 @@ const FacilityDashboard: React.FC<FacilityDashboardProps> = () => {
                 icon={<Icon fontSize={"2xl"} color={TEXT_GRAY} as={IoIosArrowForward} />}
               />
 
-              <IconButton
+              <IconButton 
                 size={"xs"}
                 onClick={() => (swiper as any).current.swiper.slidePrev()}
                 aria-label="prev"
