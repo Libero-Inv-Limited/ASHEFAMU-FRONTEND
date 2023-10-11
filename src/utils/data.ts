@@ -80,6 +80,7 @@ export const secondarySidebarContents = [
 // SECONDARY SIDEBAR CONTENTS
 export const facilities = [
   {
+    id: 1,
     name: "Dummy Facility",
     date: "12/12/2013",
     category: "Clinic",
@@ -91,6 +92,7 @@ export const facilities = [
     }
   },
   {
+    id: 2,
     name: "Jace Health",
     date: "12/08/2022",
     category: "Body",
@@ -102,6 +104,7 @@ export const facilities = [
     }
   },
   {
+    id: 3,
     name: "Ace Firm",
     date: "12/08/2022",
     category: "Body",

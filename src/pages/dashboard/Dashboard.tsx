@@ -33,7 +33,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
   }, [swiper])
   return (
     <DashboardLayout>
-      <Stack spacing={10} pb={10}>
+      <Stack spacing={10} pb={10} w={"full"}>
         <Stack spacing={4}>
           <HStack justifyContent={"space-between"}>
             <Text alignSelf={"flex-end"} noOfLines={1} fontSize={"0.875rem"} fontWeight={500} color={TEXT_DARK_GRAY}>Registered on 02 Sept 2023</Text>
@@ -61,7 +61,6 @@ const Dashboard: React.FC<DashboardProps> = () => {
             ref={swiper}
             slidesPerView={1}
             spaceBetween={20}
-            style={{ width: "100%" }}
             breakpoints={{
               640: {
                 slidesPerView: 1,
@@ -78,7 +77,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
             }}
           >
             {["error", "info", "error", "info", "warning", "warning", "info", "warning"].map((type) => (
-              <SwiperSlide key={type}>
+              <SwiperSlide key={type} style={{ width: "fit-content" }}>
                 <NotificationCard type={type as any} />
               </SwiperSlide>
             ))}

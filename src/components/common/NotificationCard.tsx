@@ -25,7 +25,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ type }) => {
 
   const color = colorMap[type]
   return (
-    <Stack p={6} bg={color.bgColor} w={"full"} minW={"340px"} minH={130} rounded={"sm"}>
+    <Stack p={6} bg={color.bgColor} w={"full"} minW={"250px"} minH={130} rounded={"sm"}>
       <HStack alignItems={"flex-start"}>
         <Stack flex={1} spacing={1}>
           <Text fontWeight={"600"} color={DARK} fontSize={"lg"}>Sender</Text>

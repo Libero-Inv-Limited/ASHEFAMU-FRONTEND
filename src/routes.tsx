@@ -6,7 +6,7 @@ import Registration from "./pages/auth/Registration";
 import SuccessPage from "./pages/auth/SuccessPage";
 import VerifyEmailAndPhone from "./pages/auth/VerifyEmailAndPhone";
 import Dashboard from "./pages/dashboard/Dashboard";
-import Facilities from "./pages/dashboard/FacilityDashboard";
+import Facilities from "./pages/dashboard/Facilities";
 import FacilityDashboard from "./pages/dashboard/FacilityDashboard";
 import FacilityDocument from "./pages/dashboard/FacilityDocument";
 import FacilityMember from "./pages/dashboard/FacilityMember";
@@ -59,16 +59,12 @@ export default [
   // FACILITIES ROUTES
   {
     path: "/facilities",
+    exact: true,
     element: <Facilities />,
     name: "Facilities"
   },
   {
-    path: "/facilities/:name",
-    element: <FacilityDashboard />,
-    name: "Facilities"
-  },
-  {
-    path: "/facilities/:name",
+    path: "/facilities/:name/",
     element: <FacilityDashboard />,
     name: "Facilities"
   },
