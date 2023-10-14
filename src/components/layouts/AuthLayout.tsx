@@ -13,7 +13,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, smaller }) => {
       <Box display={["none", "none", "block"]} gridColumn={[0, 0, "span 2"]} bg={"brand.800"} bgImage={`url(${authBg})`} bgSize={"cover"}></Box>
       <Box gridColumn={"span 3"} overflowY={"auto"}>
         <Header />
-        <Container pt={16} ml={["auto", "auto", 16]} maxW={smaller ? "sm": "lg"}>{ children }</Container>
+        <Container pt={16} ml={["auto", "auto", "auto", 16]} maxW={smaller ? "sm": "lg"}>{ children }</Container>
       </Box>
     </SimpleGrid>
   )

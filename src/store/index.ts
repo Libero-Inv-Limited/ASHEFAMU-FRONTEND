@@ -1,15 +1,18 @@
 /// <reference types="redux-persist/types" /> 
 
-import accountReducer from "./slice/accountSlice"
 import { Action, ThunkAction, combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import storage from "redux-persist/lib/storage";
 import persistReducer from "redux-persist/es/persistReducer";
 import persistStore from "redux-persist/es/persistStore";
 
+import createFacilityReducer from "./slice/createFacility";
+import accountReducer from "./slice/accountSlice"
+
 const persistConfig = { key: "root", storage };
 const appReducer = combineReducers({
-  accountStore: accountReducer
+  accountStore: accountReducer,
+  createFacilityStore: createFacilityReducer,
 });
 const persistedReducer = persistReducer(persistConfig, appReducer);
 

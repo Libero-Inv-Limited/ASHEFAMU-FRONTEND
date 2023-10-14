@@ -1,6 +1,7 @@
-import { Box, Container, HStack, Heading, Link } from "@chakra-ui/react"
+import { Box, Container, HStack, Image, Link } from "@chakra-ui/react"
 import React from "react"
 import { Link as ReactLink } from "react-router-dom"
+import logo from "../../assets/logo.png"
 
 interface HeaderProps { }
 const Header: React.FC<HeaderProps> = () => {
@@ -9,7 +10,7 @@ const Header: React.FC<HeaderProps> = () => {
       <Container maxW={"container.lg"}>
         <HStack justifyContent={"flex-end"}>
           <Link as={ReactLink} to={"/"} _hover={{ textDecor: "none" }}>
-            <Heading size={"md"}>ASHEFAMU</Heading>
+            <Image src={logo} maxW={180} objectFit={"contain"} />
           </Link>
         </HStack>
       </Container>

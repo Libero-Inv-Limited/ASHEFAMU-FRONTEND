@@ -26,8 +26,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       {isMobile ? <MobileSideBar isOpen={isOpen} onClose={onClose} /> : <SideNavigation />}
       <Stack flex={1} bg={"#F4F7F4"} w={"full"} height={"full"} pos={"relative"}>
         <DashboardHeader onOpen={onOpen} />
-        <Box flex={1} h={`calc(100vh-93px)`} w={"full"} overflowY={"auto"} >
-          <Container ref={container} maxW={"container.xl"} pt={10} w={"full"}>{children}</Container>
+        <Box flex={1} h={`calc(100vh-93px)`} w={"full"} overflowX={"hidden"} overflowY={"auto"} >
+          <Container ref={container} maxW={"container.xl"} py={10} w={"full"}>{children}</Container>
         </Box>
       </Stack>
     </Flex>

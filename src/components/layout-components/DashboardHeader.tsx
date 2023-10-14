@@ -4,6 +4,7 @@ import BreadCrumbs from "./BreadCrumbs"
 import { DARK, LIGHT_GRAY, TEXT_DARK_GRAY } from "../../utils/color"
 import { useLocation, useParams } from "react-router-dom"
 import { HiOutlineMenuAlt1 } from "react-icons/hi"
+import { decodeSlug } from "../../utils/helpers"
 
 interface DashboardHeaderProps { 
   onOpen: () => void;
@@ -21,7 +22,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onOpen }) => {
           {
             isFacility ?
               <Box h={"4px"} bgColor={DARK} mt={3} w={"25px"} /> :
-              <Heading noOfLines={1} fontSize={["xl", "xl", "2xl"]} color={DARK} textTransform={"uppercase"}>{name}</Heading>
+              <Heading noOfLines={1} fontSize={["xl", "xl", "2xl"]} color={DARK} textTransform={"uppercase"}>{decodeSlug(name)}</Heading>
           }
           <BreadCrumbs />
         </Stack>

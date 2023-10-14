@@ -29,6 +29,11 @@ const CustomTable: React.FC<CustomTableProps> = (props) => {
             borderTopRightRadius: 4,
             borderTopLeftRadius: 4,
           },
+        },
+        headCells: {
+          style: {
+            textTransform: "uppercase"
+          }
         }
       }}
       subHeader

@@ -16,8 +16,19 @@ import FacilityNotification from "./pages/dashboard/FacilityNotification";
 import Payments from "./pages/dashboard/Payments";
 import Analytics from "./pages/dashboard/Analytics";
 import Notifications from "./pages/dashboard/Notifications";
+import CreateFacility from "./pages/facility-registration/CreateFacility";
+import CreateIntent from "./pages/facility-registration/CreateIntent";
+import FacilityForm from "./pages/facility-registration/FacilityForm";
+import Landing from "./pages/home/Landing";
 
 export default [
+  // HOME PAGE
+  {
+    path: "/",
+    element: <Landing />,
+    name: "Landing"
+  },
+  
   // AUTH PAGES
   {
     path: "/register",
@@ -51,66 +62,83 @@ export default [
   },
   // DASHBOARD
   {
-    path: "/",
+    path: "/dashboard",
     element: <Dashboard />,
     name: "Dashboard"
   },
 
   // FACILITIES ROUTES
   {
-    path: "/facilities",
+    path: "/dashboard/facilities",
     exact: true,
     element: <Facilities />,
     name: "Facilities"
   },
   {
-    path: "/facilities/:name/",
+    path: "/dashboard/facilities/:name/",
     element: <FacilityDashboard />,
-    name: "Facilities"
+    name: "Facilities Dashboard"
   },
   {
-    path: "/facilities/:name/documents",
+    path: "/dashboard/facilities/:name/documents",
     element: <FacilityDocument />,
-    name: "Facilities"
+    name: "Facilities Document"
   },
   {
-    path: "/facilities/:name/members",
+    path: "/dashboard/facilities/:name/members",
     element: <FacilityMember />,
-    name: "Facilities"
+    name: "Facilities Member"
   },
   {
-    path: "/facilities/:name/profile",
+    path: "/dashboard/facilities/:name/profile",
     element: <FacilityProfile />,
     name: "Facilities"
   },
   {
-    path: "/facilities/:name/analytics",
+    path: "/dashboard/facilities/:name/analytics",
     element: <FacilityAnalytics />,
-    name: "Facilities"
+    name: "Facilities Analytics"
   },
   {
-    path: "/facilities/:name/notifications",
+    path: "/dashboard/facilities/:name/notifications",
     element: <FacilityNotification />,
-    name: "Facilities"
+    name: "Facilities Notification"
+  },
+
+  // FACILITY FORMS
+  {
+    path: "/dashboard/facilities/register-facility",
+    element: <CreateFacility />,
+    name: "Create Facility"
+  },
+  {
+    path: "/dashboard/facilities/register-facility/intent",
+    element: <CreateIntent />,
+    name: "Submit Intent"
+  },
+  {
+    path: "/dashboard/facilities/register-facility/fill-form",
+    element: <FacilityForm />,
+    name: "Facility Form"
   },
 
   // PAYMENT
   {
-    path: "/payments",
+    path: "/dashboard/payments",
     element: <Payments />,
     name: "Payments"
   },
 
   // ANALYTICS
   {
-    path: "/analytics",
+    path: "/dashboard/analytics",
     element: <Analytics />,
     name: "Analytics"
   },
 
   // Notifications
   {
-    path: "/notifications",
+    path: "/dashboard/notifications",
     element: <Notifications />,
     name: "Notifications"
   },

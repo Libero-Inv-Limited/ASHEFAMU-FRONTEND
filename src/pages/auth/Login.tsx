@@ -1,6 +1,6 @@
 import React from "react"
 import AuthLayout from "../../components/layouts/AuthLayout"
-import { HStack, Heading, Link, Spacer, Stack, Text } from "@chakra-ui/react"
+import { HStack, Heading, Link, Stack, Text } from "@chakra-ui/react"
 import { Link as ReactLink, useNavigate } from "react-router-dom"
 import AuthInput from "../../components/common/AuthInput"
 import { useForm } from "react-hook-form"
@@ -54,13 +54,13 @@ const Login: React.FC<LoginProps> = () => {
           }}
         />
 
-        <CustomButton colorScheme="brand" onClick={handleLogin}>Sign in</CustomButton>
-        <HStack alignItems={"center"} spacing={1}>
+        <CustomButton colorScheme="brand"  onClick={handleLogin}>Sign in</CustomButton>
+        <HStack alignItems={"center"} justifyContent={"space-between"} spacing={1} flexDir={['column', 'column', 'row']}>
           <HStack alignItems={"center"} spacing={1}>
             <Text fontSize={"sm"} color={TEXT_DARK}>Don't have an account?</Text>
             <Link fontSize={"sm"} as={ReactLink} to={ROUTES.REGISTER_ROUTE} fontWeight={"semibold"} color={"brand.500"}>Create one</Link>
           </HStack>
-          <Spacer />
+
           <Link fontSize={"sm"} as={ReactLink} to={ROUTES.FORGOT_PASSWORD_ROUTE} fontWeight={"semibold"} color={"brand.500"}>Forgot Password?</Link>
         </HStack>
       </Stack>

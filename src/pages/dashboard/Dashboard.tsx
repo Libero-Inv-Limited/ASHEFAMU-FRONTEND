@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from "react"
 import DashboardLayout from "../../components/layouts/DashboardLayout"
 import { Center, HStack, Icon, IconButton, IconProps, Stack, Text, Wrap, WrapItem } from "@chakra-ui/react"
-import { DARK, TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color"
+import { DARK, GRAY_BORDER, TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color"
 import CustomButton from "../../components/common/CustomButton"
 import DashboardCard from "../../components/common/DashboardCard"
 import { dashboardCards } from "../../utils/data"
@@ -37,7 +37,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
         <Stack spacing={4}>
           <HStack justifyContent={"space-between"}>
             <Text alignSelf={"flex-end"} noOfLines={1} fontSize={"0.875rem"} fontWeight={500} color={TEXT_DARK_GRAY}>Registered on 02 Sept 2023</Text>
-            <CustomButton fontSize={"0.875rem"} p={4} borderColor={"#C9CFD8"} _hover={{ borderColor: "brand.500", color: "brand.500" }} color={DARK} bg={"white"} variant={"outline"} leftIcon={<CustomizeIcon fontSize={"1.5rem"} />}>
+            <CustomButton fontSize={"0.875rem"} p={4} borderColor={GRAY_BORDER} _hover={{ borderColor: "brand.500", color: "brand.500" }} color={DARK} bg={"white"} variant={"outline"} leftIcon={<CustomizeIcon fontSize={"1.5rem"} />}>
               <Text display={["none", "none", "block"]}>Customize</Text>
             </CustomButton>
           </HStack>
