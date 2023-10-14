@@ -4,11 +4,14 @@ import { TEXT_DARK_GRAY } from "../../utils/color"
 import hero from "../../assets/hero.png"
 import CustomButton from "../common/CustomButton"
 import { FiChevronRight } from "react-icons/fi"
+import { useNavigate } from "react-router-dom"
+import ROUTES from "../../utils/routeNames"
 
 
 
 interface HeroProps { }
 const Hero: React.FC<HeroProps> = () => {
+  const navigate = useNavigate()
   return (
     <Box as={"section"} py={[20, 24, 28, 32]}>
       <Grid as={Container} maxW={"container.xl"} gridTemplateColumns={"repeat(12, 1fr)"}>
@@ -17,7 +20,7 @@ const Hero: React.FC<HeroProps> = () => {
           <Stack ml={[0, 0, 0, 12]} spacing={6}>
             <Heading fontFamily={"rubik"} fontSize={["2rem", "2.5rem"]} fontWeight={"700"}>Register all <Text as={"span"} color={"brand.500"}>Health Facilities</Text> in Anambra State</Heading>
             <Text fontSize={["md", "lg"]} color={TEXT_DARK_GRAY}>Welcome to the Anambra State Health Facilities Accreditation and Management Unit (ASHEFAMU) Digital Platform, your gateway to a healthier Anambra State!</Text>
-            <CustomButton h={["45px", 50]} size={"md"} w={"fit-content"} px={10} fontWeight={"600"} rightIcon={<Icon fontSize={"lg"} as={FiChevronRight} />}>Get started</CustomButton>
+            <CustomButton onClick={() => navigate(ROUTES.REGISTER_ROUTE)} h={["45px", 50]} size={"md"} w={"fit-content"} px={10} fontWeight={"600"} rightIcon={<Icon fontSize={"lg"} as={FiChevronRight} />}>Get started</CustomButton>
           </Stack>
         </GridItem>
 

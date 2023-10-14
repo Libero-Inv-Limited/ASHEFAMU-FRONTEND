@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react"
 import AuthLayout from "../../components/layouts/AuthLayout"
-import { HStack, Heading, Link, Stack, Text } from "@chakra-ui/react"
+import { HStack, Heading, Link, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react"
 import { Link as ReactLink, useNavigate } from "react-router-dom"
 import AuthInput from "../../components/common/AuthInput"
 import { useForm } from "react-hook-form"
@@ -9,23 +10,61 @@ import {MdOutlinePhoneEnabled, MdOutlineLock} from "react-icons/md"
 import CustomButton from "../../components/common/CustomButton"
 import { TEXT_DARK } from "../../utils/color"
 import ROUTES from "../../utils/routeNames"
+import { executeRegistration } from "../../apis/auth"
+import useWaitingText from "../../hooks/useWaitingText"
 
 interface RegistrationProps { }
 const Registration: React.FC<RegistrationProps> = () => {
-  const { control, watch, trigger, getValues } = useForm({
+  const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validaing", "Submitting", "Finalizing"])
+  const { control, watch, trigger, getValues } = useForm<RegisterData>({
     mode: "onSubmit"
   })
   const navigate = useNavigate()
   const password = watch("password")
-
+  const toast = useToast({
+    position: "bottom",
+    isClosable: true,
+    variant: "subtle",
+  })
 
   const handleRegister = async () => {
-    if(! await trigger()) return
-    sessionStorage.setItem("REG_USER", JSON.stringify({ 
-      email: getValues("email"), 
-      phone: getValues("mobile") 
-    }))
-    navigate(ROUTES.VERIFY_CONTACT_ROUTE(getValues("email")))
+    try {
+      if(! await trigger()) return
+      // MAKE REQUEST
+      openLoading()
+      startLoadingText()
+      const payload: RegisterData = {
+        ...getValues()
+      }
+      delete (payload as any)['confirm']
+
+      const result = await executeRegistration(payload)
+      if(result.status === "error") throw new Error(result.message)
+
+      // SHOW SUCCESS TOAST
+      toast({
+        status: "success",
+        title: result.message
+      })
+
+      sessionStorage.setItem("REG_USER", JSON.stringify({ 
+        email: getValues("email"), 
+        phone: getValues("mobile") 
+      }))
+      navigate(ROUTES.VERIFY_CONTACT_ROUTE(getValues("email")))
+    }
+    catch(error: any) {
+      console.log("ERROR:", error.message)
+      toast({
+        status: "error",
+        title: error.message
+      })
+    }
+    finally {
+      closeLoading()
+      stopLoadingText()
+    }
   }
 
   return (
@@ -144,7 +183,7 @@ const Registration: React.FC<RegistrationProps> = () => {
             }
           }}
         />
-        <CustomButton colorScheme="brand" onClick={handleRegister}>Create account</CustomButton>
+        <CustomButton isLoading={isLoading} loadingText={loadingText} colorScheme="brand" onClick={handleRegister}>Create account</CustomButton>
         <HStack alignItems={"center"} spacing={1}>
           <Text fontSize={"sm"} color={TEXT_DARK}>Already have an account?</Text>
           <Link fontSize={"sm"} as={ReactLink} to={ROUTES.LOGIN_ROUTE} fontWeight={"semibold"} color={"brand.500"}>Sign in</Link>

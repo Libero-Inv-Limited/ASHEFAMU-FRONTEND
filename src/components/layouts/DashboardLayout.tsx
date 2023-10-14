@@ -6,6 +6,9 @@ import SideNavigation from "../layout-components/SideNavigation";
 import { useTheme } from "@emotion/react";
 import MobileSideBar from "../layout-components/MobileSideBar";
 import { useAppContext } from "../../contexts/AppContext";
+import { useAppSelector } from "../../store/hook";
+import { Navigate } from "react-router-dom";
+import ROUTES from "../../utils/routeNames";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -16,11 +19,16 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const container = useRef(null)
   const { setContainerWidth } = useAppContext()
+
   useEffect(() => {
     if(!container.current) return
     console.dir(container.current)
     setContainerWidth((container.current as any).clientWidth)
   }, [container])
+
+  const user = useAppSelector(state => state.accountStore.user)
+  if(!user) return <Navigate replace to={ROUTES.LOGIN_ROUTE} />
+
   return (
     <Flex h={"100vh"} w={"full"} overflowX={"hidden"}>
       {isMobile ? <MobileSideBar isOpen={isOpen} onClose={onClose} /> : <SideNavigation />}

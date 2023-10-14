@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 type FacilityData = {
   id: number;
   cac_number: string;
@@ -34,6 +35,12 @@ type FacilityData = {
   };
 };
 
+type TokenData = {
+  token: string;
+  type: string;
+  expires_at: string;
+};
+
 type InvoiceData = {
   facility_id: number;
   amount: string;
@@ -47,9 +54,37 @@ type InvoiceData = {
 };
 
 type Proprietor = {
-  facility_id?: number,
-  name: string,
-  address: string,
-  occupation: string,
-  nationality: string
+  facility_id?: number;
+  name: string;
+  address: string;
+  occupation: string;
+  nationality: string;
+};
+
+type UserData = {
+  permissions: any[],
+  user: {
+    email: string,
+    firstname: string,
+    id: number,
+    last_login: string,
+    lastname: string,
+    mobile_number: string,
+    role: number,
+  },
+  userRole: {
+    id: number,
+    role: number,
+    roleDetails: {
+      name: string,
+      id: number,
+    }[],
+    user_id: number,
+  },
+  verifiedContacts: {
+    email_verification_status: string,
+    id: number,
+    mobile_verification_status: string,
+    user_id: number,
+  },
 };

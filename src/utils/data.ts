@@ -24,25 +24,25 @@ export const sidebarContents = [
   },
   {
     name: "facilities",
-    link: "/facilities",
+    link: "/dashboard/facilities",
     icon: BsHospital,
     activeIcon: BsHospitalFill,
   },
   {
     name: "payments",
-    link: "/payments",
+    link: "/dashboard/payments",
     icon: IoCardOutline,
     activeIcon: IoCard,
   },
   {
     name: "analytics",
-    link: "/analytics",
+    link: "/dashboard/analytics",
     icon: BiBarChartSquare,
     activeIcon: BiSolidBarChartSquare,
   },
   {
     name: "notifications",
-    link: "/notifications",
+    link: "/dashboard/notifications",
     icon: IoMdNotificationsOutline,
     activeIcon: IoMdNotifications,
   },
@@ -52,32 +52,32 @@ export const sidebarContents = [
 export const secondarySidebarContents = [
   {
     name: "dashboard",
-    link: "/facilities/:name",
+    link: "/dashboard/facilities/:name",
     icon: RiApps2Line,
   },
   {
     name: "documents",
-    link: "/facilities/:name/documents",
+    link: "/dashboard/facilities/:name/documents",
     icon: FaRegFileAlt,
   },
   {
     name: "members",
-    link: "/facilities/:name/members",
+    link: "/dashboard/facilities/:name/members",
     icon: FaUsers,
   },
   {
     name: "profile",
-    link: "/facilities/:name/profile",
+    link: "/dashboard/facilities/:name/profile",
     icon: FaRegUser,
   },
   {
     name: "analytics",
-    link: "/facilities/:name/analytics",
+    link: "/dashboard/facilities/:name/analytics",
     icon: BiBarChartSquare,
   },
   {
     name: "notifications",
-    link: "/facilities/:name/notifications",
+    link: "/dashboard/facilities/:name/notifications",
     icon: IoMdNotificationsOutline,
   },
 ];

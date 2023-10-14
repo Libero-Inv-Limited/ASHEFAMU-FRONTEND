@@ -11,17 +11,17 @@ interface IuseTimer {
 } 
 
 const useTimer = (time: number, isMinute?: boolean): IuseTimer => {
-  const [currentTime, setCurrentTime] = useState<TimeState>( () => {
-    const minutes = isMinute ? time / 60 : 0
-    const seconds = isMinute ? 59 : time
+  const [currentTime, setCurrentTime] = useState<TimeState>(() => {
+    const minutes = isMinute ? time : 0
+    const seconds = isMinute ? 0 : time
     return { seconds, minutes }
   })
   const [isDone, setIsDone] = useState<boolean>(false)
   const [intervalId, setIntervalId] = useState<number | null>(null)
 
   const start = useCallback(() => {
-    let minutes = isMinute ? time / 60 : 0
-    let seconds = isMinute ? 59 : time
+    let minutes = isMinute ? time : 0
+    let seconds = isMinute ? 0 : time
 
     setIntervalId(setInterval(() => {
       if(minutes <= 0 && seconds <= 0) {

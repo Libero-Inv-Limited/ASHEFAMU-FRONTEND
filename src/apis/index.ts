@@ -1,9 +1,10 @@
-const BASE_URL = ""
+const BASE_URL = "https://ashefamu.onrender.com"
 
 
 // AUTH ENDPOINTS
 export const REGISTER_ENDPOINT = BASE_URL + "/auth/sign-up"
 export const LOGIN_ENDPOINT = BASE_URL + "/auth/sign-in"
+export const PROFILE_ENDPOINT = BASE_URL + "/profile"
 export const LOGOUT_ENDPOINT = BASE_URL + "/auth/logout"
 export const VERIFY_CONTACTS_ENDPOINT = BASE_URL + "/verify-contacts"
 export const FORGOT_PASSWORD_ENDPOINT = BASE_URL + "/forgot-password"

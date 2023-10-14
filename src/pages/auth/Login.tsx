@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react"
 import AuthLayout from "../../components/layouts/AuthLayout"
-import { HStack, Heading, Link, Stack, Text } from "@chakra-ui/react"
+import { HStack, Heading, Link, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react"
 import { Link as ReactLink, useNavigate } from "react-router-dom"
 import AuthInput from "../../components/common/AuthInput"
 import { useForm } from "react-hook-form"
@@ -9,18 +10,70 @@ import { MdOutlineLock } from "react-icons/md"
 import CustomButton from "../../components/common/CustomButton"
 import { TEXT_DARK } from "../../utils/color"
 import ROUTES from "../../utils/routeNames"
+import useWaitingText from "../../hooks/useWaitingText"
+import { executeGetProfile, executeLogin } from "../../apis/auth"
+import { useAppDispatch } from "../../store/hook"
+import { populateToken, populateUser } from "../../store/slice/accountSlice"
 
 interface LoginProps { }
 const Login: React.FC<LoginProps> = () => {
-  const { control, trigger } = useForm({
+  const { control, trigger, getValues } = useForm<LoginData>({
     mode: "onSubmit"
   })
   const navigate = useNavigate()
-
+  const dispatch = useAppDispatch()
+  const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Submitting", "Searching user", "Matching cred..."])
+  const toast = useToast({
+    position: "bottom",
+    isClosable: true,
+    variant: "subtle",
+  })
 
   const handleLogin = async () => {
-    if(! await trigger()) return
-    navigate(ROUTES.SUCCESS_ROUTE("login"))
+    try {
+      if(! await trigger()) return
+      // MAKE REQUEST
+      openLoading()
+      startLoadingText()
+      const payload: LoginData = {
+        ...getValues()
+      }
+      delete (payload as any)['confirm']
+
+      const result = await executeLogin(payload)
+      if(result.status === "error") throw new Error(result.message)
+
+      // GET TOKEN
+      const tokenData = result.data.token
+      dispatch(populateToken(tokenData))
+
+      // GET USER DATA
+      const userData = await executeGetProfile(tokenData.token)
+      if(userData.status === "error") throw new Error("Failed to get account information, Try again")
+
+      console.log("DATA:", userData)
+      dispatch(populateUser(userData.data))
+
+      // SHOW SUCCESS TOAST
+      toast({
+        status: "success",
+        title: result.message
+      })
+
+      navigate(ROUTES.SUCCESS_ROUTE("login"))
+    }
+    catch(error: any) {
+      console.log("ERROR:", error.message)
+      toast({
+        status: "error",
+        title: error.message
+      })
+    }
+    finally {
+      closeLoading()
+      stopLoadingText()
+    }
   }
 
   return (
@@ -54,7 +107,7 @@ const Login: React.FC<LoginProps> = () => {
           }}
         />
 
-        <CustomButton colorScheme="brand"  onClick={handleLogin}>Sign in</CustomButton>
+        <CustomButton colorScheme="brand" isLoading={isLoading} loadingText={loadingText} onClick={handleLogin}>Sign in</CustomButton>
         <HStack alignItems={"center"} justifyContent={"space-between"} spacing={1} flexDir={['column', 'column', 'row']}>
           <HStack alignItems={"center"} spacing={1}>
             <Text fontSize={"sm"} color={TEXT_DARK}>Don't have an account?</Text>

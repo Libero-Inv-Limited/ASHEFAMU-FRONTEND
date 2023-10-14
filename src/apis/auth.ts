@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { log } from '../utils/helpers';
-import { CHANGE_PASSWORD_ENDPOINT, FORGOT_PASSWORD_ENDPOINT, LOGIN_ENDPOINT, REGISTER_ENDPOINT, RESEND_OTP_ENDPOINT, VERIFY_CONTACTS_ENDPOINT } from './index';
+import { CHANGE_PASSWORD_ENDPOINT, FORGOT_PASSWORD_ENDPOINT, LOGIN_ENDPOINT, PROFILE_ENDPOINT, REGISTER_ENDPOINT, RESEND_OTP_ENDPOINT, VERIFY_CONTACTS_ENDPOINT } from './index';
 
 
 
@@ -10,11 +10,11 @@ export const executeRegistration = async (data: RegisterData): Promise<ResponseD
       method: "POST",
       body: JSON.stringify(data),
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       }
     }
     const request = await fetch(REGISTER_ENDPOINT, options)
-    const response = await request.json() satisfies ResponseDataType
+    const response = await request.json() as ResponseDataType
     return response
   }
   catch(error: any) {
@@ -94,6 +94,25 @@ export const executeResendOTP = async (email: string): Promise<ResponseDataType>
       }
     }
     const request = await fetch(RESEND_OTP_ENDPOINT, options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("RESEND_OTP [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}
+
+
+export const executeGetProfile = async (token: string): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    }
+    const request = await fetch(PROFILE_ENDPOINT, options)
     const response = await request.json() satisfies ResponseDataType
     return response
   }

@@ -5,6 +5,7 @@ import { DARK, LIGHT_GRAY, TEXT_DARK_GRAY } from "../../utils/color"
 import { useLocation, useParams } from "react-router-dom"
 import { HiOutlineMenuAlt1 } from "react-icons/hi"
 import { decodeSlug } from "../../utils/helpers"
+import { useAppSelector } from "../../store/hook"
 
 interface DashboardHeaderProps { 
   onOpen: () => void;
@@ -13,6 +14,9 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onOpen }) => {
   const { pathname } = useLocation()
   const isFacility = useParams()?.['name']
   const name = pathname.split("/").reverse()[0] || "Dashboard"
+  const user = useAppSelector(state => state.accountStore.user)
+
+  const fullname = user!.user.firstname + " " + user!.user.lastname
 
   return (
     <Box py={3} bg={"white"} minH={"90px"} borderBottom={"1px solid " + LIGHT_GRAY}>
@@ -31,10 +35,10 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onOpen }) => {
 
         <HStack alignItems={"center"}>
           <Stack spacing={0} textAlign={"right"} display={["none", "none", "flex", 'flex']}>
-            <Heading size="sm" color={DARK} fontFamily={"heading"}>Chiaza Okoli</Heading>
-            <Text color={TEXT_DARK_GRAY}>smart.okolichiaza@gmail.com</Text>
+            <Heading size="sm" color={DARK} fontFamily={"heading"}>{fullname}</Heading>
+            <Text color={TEXT_DARK_GRAY}>{user?.user.email}</Text>
           </Stack>
-          <Avatar size={["md", "md", "lg"]} name="Chiaza Okoli" />
+          <Avatar size={["md", "md", "lg"]} name={fullname} />
         </HStack>
       </HStack>
     </Box>
