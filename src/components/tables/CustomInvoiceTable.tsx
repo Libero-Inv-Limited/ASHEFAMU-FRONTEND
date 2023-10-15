@@ -4,10 +4,8 @@ import { Center, HStack, Icon, Input, InputGroup, InputLeftElement, Select, Spac
 import React from "react"
 import { AiOutlineSearch } from "react-icons/ai";
 import { TEXT_DARK, TEXT_GRAY } from "../../utils/color";
-import CustomButton from "../common/CustomButton";
-import { BsPlus } from "react-icons/bs";
 import CustomTable from "./CustomTable";
-import { facilities, invoiceData } from "../../utils/data";
+import { invoiceData } from "../../utils/data";
 
 
 const invoice = {
