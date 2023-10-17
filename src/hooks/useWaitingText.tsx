@@ -28,7 +28,7 @@ const useWaitingText = (texts: string[], timeInterval: number = 5000): IuseWaiti
   }
 
   useEffect(() => {
-    return () => stopLoadingText()
+    stopLoadingText()
   }, [])
 
   return{ loadingText, startLoadingText, stopLoadingText }

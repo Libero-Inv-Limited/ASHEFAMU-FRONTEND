@@ -1,14 +1,18 @@
-import React, { useEffect } from "react"
-import { Heading, Stack, Text, VStack, Image, Center, Container, HStack, Button } from "@chakra-ui/react"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Heading, Stack, Text, VStack, Image, Center, Container, HStack, useDisclosure, useToast } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import CustomButton from "../../components/common/CustomButton"
 import { TEXT_GRAY } from "../../utils/color"
 import lockIcon from "../../assets/icons/lock.png"
 import Header from "../../components/common/Header"
 import PasswordInput from "../../components/common/PasswordInput"
-import useTimer from "../../hooks/useTimer"
+import { useNavigate, useParams } from "react-router-dom"
+import useWaitingText from "../../hooks/useWaitingText"
+import TimerComponent from "../../components/common/TimerComponent"
+import { executeChangePassword, executeResendOTP } from "../../apis/auth"
+import ROUTES from "../../utils/routeNames"
 
-type ChangePasswordData = {
+type ChangeData = {
   password: string,
   confirmPassword: string,
   token: string
@@ -17,14 +21,86 @@ type ChangePasswordData = {
 
 interface ChangePasswordProps { }
 const ChangePassword: React.FC<ChangePasswordProps> = () => {
-  const { currentTime, start, isDone } = useTimer(5)
-  useEffect(() => {
-    start()
-  }, [])
-  const { control, watch } = useForm<ChangePasswordData>({
+  const { control, watch, trigger, getValues } = useForm<ChangeData>({
     mode: "onSubmit",
   })
+  const param = useParams()
+
   const password = watch("password")
+  const { isOpen: isResending, onOpen: openResending, onClose: closeResending } = useDisclosure()
+  const navigate = useNavigate()
+  const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validaing", "Submitting", "Updating credentials", "Finalizing"], 2000)
+  const toast = useToast({
+    position: "bottom",
+    isClosable: true,
+    variant: "subtle",
+  })
+
+
+  const handleResetPassword = async () => {
+    try {
+      if(! await trigger()) return
+      // MAKE REQUEST
+      openLoading()
+      startLoadingText()
+
+      const payload: ChangePasswordData = {
+        email: param.email!,
+        password: getValues("password"),
+        token: getValues("token"),
+      } 
+      const result = await executeChangePassword(payload)
+      if(result.status === "error") throw new Error(result.message)
+
+      // SHOW SUCCESS TOAST
+      toast({
+        status: "success",
+        title: result.message
+      })
+      navigate(ROUTES.LOGIN_ROUTE, { replace: true })
+    }
+    catch(error: any) {
+      console.log("ERROR:", error.message)
+      toast({
+        status: "error",
+        title: error.message
+      })
+    }
+    finally {
+      closeLoading()
+      stopLoadingText()
+    }
+  }
+
+
+  const handleResend = async (start: any) => {
+    try {
+      openResending()
+
+      const result = await executeResendOTP(param.email!)
+      if (result.status === "error") throw new Error(result.message)
+
+      // SHOW SUCCESS TOAST
+      toast({
+        status: "success",
+        title: result.message
+      })
+      start()
+    }
+    catch (error: any) {
+      console.log("ERROR:", error.message)
+      toast({
+        status: "error",
+        title: "Failed to send OTP, Try again later"
+      })
+    }
+    finally {
+      closeResending()
+    }
+  }
+
+
 
   return (
     <Stack h={"100vh"}>
@@ -40,7 +116,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = () => {
 
             <Stack>
               {/* PASSWORD */}
-              <PasswordInput 
+              <PasswordInput
                 name="password"
                 placeholder="New password"
                 control={control}
@@ -54,7 +130,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = () => {
               />
 
               {/* CONFIRM PASSWORD */}
-              <PasswordInput 
+              <PasswordInput
                 name="confirmPassword"
                 control={control}
                 placeholder="Confirm password"
@@ -67,7 +143,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = () => {
               />
 
               {/* Token */}
-              <PasswordInput 
+              <PasswordInput
                 name="token"
                 control={control}
                 placeholder="Token"
@@ -77,12 +153,20 @@ const ChangePassword: React.FC<ChangePasswordProps> = () => {
               />
 
               <HStack mt={2} alignItems={"center"}>
-                <Button size={"sm"} colorScheme="blue" isDisabled={!isDone} variant={"link"}>Resend code</Button>
-                <Text color={TEXT_GRAY} fontSize={"sm"}>in {`${(currentTime.minutes).toString().padStart(2, "0")}:${currentTime.seconds.toString().padStart(2, "0")}`}</Text>
+                <TimerComponent
+                  time={3}
+                  isMinute
+                  isLoading={isResending}
+                  onClick={handleResend}
+                />
               </HStack>
             </Stack>
 
-            <CustomButton mt={2} colorScheme="brand">Reset password</CustomButton>
+            <CustomButton 
+              onClick={handleResetPassword} 
+              isLoading={isLoading} mt={2} 
+              loadingText={loadingText}
+              colorScheme="brand">Reset password</CustomButton>
           </Stack>
         </Container>
       </Center>

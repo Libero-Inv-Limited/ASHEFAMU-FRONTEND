@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react"
 import AuthLayout from "../../components/layouts/AuthLayout"
-import { Heading, Stack, Text, VStack, Image, FormControl, InputGroup, InputLeftElement, Center, Input, FormErrorMessage, HStack, Link, Icon } from "@chakra-ui/react"
+import { Heading, Stack, Text, VStack, Image, FormControl, InputGroup, InputLeftElement, Center, Input, FormErrorMessage, HStack, Link, Icon, useDisclosure, useToast } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { IoMailOutline } from "react-icons/io5"
 import CustomButton from "../../components/common/CustomButton"
@@ -10,6 +11,8 @@ import { useNavigate } from "react-router-dom"
 import ROUTES from "../../utils/routeNames"
 import { Link as ReactLink } from "react-router-dom"
 import {BiArrowBack} from "react-icons/bi"
+import useWaitingText from "../../hooks/useWaitingText"
+import { executeForgotPassword } from "../../apis/auth"
 
 interface ForgotPasswordProps { }
 const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
@@ -17,12 +20,45 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
     mode: "onSubmit"
   })
   const navigate = useNavigate()
+  const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
+
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validaing", "Submitting", "Finalizing"])
+  const toast = useToast({
+    position: "bottom",
+    isClosable: true,
+    variant: "subtle",
+  })
 
   const handleContinue = async () => {
-    // CALL FUNCTION HERE
-    if (!await trigger()) return
-    navigate(ROUTES.CHANGE_PASSWORD_ROUTE(getValues("email")))
+    try {
+      if(! await trigger()) return
+      // MAKE REQUEST
+      openLoading()
+      startLoadingText()
+      const result = await executeForgotPassword(getValues("email"))
+      if(result.status === "error") throw new Error(result.message)
+
+      // SHOW SUCCESS TOAST
+      toast({
+        status: "success",
+        title: result.message
+      })
+      navigate(ROUTES.CHANGE_PASSWORD_ROUTE(getValues("email")))
+    }
+    catch(error: any) {
+      console.log("ERROR:", error.message)
+      toast({
+        status: "error",
+        title: error.message
+      })
+    }
+    finally {
+      closeLoading()
+      stopLoadingText()
+    }
   }
+
+
 
   return (
     <AuthLayout smaller>
@@ -45,7 +81,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
           {Boolean(errors.email) && <FormErrorMessage fontSize={"xs"}>{errors.email?.message}</FormErrorMessage>}
         </FormControl>
 
-        <CustomButton onClick={handleContinue} colorScheme="brand">Continue</CustomButton>
+        <CustomButton isLoading={isLoading} loadingText={loadingText} onClick={handleContinue} colorScheme="brand">Continue</CustomButton>
         <Link as={ReactLink} to={ROUTES.LOGIN_ROUTE} color={"brand.500"}>
           <HStack alignItems={"center"} spacing={1}>
             <Icon as={BiArrowBack} fontSize={"xl"} color={"brand.500"} />
