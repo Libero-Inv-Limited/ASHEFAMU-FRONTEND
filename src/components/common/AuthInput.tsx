@@ -26,6 +26,7 @@ interface AuthInputProps extends InputProps {
 
 const AuthInput: React.FC<AuthInputProps> = ({ label, iconProp, rules, labelStyles, selectProps, control, data, isPassword, isSelect, name, Icon, ...rest }) => {
   const theme = useTheme()
+  const { fontSize } = rest
 
   const { field, fieldState: { error } } = useController({
     defaultValue: "",
@@ -42,6 +43,7 @@ const AuthInput: React.FC<AuthInputProps> = ({ label, iconProp, rules, labelStyl
       alignItems: "center",
       padding: theme.sizes['1'],
       borderRadius: "6px",
+      fontSize: fontSize === "sm" ? ".9rem" : "1rem",
       border: `1px solid ${theme.colors.gray['200']}`,
       ":hover": {
         borderColor: theme.colors.gray['300']

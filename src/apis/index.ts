@@ -37,3 +37,8 @@ export const TOGGLE_CARD_VISIBILITY_ENDPOINT = BASE_URL + "/toggle-card-visibili
 
 // FACILITY-CATEGORY ENDPOINTS
 export const CREATE_CATEGORY_ENDPOINT = BASE_URL + "/create-facility-category"
+
+
+// FACILITY DATA ENDPOINTS
+export const REQUIRED_DOCS_ENDPOINT = BASE_URL + "/all-required-doc"
+

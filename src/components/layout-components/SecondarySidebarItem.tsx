@@ -12,7 +12,7 @@ interface SecondarySidebarItemProps {
 const SecondarySidebarItem: React.FC<SecondarySidebarItemProps> = (prop) => {
   const { pathname } = useLocation()
   const param = useParams()
-  const isActive = (prop.name.toLowerCase() === "dashboard" && pathname.endsWith(param.name!)) || pathname.toLowerCase().includes(prop.name.toLowerCase())
+  const isActive = (prop.name.toLowerCase() === "dashboard" && pathname.endsWith(param.name!)) || (prop.name.toLowerCase() !== "dashboard" && pathname.toLowerCase().includes(prop.name.toLowerCase()))
   return (
     <HStack bg={isActive ? LIGHT_BLUE : ""} rounded={"sm"} to={prop.link.replace(":name", param.name!)} _hover={{ bg: !isActive && "gray.100" }} color={isActive ? "primary.500" : TEXT_DARK_GRAY } spacing={2} as={Link} alignItems={"center"} p={3} h={"40px"}>
       <Icon as={prop.icon} color={"inherit"} fontSize={"24px"} />

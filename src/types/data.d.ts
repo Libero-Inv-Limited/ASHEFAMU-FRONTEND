@@ -62,29 +62,44 @@ type Proprietor = {
 };
 
 type UserData = {
-  permissions: any[],
+  permissions: any[];
   user: {
-    email: string,
-    firstname: string,
-    id: number,
-    last_login: string,
-    lastname: string,
-    mobile_number: string,
-    role: number,
-  },
+    email: string;
+    firstname: string;
+    id: number;
+    last_login: string;
+    lastname: string;
+    mobile_number: string;
+    role: number;
+  };
   userRole: {
-    id: number,
-    role: number,
+    id: number;
+    role: number;
     roleDetails: {
-      name: string,
-      id: number,
-    }[],
-    user_id: number,
-  },
+      name: string;
+      id: number;
+    }[];
+    user_id: number;
+  };
   verifiedContacts: {
-    email_verification_status: string,
-    id: number,
-    mobile_verification_status: string,
-    user_id: number,
-  },
+    email_verification_status: string;
+    id: number;
+    mobile_verification_status: string;
+    user_id: number;
+  };
+};
+
+type RequireDocumentType = {
+  id: number;
+  name: string;
+  compulsory: boolean;
+  status: string;
+  updated_at: string;
+  created_at: string;
+};
+
+type SectorCategoryType = {
+  id: number;
+  name: string;
+  description: string;
 };

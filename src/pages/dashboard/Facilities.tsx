@@ -43,8 +43,6 @@ const Facilities: React.FC<FacilitiesProps> = () => {
           )}
         </Box>
       </Stack>
-
-
     </DashboardLayout>
   )
 }

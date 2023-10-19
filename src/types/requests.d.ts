@@ -57,8 +57,32 @@ type AddFacilityData = {
 
 type UpdateFacilityStatus = {
   facility_id: number;
-  status: "pending" | "approved" | "rejected",
+  status: "pending" | "approved" | "rejected";
   reason: string;
+};
+
+type ServiceData = {
+  facility_id: number;
+  number_of_couches: number;
+  number_of_observation_beds: number;
+  number_of_admission_beds: number;
+  waterSources: { id: number; water_source: string }[];
+  powerSources: { id: number; power_source: string }[];
+  wasteDisposalMethods: any[];
+  protectiveItems: any[];
+};
+
+type MedicalProfessional = {
+  facility_id: number;
+  fullname: string;
+  nationality: string;
+  address: string;
+  qualification: string;
+  institution: string;
+  registration_number: string;
+  year_of_qualification: number;
+  year_of_registration: number;
+  approving_authority: string;
 };
 
 type ResponseDataType = {

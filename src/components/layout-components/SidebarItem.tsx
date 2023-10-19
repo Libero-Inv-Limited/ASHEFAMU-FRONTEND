@@ -15,7 +15,7 @@ const SidebarItem: React.FC<SidebarItemProps> = (item) => {
   const param = useParams()
   const isActive = param?.name ? 
     pathname.split(param.name)[0].toLowerCase().includes(item.name) : 
-    pathname.includes(item.name.toLowerCase()) ||
+    pathname.toLowerCase().split("/").reverse()[0] === item.name.toLowerCase() ||
     item.name.toLowerCase() === "dashboard" && pathname === "/"
 
   return (

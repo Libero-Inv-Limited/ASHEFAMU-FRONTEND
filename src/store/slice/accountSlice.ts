@@ -4,11 +4,11 @@ import { createSlice } from '@reduxjs/toolkit';
 
 type InitialStateType = {
   user: UserData | null,
-  tokenStore?: TokenData
+  tokenStore: TokenData | null
 }
 const initialState:InitialStateType = {
   user: null,
-  tokenStore: undefined
+  tokenStore: null
 };
 
 
@@ -16,6 +16,10 @@ const accountSlice = createSlice({
   name: 'account',
   initialState,
   reducers:{
+    clearAccount: (state) => {
+      state.tokenStore = null
+      state.user = null
+    },
     populateUser: (state, action) => {
       state.user = action.payload
     },
@@ -26,5 +30,5 @@ const accountSlice = createSlice({
 })
 
 
-export const { populateUser, populateToken } = accountSlice.actions;
+export const { populateUser, populateToken, clearAccount } = accountSlice.actions;
 export default accountSlice.reducer;

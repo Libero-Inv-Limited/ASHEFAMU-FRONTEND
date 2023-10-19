@@ -1,9 +1,9 @@
-import React from "react"
+import React, { useEffect } from "react"
 import DashboardLayout from "../../components/layouts/DashboardLayout"
-import { Center, Checkbox, Circle, FormControl, FormLabel, HStack, Heading, Icon, List, ListIcon, ListItem, Stack, Text } from "@chakra-ui/react"
+import { Center, Checkbox, Circle, FormControl, FormLabel, HStack, Heading, Icon, List, ListIcon, ListItem, Stack, Text, useDisclosure } from "@chakra-ui/react"
 import { DARK, LIGHT_GRAY, LIGHT_GREEN, RED, TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color"
 import { BsArrowRight, BsDot } from "react-icons/bs"
-import { compulsoryDocs, condinateGuideline, warnings } from "../../utils/data"
+import { condinateGuideline, warnings } from "../../utils/data"
 import { FaRegFileAlt } from "react-icons/fa"
 import { LuInfo } from "react-icons/lu"
 import { PiBookOpenTextLight } from "react-icons/pi"
@@ -11,17 +11,39 @@ import CustomButton from "../../components/common/CustomButton"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import ROUTES from "../../utils/routeNames"
+import { executeGetRequiredDocs } from "../../apis/facilityData"
+import { useAppDispatch, useAppSelector } from "../../store/hook"
+import { populateRequiredDocs } from "../../store/slice/facilityData"
+import Loader from "../../components/common/loader/Loader"
 
 interface CreateFacilityProps { }
 const CreateFacility: React.FC<CreateFacilityProps> = () => {
   const { register, formState: { errors }, watch } = useForm<{ accept: boolean; }>({ mode: "onChange" })
   const isChecked = watch("accept")
   const navigate = useNavigate()
+  const token = useAppSelector(state => state.accountStore.tokenStore?.token)
+  const requiredDocs = useAppSelector(state => state.facilityDataStore.requiredDocs)
+  const dispatch = useAppDispatch()
+  const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
+
+  const handleFetchData = async () => {
+    openLoading()
+    const [docsResult] = await Promise.all([executeGetRequiredDocs(token!)])
+    if (docsResult.status === "success") dispatch(populateRequiredDocs(docsResult.data))
+    closeLoading()
+  }
+
+  // TODO GET ALL FACILITY DATA
+  useEffect(() => {
+    if (requiredDocs.length) return
+    handleFetchData()
+  }, [])
+
+  // TODO CREATE STATE TO STORE IT
   return (
     <DashboardLayout>
       <Stack p={8} spacing={8} bg={"white"} rounded={"md"} mb={10}>
         <Heading textTransform={"uppercase"} pb={6} borderBottom={`1px solid ${LIGHT_GREEN}`} color={"#444B5A"} fontWeight={"700"} fontSize={"xl"}>Guide to registering a medical facility on ASHEFAMU Platform</Heading>
-
 
         <Stack spacing={3}>
           <Heading color={"#146BD1"} fontSize={"xl"}>Obtain GPS co-ordinates</Heading>
@@ -40,12 +62,16 @@ const CreateFacility: React.FC<CreateFacilityProps> = () => {
           <Heading color={"#146BD1"} fontSize={"xl"}>Compulsory Documents</Heading>
           <Text color={"#444B5A"} fontWeight={"600"} fontSize={"sm"}>You are required to scan and upload the following documents as they’ll be required for upload during the registration process. <br />They must be in PDF format and not more than 200KB in size to be accepted for upload.</Text>
           <Stack mt={2}>
-            {compulsoryDocs.map((doc, index) => (
-              <HStack py={4} maxW={600} px={2} rounded={"md"} bg={"#F4F7F4"} key={`doc-${index}`}>
-                <Icon as={FaRegFileAlt} color={RED} fontSize={"lg"} />
-                <Text fontSize={"sm"} color={DARK} fontWeight={"500"}>{doc}</Text>
-              </HStack>
-            ))}
+            {
+              isLoading ? <Loader /> :
+                requiredDocs.map((doc, index) => (
+                  <HStack py={4} maxW={600} px={2} rounded={"md"} bg={"#F4F7F4"} key={`doc-${index}`}>
+                    <Icon as={FaRegFileAlt} color={RED} fontSize={"lg"} />
+                    <Text fontSize={"sm"} color={DARK} fontWeight={"500"}>{doc.name}</Text>
+                  </HStack>
+                ))
+            }
+
           </Stack>
         </Stack>
 

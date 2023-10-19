@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FormControl, FormErrorMessage, FormLabel, Heading, Icon, Input, InputGroup, InputRightElement, Stack } from "@chakra-ui/react"
-import React, { ChangeEvent, useRef } from "react"
+import { Heading, Icon, Stack } from "@chakra-ui/react"
+import React from "react"
 import DashboardLayout from "../../components/layouts/DashboardLayout"
-import { DARK, LIGHT_GREEN, TEXT_DARK } from "../../utils/color"
+import { DARK, LIGHT_GREEN } from "../../utils/color"
 import AuthInput from "../../components/common/AuthInput"
 import { useForm } from "react-hook-form"
 import CustomButton from "../../components/common/CustomButton"
@@ -13,6 +13,7 @@ import { useAppSelector } from "../../store/hook"
 import { facilityCategories, sectorCategories } from "../../utils/data"
 import { useNavigate } from "react-router-dom"
 import ROUTES from "../../utils/routeNames"
+import UploadInput from "../../components/common/UploadInput"
 
 type IntentType = {
   facility_name: string,
@@ -23,9 +24,7 @@ type IntentType = {
 
 interface CreateIntentProps { }
 const CreateIntent: React.FC<CreateIntentProps> = () => {
-  const { control, register, formState: { errors }, getValues, trigger, setValue, setError, watch } = useForm<IntentType>({ mode: "onSubmit" })
-  const fileRef = useRef<HTMLInputElement>(null)
-  const letterOfIntent = watch("letter_of_intent")
+  const { control, register, formState: { errors }, getValues, trigger, watch, setValue, setError } = useForm<IntentType>({ mode: "onSubmit" })
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const currentStep = useAppSelector(state => state.createFacilityStore.currentStep)
@@ -45,8 +44,9 @@ const CreateIntent: React.FC<CreateIntentProps> = () => {
     // MOVE TO NEXT
     navigate(ROUTES.FILL_FORM_ROUTE)
   }
+
   return (
-    <DashboardLayout>
+    <DashboardLayout> 
       <Stack rounded={"md"} p={9} spacing={6} bg={"white"} maxW={647}>
         <Heading textTransform={"uppercase"} pb={6} borderBottom={`1px solid ${LIGHT_GREEN}`} color={"#444B5A"} fontWeight={"700"} fontSize={"xl"}>submit your letter of intent</Heading>
 
@@ -101,22 +101,15 @@ const CreateIntent: React.FC<CreateIntentProps> = () => {
           />
 
 
-          <FormControl isInvalid={Boolean(errors.letter_of_intent)}>
-            <FormLabel color={TEXT_DARK} fontSize={"14px"} mb={1} fontWeight={"500"} fontFamily={"body"}>Upload letter of intent</FormLabel>
-            <input onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              const file = e.target.files?.[0]
-              if(!file) return setError("letter_of_intent", {
-                message: "Please select a file",
-                type: "required"
-              })
-              setValue("letter_of_intent", file)
-            }} type="file" hidden ref={fileRef} accept=".pdf, .docx" />
-            <InputGroup alignItems={"center"}>
-              <Input readOnly value={letterOfIntent?.name} color={DARK} h={"40px"} size="lg" fontSize={"md"} rounded={6} fontFamily={"body"} boxShadow="none !important" _focus={{ borderColor: "brand.500", boxShadow: "none" }} {...register("letter_of_intent", { required: "Please upload a document" })}/>
-              <InputRightElement as={CustomButton} minW={"fit-content"} onClick={() => fileRef.current?.click()} colorScheme={"primary"}> Choose file </InputRightElement>
-            </InputGroup>
-            {Boolean(errors.letter_of_intent) && <FormErrorMessage fontSize={"xs"}>{(errors.letter_of_intent as any).message!}</FormErrorMessage>}
-          </FormControl>
+            <UploadInput 
+              label="Upload letter of intent"
+              name="letter_of_intent"
+              register={register}
+              setError={setError as any}
+              setValue={setValue as any}
+              error={errors?.letter_of_intent?.message}
+              value={watch('letter_of_intent')}
+            />
 
         </Stack>
         <CustomButton onClick={handleSave} alignSelf={"flex-end"} w={"fit-content"} rightIcon={<Icon fontSize={"xl"} as={HiArrowNarrowRight} />}>Save & proceed</CustomButton>
