@@ -9,17 +9,19 @@ import persistStore from "redux-persist/es/persistStore";
 import createFacilityReducer from "./slice/createFacility";
 import accountReducer from "./slice/accountSlice"
 import facilityDataReducer from "./slice/facilityData";
+import dataReducer from "./slice/dataSlice";
 
 
 const appReducer = combineReducers({
   accountStore: accountReducer,
   createFacilityStore: createFacilityReducer,
-  facilityDataStore: facilityDataReducer
+  facilityDataStore: facilityDataReducer,
+  dataStore: dataReducer,
 });
 const persistedReducer = persistReducer({ 
   key: "root", 
   storage,
-  whitelist: ['accountStore']
+  whitelist: ['accountStore', 'createFacilityStore']
 }, appReducer);
 
 const store = configureStore({

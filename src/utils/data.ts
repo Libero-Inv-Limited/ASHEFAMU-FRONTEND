@@ -14,6 +14,80 @@ import scrollIcon from "../assets/landing-icon/file.png"
 import eyeIcon from "../assets/landing-icon/eye.png"
 import paintIcon from "../assets/landing-icon/paint.png"
 
+import remita from "../assets/remita.png"
+import paypal from "../assets/paypal.png"
+import paystack from "../assets/paystack.png"
+import interswitch from "../assets/interswitch.png"
+
+// PAYMENT METHODS
+export const paymentMethods = [
+  {
+    image: remita,
+    name: "remita",
+    isDisabled: true,
+  },
+  {
+    image: interswitch,
+    name: "interswitch",
+    isDisabled: true,
+  },
+  {
+    image: paypal,
+    name: "paypal",
+    isDisabled: true,
+  },
+  {
+    image: paystack,
+    name: "paystack",
+    isDisabled: false,
+  },
+]
+
+
+// LGAs
+export const LGAs = [
+  "Aguata",
+  "Anambra East",
+  "Anambra West",
+  "Anaocha",
+  "Awka North",
+  "Awka South",
+  "Ayamelum",
+  "Dunukofia",
+  "Ekwusigo",
+  "Idemili North",
+  "Idemili South",
+  "Ihiala",
+  "Njikoka",
+  "Nnewi North",
+  "Nnewi South",
+  "Ogbaru",
+  "Onitsha North",
+  "Onitsha South",
+  "Orumba North",
+  "Orumba South",
+  "Oyi"
+];
+
+
+export const generalBuildingTypes = [
+  "Skyscraper",
+  "Apartment Building",
+  "Office Building",
+  "Residential House",
+  "Cottage",
+  "Bungalow",
+  "Penthouse",
+  "Mansion",
+  "Dormitory",
+  "Cabin",
+  "Prison",
+  "Courthouse",
+  "Lodge"
+];
+
+
+
 // SIDEBAR CONTENTS
 export const sidebarContents = [
   {
@@ -82,6 +156,35 @@ export const secondarySidebarContents = [
   },
 ];
 
+// POWER SOURCES
+export const powerSources = [
+  { label: 'Grid Electricity', value: 'grid' },
+  { label: 'Backup Generator', value: 'generator' },
+  { label: 'Solar Power', value: 'solar' },
+  { label: 'Wind Turbines', value: 'wind' },
+  { label: 'Battery Storage', value: 'battery' },
+  { label: 'Hydroelectric Power', value: 'hydro' },
+  { label: 'Natural Gas', value: 'natural-gas' },
+  { label: 'Diesel Power', value: 'diesel' },
+  { label: 'Geothermal Power', value: 'geothermal' },
+];
+
+
+// WATER SOURCES
+export const waterSources = [
+  { label: 'Municipal Water Supply', value: 'municipal' },
+  { label: 'Well Water', value: 'well' },
+  { label: 'Rainwater Harvesting', value: 'rainwater' },
+  { label: 'Bottled Water', value: 'bottled' },
+  { label: 'Filtered Tap Water', value: 'filtered-tap' },
+  { label: 'Spring Water', value: 'spring' },
+  { label: 'Distilled Water', value: 'distilled' },
+  { label: 'Water Tanker Delivery', value: 'tanker' },
+  { label: 'Recycled/Gray Water', value: 'recycled' },
+];
+
+
+
 // SECONDARY SIDEBAR CONTENTS
 export const facilities = [
   {
@@ -121,6 +224,7 @@ export const facilities = [
     },
   },
 ];
+
 
 export const dashboardCards = [
   {
@@ -162,6 +266,7 @@ export const dashboardCards = [
     isActive: true,
   },
 ];
+
 
 export const documentContents = [
   {
@@ -222,6 +327,7 @@ export const documentContents = [
   },
 ];
 
+
 export const invoiceData: InvoiceData[] = [
   {
     facility_id: 4,
@@ -278,6 +384,7 @@ export const condinateGuideline = [
   "Note the longitude and latitude values as it will be required on the registration form",
 ]
 
+
 export const compulsoryDocs = [ 
   "Letter of intent to the commissioner for Health Lagos state",
   "LASRAA Card",
@@ -291,12 +398,14 @@ export const compulsoryDocs = [
   "Last registration/renewal certificate"
 ]
 
+
 export const warnings = [ 
   "Please note that failure to provide accurate information may delay or lead to rejection of your registration application.",
   "Ensure you have all the documents stated above so as to aid the quick completion and submission of your registration application",
   "All applications will be treated on a first-come-first-serve basis.",
   "If you are sure you have all your requirements ready, you may proceed with your application.",
 ]
+
 
 export const facilityCategories = [
   {  
@@ -308,6 +417,7 @@ export const facilityCategories = [
     value: "Hospital",
   },
 ]
+
 
 export const sectorCategories = [
   {  
@@ -331,6 +441,7 @@ export const nationalityData = [
     label: "Ghana"
   },
 ]
+
 
 export const facilityScopeData = [
   {
@@ -443,6 +554,7 @@ export const timeData = [
   },
 ]
 
+
 export const headerLinks = [
   {
     link: "",
@@ -458,8 +570,10 @@ export const headerLinks = [
   },
 ]
 
+
 export const services = ["Hospital", "Clinic", "Optical Clinic", "Diagnostic Center", "Eye Hospital", "Dental Hospital", "Laboratory", "Mobile Clinic", "Multispecialist Clinic", "Home Care", "Cosmetic Surgery", "Telemedicine", "Eye Clinic"
 ]
+
 
 export const serviceCards = [
   {
@@ -482,6 +596,7 @@ export const serviceCards = [
     text: "A key responsibility of ASHEFAMU is the regulation of the private health facilities, a major provider of healthcare services to over 60% of the population of Anambra State."
   }
 ]
+
 
 export const socialLinks = [
   {
@@ -700,6 +815,7 @@ export const countries = [
   "Zimbabwe"
 ]
 
+
 export const staffCompliment = [
   "Please download the Excel template below, complete accordingly and upload in the appropriate field below",
   "Upload scanned copies of respective staff in PDF format only against the staff records.",
@@ -753,5 +869,27 @@ export const notificationSearchData = [
   {
     label: "Extra fee",
     value: "extra-fee"
+  },
+]
+
+
+export const paymentData = [
+  {
+    invoice_id: "45678765434",
+    date_sent: "2023-04-12",
+    fee_category: "Renewal",
+    facility: "James Health",
+    amount: 20000,
+    due_date: "24-04-12",
+    status: "paid"
+  },
+  {
+    invoice_id: "43456765431",
+    date_sent: "2023-05-12",
+    fee_category: "Renewal",
+    facility: "Honnan Health",
+    amount: 40000,
+    due_date: "24-04-12",
+    status: "unpaid"
   },
 ]

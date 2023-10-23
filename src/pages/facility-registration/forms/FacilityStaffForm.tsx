@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Grid, GridItem, Icon, List, ListIcon, ListItem, Stack } from "@chakra-ui/react"
+import { Grid, GridItem, Icon, List, ListIcon, ListItem, Stack, useDisclosure } from "@chakra-ui/react"
 import React from "react"
 import FormTitle from "../../../components/common/FormTitle"
 import { BsDot } from "react-icons/bs"
@@ -10,11 +10,34 @@ import { FiDownload } from "react-icons/fi"
 import UploadInput from "../../../components/common/UploadInput"
 import { useForm } from "react-hook-form"
 import NumberInput from "../../../components/common/NumberInput"
+import FormFooter from "../../../components/layout-components/FormFooter"
+import useWaitingText from "../../../hooks/useWaitingText"
+import useFetchFacilityData from "../../../hooks/useFetchFacilityData"
+import { getSlug } from "../../../utils/helpers"
 
-interface FacilityStaffFormProps { }
-const FacilityStaffForm: React.FC<FacilityStaffFormProps> = () => {
+interface FacilityStaffFormProps {
+  setActiveStep: (no: any) => void;
+  activeStep: number;
+}
+const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setActiveStep }) => {
   const { register, setError, setValue, watch, formState: { errors } } = useForm<{ staff_list: File | undefined }>({ mode: "onSubmit" })
-  const { control, setValue: setNumberValue } = useForm({ mode: "onSubmit" })
+  const { control, setValue: setNumberValue, getValues } = useForm({ mode: "onSubmit" })
+
+  const { isOpen: isLoading } = useDisclosure()
+  const { loadingText } = useWaitingText(['Validating', 'Submitting', 'Proccessing'], 2000)
+  const { nonComplimentList } = useFetchFacilityData()
+  const handleSaveInfo = async () => {
+    try {
+      const data = {...getValues()}
+      console.log("DATA:", data)
+    }
+    catch (e: any) {
+      console.log("ERROR:", e.message)
+    }
+    finally {
+      // closeLoading()
+    }
+  }
   return (
     <Stack spacing={14}>
       <Stack spacing={6}>
@@ -47,47 +70,30 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = () => {
       <Stack spacing={6}>
         <FormTitle>NON- PROFESSIONAL STAFF COMPLEMENT</FormTitle>
         <Grid gap={4} gridTemplateColumns={"repeat(12, 1fr)"}>
-          <GridItem colSpan={[12, 12, 2]}>
-            <NumberInput 
-              control={control}
-              label="Hospital attendants"
-              name="hospital_attendants"
-              setValue={setNumberValue}
-              rules={{ required: "Hospital attendants is required" }}
-            />
-          </GridItem>
-
-          <GridItem colSpan={[12, 12, 2]}>
-            <NumberInput 
-              control={control}
-              label="Admin staff"
-              name="admin_staff"
-              setValue={setNumberValue}
-              rules={{ required: "Admin staff is required" }}
-            />
-          </GridItem>
-
-          <GridItem colSpan={[12, 12, 2]}>
-            <NumberInput 
-              control={control}
-              label="Security staff"
-              name="security_staff"
-              setValue={setNumberValue}
-              rules={{ required: "Security staff is required" }}
-            />
-          </GridItem>
-
-          <GridItem colSpan={[12, 12, 2]}>
-            <NumberInput 
-              control={control}
-              label="others"
-              name="others"
-              setValue={setNumberValue}
-              rules={{  }}
-            />
-          </GridItem>
+          {nonComplimentList.map((list) => (
+            <GridItem colSpan={[12, 12, 2]}>
+              <NumberInput
+                control={control}
+                label={list.name}
+                name={getSlug(list.name)}
+                setValue={setNumberValue}
+                rules={{ required: list.name + " is required" }}
+              />
+            </GridItem>
+          ))}
         </Grid>
       </Stack>
+
+      <FormFooter
+        activeStep={activeStep}
+        setActiveStep={setActiveStep}
+        handleAction={handleSaveInfo as any}
+        nextButtonProps={{
+          isLoading,
+          loadingText
+        }}
+        prevButtonProps={{ isDisabled: isLoading }}
+      />
     </Stack>
   )
 }

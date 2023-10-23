@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Center, HStack, Icon, IconButton, Input, InputGroup, InputLeftElement, Select, Spacer } from "@chakra-ui/react";
+import { HStack, Icon, IconButton } from "@chakra-ui/react";
 import React from "react"
-import { AiOutlineSearch } from "react-icons/ai";
-import { RED, TEXT_DARK, TEXT_GRAY, YELLOW } from "../../utils/color";
+import { RED, YELLOW } from "../../utils/color";
 import CustomTable from "./CustomTable";
 import { facilities } from "../../utils/data";
 import { BiEdit, BiTrash } from "react-icons/bi";
+import FilterComponent from "../common/FilterComponent";
 
 
 const accreditedData = {
@@ -91,29 +91,6 @@ const CustomAccredTable: React.FC<CustomAccredTableProps> = () => {
       paginationResetDefaultPage={resetPaginationToggle}
       subHeaderComponent={subHeaderComponentMemo}
     />
-  )
-}
-
-interface FilterComponentProp {
-  onFilter: (e: any) => void;
-  onClear: () => void;
-  filterText: string;
-}
-const FilterComponent: React.FC<FilterComponentProp> = ({ onFilter, filterText }) => {
-  return (
-    <HStack spacing={0} alignItems={"center"} w={"full"}>
-      <InputGroup maxW={300}>
-        <InputLeftElement as={Center}>
-          <Icon as={AiOutlineSearch} fontSize={"24px"} color={TEXT_GRAY} />
-        </InputLeftElement>
-        <Input fontSize={"sm"} onChange={onFilter} value={filterText} placeholder="Search" />
-      </InputGroup>
-
-      <Spacer />
-      <Select maxW={150} fontSize={"sm"} color={TEXT_DARK}>
-        <option value="">Filter</option>
-      </Select>
-    </HStack>
   )
 }
 

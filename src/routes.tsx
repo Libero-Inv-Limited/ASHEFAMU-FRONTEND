@@ -20,6 +20,7 @@ import CreateFacility from "./pages/facility-registration/CreateFacility";
 import CreateIntent from "./pages/facility-registration/CreateIntent";
 import FacilityForm from "./pages/facility-registration/FacilityForm";
 import Landing from "./pages/home/Landing";
+import ProfilePage from "./pages/dashboard/ProfilePage";
 
 export default [
   // HOME PAGE
@@ -141,6 +142,13 @@ export default [
     path: "/dashboard/notifications",
     element: <Notifications />,
     name: "Notifications"
+  },
+
+  // Profile
+  {
+    path: "/dashboard/profile",
+    element: <ProfilePage />,
+    name: "Profile"
   },
   {
     path: "*",

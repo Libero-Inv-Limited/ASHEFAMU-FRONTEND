@@ -30,7 +30,7 @@ const FacilityDocument: React.FC<FacilityDocumentProps> = () => {
 
   return (
     <DashboardLayout>
-      <Box pos={"sticky"} top={0} mb={10}>
+      <Box mb={10}>
         <ButtonGroup w={"full"} maxW={"400px"} p={1} bg={"white"} rounded={"sm"}>
           <CustomButton colorScheme={activeTab === "document" ? "primary" : "gray"} onClick={handleTabChange as any} bg={activeTab === "document" ? "primary.500" : "white"} color={activeTab === "document" ? "white" : DARK} textTransform={"capitalize"} flex={1} variant={"solid"} name="document" >Uploaded documents</CustomButton>
           <CustomButton colorScheme={activeTab === "invoice" ? "primary" : "gray"} onClick={handleTabChange as any} bg={activeTab === "invoice" ? "primary.500" : "white"} name="invoice" color={activeTab === "invoice" ? "white" : DARK} textTransform={"capitalize"} flex={1}>Invoices</CustomButton>

@@ -1,7 +1,8 @@
-import { HStack, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Text } from "@chakra-ui/react"
+import { Center, HStack, Heading, Icon, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, VStack } from "@chakra-ui/react"
 import React from "react"
-import { DARK } from "../../utils/color";
+import { DARK, YELLOW } from "../../utils/color";
 import CustomButton from "../common/CustomButton";
+import { IoWarningOutline } from "react-icons/io5";
 
 interface LogoutModalProps {
   isOpen: boolean;
@@ -10,21 +11,21 @@ interface LogoutModalProps {
 }
 const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onClose, handleAction }) => {
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalBody pt={4}>
-          <Text color={DARK} fontFamily={"rubik"} fontWeight={"semibold"}>Do you really want to logout?</Text>
-        </ModalBody>
-
-        <ModalFooter>
-          <HStack>
-            <CustomButton onClick={handleAction} colorScheme="red">Logout</CustomButton>
-            <CustomButton colorScheme="gray" onClick={onClose}>Cancel</CustomButton>
-          </HStack>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+<Modal isCentered isOpen={isOpen} onClose={onClose}>
+<ModalOverlay />
+<ModalContent>
+  <ModalBody pt={6} as={VStack} spacing={4} textAlign={"center"}>
+    <Center>
+      <Icon as={IoWarningOutline} fontSize={"4xl"} color={YELLOW} fill={YELLOW} />
+    </Center>
+    <Heading size={"md"} lineHeight={"7"} color={DARK}>Do you really want to logout?</Heading>
+  </ModalBody>
+  <ModalFooter as={HStack} spacing={3}>
+    <CustomButton flex={1} colorScheme="gray" variant={"outline"} onClick={onClose}>Cancel</CustomButton>
+    <CustomButton flex={1} onClick={handleAction} colorScheme="red">Yes, Logout.</CustomButton>
+  </ModalFooter>
+</ModalContent>
+</Modal>
   )
 }
 

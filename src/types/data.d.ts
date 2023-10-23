@@ -1,37 +1,39 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type FacilityData = {
   id: number;
-  cac_number: string;
+  cac_number: string | null;
   multiple_branch: number;
-  facility_phone: string;
-  address: string;
-  closest_landmark: string;
-  local_gov_area: string;
-  local_council_dev_area: string;
-  building_type: string;
-  gps_cordinates: string;
-  any_other_use_of_premises: string;
-  created_at: string;
-  updated_at: string;
-  name: string;
+  facility_phone: string | null;
+  address: string | null;
+  closest_landmark: string | null;
+  local_gov_area: string | null;
+  local_council_dev_area: string | null;
+  building_type: string | null;
+  gps_cordinates: string | null;
+  any_other_use_of_premises: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+  protective_items: any;
+  name: string | null;
+  letter_of_intent: string | null;
   user_id: number;
   status: {
     id: number;
     facility_id: number;
-    status: string;
-    approval_date: string;
+    status: string | null;
+    approval_date: string | null;
     rejection_date: string | null;
     rejection_reason: string | null;
-    created_at: string;
-    updated_at: string;
+    created_at: string | null;
+    updated_at: string | null;
     approved_by: number;
   };
   categorySelection: {
     id: number;
     facility_id: number;
     facility_category_id: number;
-    created_at: string;
-    updated_at: string;
+    created_at: string | null;
+    updated_at: string | null;
   };
 };
 
@@ -102,4 +104,30 @@ type SectorCategoryType = {
   id: number;
   name: string;
   description: string;
+};
+
+type FacilityCategoryType = {
+  id: number;
+  name: string;
+  description: string;
+  status: string;
+  updated_at: string;
+  created_at: string;
+};
+
+type WasteDisposalType = {
+  id: number;
+  name: string;
+  category: string;
+};
+
+type ProctectiveItemType = {
+  id: number;
+  name: string;
+};
+
+type NonComplimentListType = {
+  id: number;
+  name: string;
+  status: "active" | "inactive"
 };

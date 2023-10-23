@@ -14,15 +14,17 @@ import ROUTES from "../../utils/routeNames"
 import { executeGetRequiredDocs } from "../../apis/facilityData"
 import { useAppDispatch, useAppSelector } from "../../store/hook"
 import { populateRequiredDocs } from "../../store/slice/facilityData"
-import Loader from "../../components/common/loader/Loader"
+import FileSkeleton from "../../components/common/FileSkeleton"
+import { STEPS, updateLevel } from "../../store/slice/createFacility"
 
 interface CreateFacilityProps { }
 const CreateFacility: React.FC<CreateFacilityProps> = () => {
-  const { register, formState: { errors }, watch } = useForm<{ accept: boolean; }>({ mode: "onChange" })
+  const { register, formState: { errors }, watch, getValues } = useForm<{ accept: boolean; }>({ mode: "onChange" })
   const isChecked = watch("accept")
   const navigate = useNavigate()
   const token = useAppSelector(state => state.accountStore.tokenStore?.token)
-  const requiredDocs = useAppSelector(state => state.facilityDataStore.requiredDocs)
+  const currentStep = useAppSelector(state => state.createFacilityStore.currentStep)
+  const facilityData = useAppSelector(state => state.facilityDataStore)
   const dispatch = useAppDispatch()
   const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
 
@@ -33,9 +35,18 @@ const CreateFacility: React.FC<CreateFacilityProps> = () => {
     closeLoading()
   }
 
+  const handleBegin = () => {
+    dispatch(updateLevel({
+      step: STEPS.INTENT,
+      data: {
+        [currentStep]: getValues()
+      }
+    }))
+    navigate(ROUTES.CREATE_INTENT_ROUTE)
+  }
+
   // TODO GET ALL FACILITY DATA
   useEffect(() => {
-    if (requiredDocs.length) return
     handleFetchData()
   }, [])
 
@@ -63,8 +74,9 @@ const CreateFacility: React.FC<CreateFacilityProps> = () => {
           <Text color={"#444B5A"} fontWeight={"600"} fontSize={"sm"}>You are required to scan and upload the following documents as they’ll be required for upload during the registration process. <br />They must be in PDF format and not more than 200KB in size to be accepted for upload.</Text>
           <Stack mt={2}>
             {
-              isLoading ? <Loader /> :
-                requiredDocs.map((doc, index) => (
+              isLoading ?
+                (new Array(8).fill("-")).map((_, index) => <FileSkeleton key={`file-skeleton-${index}`} />) :
+                facilityData.requiredDocs.map((doc, index) => (
                   <HStack py={4} maxW={600} px={2} rounded={"md"} bg={"#F4F7F4"} key={`doc-${index}`}>
                     <Icon as={FaRegFileAlt} color={RED} fontSize={"lg"} />
                     <Text fontSize={"sm"} color={DARK} fontWeight={"500"}>{doc.name}</Text>
@@ -118,7 +130,7 @@ const CreateFacility: React.FC<CreateFacilityProps> = () => {
             <FormLabel cursor={"pointer"} color={TEXT_DARK_GRAY} m={0} fontWeight={500} fontSize={"sm"}>I have all requirements to proceed</FormLabel>
           </FormControl>
 
-          <CustomButton onClick={() => navigate(ROUTES.CREATE_INTENT_ROUTE)} isDisabled={!isChecked} w={['full', 'full', 'fit-content']} rightIcon={<Icon as={BsArrowRight} color={"white"} fontSize={"xl"} />}>Next</CustomButton>
+          <CustomButton onClick={handleBegin} isDisabled={!isChecked} w={['full', 'full', 'fit-content']} rightIcon={<Icon as={BsArrowRight} color={"white"} fontSize={"xl"} />}>Next</CustomButton>
         </HStack>
       </Stack>
     </DashboardLayout>

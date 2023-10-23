@@ -29,7 +29,7 @@ type ChangePasswordData = {
 type AddFacilityData = {
   name: string;
   cac_number: string;
-  multiple_branch: true;
+  multiple_branch: boolean;
   facility_phone: string;
   address: string;
   closest_landmark: string;
@@ -68,8 +68,18 @@ type ServiceData = {
   number_of_admission_beds: number;
   waterSources: { id: number; water_source: string }[];
   powerSources: { id: number; power_source: string }[];
-  wasteDisposalMethods: any[];
-  protectiveItems: any[];
+  wasteDisposalMethods: string;
+  protectiveItems: string;
+};
+
+type IntentResultType = {
+  name: string;
+  letter_of_intent: string;
+  user_id: number;
+  cac_number: string;
+  created_at: string;
+  updated_at: string;
+  id: number;
 };
 
 type MedicalProfessional = {

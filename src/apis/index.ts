@@ -11,8 +11,8 @@ export const FORGOT_PASSWORD_ENDPOINT = BASE_URL + "/forgot-password"
 export const CHANGE_PASSWORD_ENDPOINT = BASE_URL + "/reset-password"
 export const RESEND_OTP_ENDPOINT = BASE_URL + "/resend-verification-otp"
 
-
 // FACILITY ENDPOINTS
+export const LETTER_OF_INTENT_ENDPOINT = BASE_URL + "/letter-of-intent"
 export const ADD_FACILITY_ENDPOINT = BASE_URL + "/document-facility"
 export const UPDATE_FACILITY_STATUS_ENDPOINT = BASE_URL + "/update-facility-status"
 export const GET_ALL_FACILITIES_ENDPOINT = BASE_URL + "/all-facilities"
@@ -35,10 +35,13 @@ export const DELETE_CARD_ENDPOINT = BASE_URL + "/delete-card"
 export const UPDATE_CARD_ENDPOINT = BASE_URL + "/update-card"
 export const TOGGLE_CARD_VISIBILITY_ENDPOINT = BASE_URL + "/toggle-card-visibility"
 
-// FACILITY-CATEGORY ENDPOINTS
-export const CREATE_CATEGORY_ENDPOINT = BASE_URL + "/create-facility-category"
-
 
 // FACILITY DATA ENDPOINTS
 export const REQUIRED_DOCS_ENDPOINT = BASE_URL + "/all-required-doc"
+export const FACILITY_SECTOR_ENDPOINT = BASE_URL + "/facility-sectors"
+export const FACILITY_CATEGORY_ENDPOINT = BASE_URL + "/all-facility-categories"
+export const SERVICE_SCOPE_ENDPOINT = BASE_URL + "/service-scopes"
+export const GET_PROTECTIVE_ITEM = BASE_URL + "/protective-items"
+export const WASTE_DISPOSAL_ENDPOINTS = BASE_URL + "/waste-disposal-methods"
+export const NON_COMP_LIST_ENDPOINT = BASE_URL + "/non-prof-staff-complements"
 

@@ -1,36 +1,43 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react"
 import DashboardLayout from "../../components/layouts/DashboardLayout"
 import { HStack, Icon, Stack, Text } from "@chakra-ui/react"
 import { LuInfo } from "react-icons/lu"
 import BasicForm from "./forms/BasicForm"
-import CustomButton from "../../components/common/CustomButton"
-import { BsArrowLeft, BsArrowRight } from "react-icons/bs"
 import Stepper from "../../components/layout-components/Stepper"
 import ServicesForm from "./forms/ServicesForm"
 import FacilityDocumentForm from "./forms/FacilityDocumentForm"
 import FacilityStaffForm from "./forms/FacilityStaffForm"
+import { useAppSelector } from "../../store/hook"
 
 
 interface FacilityFormProps { }
 const FacilityForm: React.FC<FacilityFormProps> = () => {
-const [activeStep, setActiveStep] = useState(0)
+const { currentStep } = useAppSelector(state => state.createFacilityStore)
+const valueMap = {
+  FILL_FORM: 0,
+  SERVICES: 1,
+  DOCUMENT: 2,
+  STAFFS: 3,
+}
+const [activeStep, setActiveStep] = useState((valueMap as any)[currentStep] || 0)
 
 const steps = [
   {
     name: "Basic facility details",
-    component: <BasicForm />
+    component: <BasicForm setActiveStep={setActiveStep} activeStep={activeStep}  />
   },
   {
     name: "Services offered",
-    component: <ServicesForm />
+    component: <ServicesForm setActiveStep={setActiveStep} activeStep={activeStep}  />
   },
   {
     name: "Facility documents",
-    component: <FacilityDocumentForm />
+    component: <FacilityDocumentForm setActiveStep={setActiveStep} activeStep={activeStep} />
   },
   {
     name: "Facility staff",
-    component: <FacilityStaffForm />
+    component: <FacilityStaffForm setActiveStep={setActiveStep} activeStep={activeStep}  />
   },
 ]
   return (
@@ -43,17 +50,6 @@ const steps = [
 
         <Stepper currentIndex={activeStep} steps={steps.map(step => ({ title: step.name }))} />
         { steps[activeStep].component }
-
-          <HStack alignItems={"center"} justifyContent={"space-between"}>
-            <CustomButton 
-              isDisabled={activeStep < 1} onClick={() => {
-              setActiveStep(prev => prev - 1)
-            }} variant={"outline"} leftIcon={<Icon fontSize={"xl"} as={BsArrowLeft} />}>Previous</CustomButton>
-            
-            <CustomButton onClick={() => {
-              setActiveStep(prev => prev + 1)
-            }} rightIcon={<Icon fontSize={"xl"} as={BsArrowRight} />}>Next</CustomButton>
-          </HStack>
       </Stack>
     </DashboardLayout>
   )

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, ButtonGroup, FormControl, FormLabel, Grid, GridItem, HStack, Icon, IconButton, Stack, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
+import { Box, ButtonGroup, FormControl, FormLabel, Grid, GridItem, HStack, Icon, IconButton, Stack, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react"
 import React, { useState } from "react"
 import FormTitle from "../../../components/common/FormTitle"
 import { useForm } from "react-hook-form"
@@ -10,27 +10,55 @@ import { MdOutlinePhoneEnabled } from "react-icons/md"
 import { HiOutlineLocationMarker } from "react-icons/hi"
 import { FaRegUser } from "react-icons/fa"
 import CustomButton from "../../../components/common/CustomButton"
-import { facilityScopeData, nationalityData, timeData } from "../../../utils/data"
+import { LGAs, countries, generalBuildingTypes } from "../../../utils/data"
 import { BsPlus } from "react-icons/bs"
 import { TbBriefcase2 } from "react-icons/tb"
 import { BiTrash } from "react-icons/bi"
+import FormFooter from "../../../components/layout-components/FormFooter"
+import useWaitingText from "../../../hooks/useWaitingText"
+import useFetchFacilityData from "../../../hooks/useFetchFacilityData"
+import Loader from "../../../components/common/loader/Loader"
+import { labelValueMap } from "../../../utils/helpers"
+import { executeDocumentFacility } from "../../../apis/facility"
+import { useAppDispatch, useAppSelector } from "../../../store/hook"
+import { STEPS, updateLevel, updateSavedFacility } from "../../../store/slice/createFacility"
 
 
-interface BasicFormProps { }
-const BasicForm: React.FC<BasicFormProps> = () => {
-  const { control, watch, setValue } = useForm({
+interface BasicFormProps { 
+  setActiveStep: (no: any) => void;
+  activeStep: number;
+}
+
+const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
+  const allData = useAppSelector(state => state.createFacilityStore.data)
+  const prevData = allData['FILL_FORM'] || {}
+  const defaultValues = prevData['default']
+  const { control, watch, setValue, trigger, getValues } = useForm({ 
     mode: "onSubmit"
   })
-  const { control: propControl, trigger: propTrigger, getValues: propGetValues, reset: propReset } = useForm<Proprietor>({
-    mode: "onSubmit"
-  })
-  const [proprietors, setProprietors] = useState<Proprietor[]>([])
+  const prevDatas = watch()
+  console.log("PREV DATA:", prevDatas)
+
+  const { control: propControl, trigger: propTrigger, getValues: propGetValues, reset: propReset } = useForm<Proprietor>({ mode: "onSubmit" })
+
+  const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(['Validating', 'Submitting', 'Proccessing'], 2000)
+  const [proprietors, setProprietors] = useState<Proprietor[]>(prevData['proprietors'] || [])
   const hasMultipleFacility = watch("has_multiple_facility")
   const hasUseOfPremesis = watch("any_other_use_of_premises")
   const hasEmergency = watch("emergency_service")
   const hasAmbulance = watch("ambulance_service")
+  const toast = useToast({
+    position: "bottom",
+    isClosable: true,
+    variant: "subtle",
+  })
+  const { isFetching, facilityCategory, sectorCategory, serviceScope } = useFetchFacilityData()
+  const token = useAppSelector(state => state.accountStore.tokenStore?.token)
+  const dispatch = useAppDispatch()
 
-  const handleAddProprietors = async () => {
+
+  const handleAddProprietors = async () => {    
     if (!await propTrigger()) return
     const data: Proprietor = {
       ...propGetValues(),
@@ -43,7 +71,80 @@ const BasicForm: React.FC<BasicFormProps> = () => {
   }
 
   const handleDeleteProprietor = async (index: number) => {
-    setProprietors(prev => prev.filter((_, idx) => idx !== index ))
+    setProprietors(prev => prev.filter((_, idx) => idx !== index))
+  }
+
+  const handleSaveFacilityInfo = async (): Promise<boolean> => {
+    if (! await trigger() || (!proprietors.length && await propTrigger())) return false
+    let result = false
+    try {
+      startLoadingText()
+      openLoading()
+      
+      const facilityId = sessionStorage.getItem("FACILITY_ID")
+      const data = { 
+        id: +facilityId!,
+        address: getValues("address"),
+        name: getValues("facility_name"),
+        facility_phone: getValues("facility_phone"),
+        building_type: getValues("building_type").value,
+        gps_cordinates: JSON.stringify({
+          latitude: getValues("latitude"),
+          longitude: getValues("longitude"),
+        }),
+        cac_number: getValues("cac_number"),
+        multiple_branch: getValues("has_multiple_facility") === "yes",
+        closest_landmark: getValues("closet_landmark"),
+        local_gov_area: getValues("local_gov_area").value,
+        local_council_dev_area: getValues("local_council_dev_area"),
+        category: getValues("facility_category").value,
+        any_other_use_of_premises: getValues("any_other_use_of_premises"),
+        proprietor: proprietors,
+        operationDetails: {
+          opening_time: getValues("opening_time"),
+          closing_time: getValues("closing_time"),
+          date_of_establishment: getValues("date_of_establishment"),
+          provides_ambulance_services: getValues("ambulance_service") === "yes",
+          provides_emergency_services: getValues("emergency_service") === "yes",
+        },
+        scopeOfService: getValues("service_scope").map((item: any) => ({ service_scope: item.label }))
+      }
+      const resultData = await executeDocumentFacility(data, token!)
+      if(resultData.status === "error") throw new Error(resultData.message)
+
+      dispatch(updateSavedFacility(resultData.data))
+
+      // SHOW MESSAGE
+      toast({
+        title: resultData.message,
+        status: "success"
+      })
+
+      // SAVE PROGRESS
+      dispatch(updateLevel({
+        step: STEPS.SERVICES,
+        data: {
+          ["FILL_FORM"]: {
+            default: getValues(),
+            proprietors
+          }
+        }
+      }))
+      // MOVE TO NEXT
+      result = true
+    }
+    catch (e: any) {
+      toast({
+        status: "error",
+        title: e.message
+      })
+    }
+    finally {
+      closeLoading()
+      stopLoadingText()
+    }
+
+    return result
   }
 
   return (
@@ -62,6 +163,7 @@ const BasicForm: React.FC<BasicFormProps> = () => {
               fontSize={"sm"}
               label="Facility name"
               name="facility_name"
+              value={defaultValues["facility_name"]}
               rules={{
                 required: "Facility name is required"
               }}
@@ -76,6 +178,9 @@ const BasicForm: React.FC<BasicFormProps> = () => {
               fontSize={"sm"}
               label="Facility sector category"
               name="facility_sector"
+              value={defaultValues["facility_sector"]}
+              isSelect
+              data={labelValueMap(sectorCategory)}
               rules={{
                 required: "Facility sector is required"
               }}
@@ -90,6 +195,9 @@ const BasicForm: React.FC<BasicFormProps> = () => {
               fontSize={"sm"}
               label="Facility category"
               name="facility_category"
+              value={defaultValues["facility_category"]}
+              isSelect
+              data={labelValueMap(facilityCategory)}
               rules={{
                 required: "Facility category is required"
               }}
@@ -103,6 +211,7 @@ const BasicForm: React.FC<BasicFormProps> = () => {
               fontSize={"sm"}
               label="CAC Number"
               name="cac_number"
+              value={defaultValues["cac_number"]}
               rules={{
                 required: "CAC Number is required"
               }}
@@ -142,6 +251,7 @@ const BasicForm: React.FC<BasicFormProps> = () => {
               fontSize={"sm"}
               label="Facility phone"
               name="facility_phone"
+              value={defaultValues["facility_phone"]}
               rules={{
                 required: "Facility phone is required"
               }}
@@ -155,6 +265,7 @@ const BasicForm: React.FC<BasicFormProps> = () => {
               fontSize={"sm"}
               label="Address"
               name="address"
+              value={defaultValues["address"]}
               rules={{
                 required: "Address is required"
               }}
@@ -171,11 +282,13 @@ const BasicForm: React.FC<BasicFormProps> = () => {
           <GridItem colSpan={[12, 12, 4]}>
             <AuthInput
               isSelect
+              data={LGAs.map(item => ({ label: item, value: item }))}
               Icon={MdOutlinePhoneEnabled}
               control={control}
               fontSize={"sm"}
               label="Local Government Area"
               name="local_gov_area"
+              value={defaultValues["local_gov_area"]}
               rules={{
                 required: "Local Government Area is required"
               }}
@@ -189,6 +302,7 @@ const BasicForm: React.FC<BasicFormProps> = () => {
               fontSize={"sm"}
               label="Closest landmark"
               name="closet_landmark"
+              value={defaultValues["closet_landmark"]}
               rules={{
                 required: "Closest landmark is required"
               }}
@@ -199,9 +313,11 @@ const BasicForm: React.FC<BasicFormProps> = () => {
             <AuthInput
               control={control}
               isSelect
+              data={generalBuildingTypes.map(item => ({label: item, value: item}))}
               fontSize={"sm"}
               label="Building type"
               name="building_type"
+              value={defaultValues["building_type"]}
               rules={{
                 required: "Building type is required"
               }}
@@ -217,12 +333,12 @@ const BasicForm: React.FC<BasicFormProps> = () => {
 
           <GridItem colSpan={[12, 12, 3]}>
             <AuthInput
-              isSelect
-              Icon={MdOutlinePhoneEnabled}
+              // isSelect
               control={control}
               fontSize={"sm"}
               label="Local council development area"
               name="local_council_dev_area"
+              value={defaultValues["local_council_dev_area"]}
               rules={{
                 required: "Local council development area is required"
               }}
@@ -237,9 +353,10 @@ const BasicForm: React.FC<BasicFormProps> = () => {
                 fontSize={"sm"}
                 label=""
                 placeholder="X: Latitude"
-                name="closet_landmark"
+                name="latitude"
+                value={defaultValues["latitude"]}
                 rules={{
-                  required: "Closest landmark is required"
+                  required: "Latitude is required"
                 }}
               />
               <AuthInput
@@ -247,9 +364,10 @@ const BasicForm: React.FC<BasicFormProps> = () => {
                 fontSize={"sm"}
                 label=""
                 placeholder="Y: Longitude"
-                name="closet_landmark"
+                name="longitude"
+                value={defaultValues["longitude"]}
                 rules={{
-                  required: "Closest landmark is required"
+                  required: "Longitude is required"
                 }}
               />
             </HStack>
@@ -271,7 +389,7 @@ const BasicForm: React.FC<BasicFormProps> = () => {
           </GridItem>
         </Grid>
       </Stack>
-      
+
 
       {/* PROPRIETOR */}
       <Stack spacing={6}>
@@ -326,7 +444,7 @@ const BasicForm: React.FC<BasicFormProps> = () => {
               control={propControl}
               fontSize={"sm"}
               isSelect
-              data={nationalityData}
+              data={countries.map(item => ({label: item, value: item}))}
               label="Nationality"
               name="nationality"
               rules={{
@@ -336,7 +454,7 @@ const BasicForm: React.FC<BasicFormProps> = () => {
           </GridItem>
 
           <GridItem colSpan={[12, 12, 4]} as={HStack} alignItems={"flex-end"} h={"full"}>
-            <CustomButton leftIcon={<Icon fontSize={"2xl"} color={"white"} as={BsPlus} />}  onClick={handleAddProprietors}>Add Proprietor</CustomButton>
+            <CustomButton leftIcon={<Icon fontSize={"2xl"} color={"white"} as={BsPlus} />} onClick={handleAddProprietors}>Add Proprietor</CustomButton>
           </GridItem>
         </Grid>
 
@@ -355,12 +473,12 @@ const BasicForm: React.FC<BasicFormProps> = () => {
             <Tbody bg={"#F7FAF7"}>
               {proprietors.length ? proprietors.map((prop, index) => (
                 <Tr key={`prop-${index}`}>
-                  <Td fontSize={"sm"} whiteSpace={"nowrap"} color={TEXT_DARK_GRAY} p={4}>{ prop.name }</Td>
-                  <Td fontSize={"sm"} whiteSpace={"nowrap"} color={TEXT_DARK_GRAY} p={4}>{ prop.address }</Td>
-                  <Td fontSize={"sm"} whiteSpace={"nowrap"} color={TEXT_DARK_GRAY} p={4}>{ prop.occupation }</Td>
-                  <Td fontSize={"sm"} whiteSpace={"nowrap"} color={TEXT_DARK_GRAY} p={4}>{ prop.nationality }</Td>
+                  <Td fontSize={"sm"} whiteSpace={"nowrap"} color={TEXT_DARK_GRAY} p={4}>{prop.name}</Td>
+                  <Td fontSize={"sm"} whiteSpace={"nowrap"} color={TEXT_DARK_GRAY} p={4}>{prop.address}</Td>
+                  <Td fontSize={"sm"} whiteSpace={"nowrap"} color={TEXT_DARK_GRAY} p={4}>{prop.occupation}</Td>
+                  <Td fontSize={"sm"} whiteSpace={"nowrap"} color={TEXT_DARK_GRAY} p={4}>{prop.nationality}</Td>
                   <Td fontSize={"sm"} whiteSpace={"nowrap"} color={TEXT_DARK_GRAY} p={4}>
-                    <IconButton 
+                    <IconButton
                       onClick={() => handleDeleteProprietor(index)}
                       aria-label="delete-proprietor"
                       variant={"ghost"}
@@ -368,7 +486,7 @@ const BasicForm: React.FC<BasicFormProps> = () => {
                       bg={"#FEE2E2"}
                       rounded={"full"}
                       size={"sm"}
-                      icon={<Icon color={RED} fontSize={"xl"} as={BiTrash} />} 
+                      icon={<Icon color={RED} fontSize={"xl"} as={BiTrash} />}
                     />
                   </Td>
                 </Tr>
@@ -395,11 +513,13 @@ const BasicForm: React.FC<BasicFormProps> = () => {
             <AuthInput
               control={control}
               fontSize={"sm"}
-              isSelect
-              data={timeData}
+              // isSelect
+              // data={timeData}
+              type="time"
               iconProp={{ fontSize: "xl" }}
               label="Opening time"
               name="opening_time"
+              value={defaultValues["opening_time"]}
               rules={{
                 required: "Full name is required"
               }}
@@ -410,10 +530,12 @@ const BasicForm: React.FC<BasicFormProps> = () => {
             <AuthInput
               control={control}
               fontSize={"sm"}
-              isSelect
-              data={timeData}
+              // isSelect
+              // data={timeData}
+              type="time"
               label="Closing time"
               name="closing_time"
+              value={defaultValues["closing_time"]}
               rules={{
                 required: "Closing time is required"
               }}
@@ -422,7 +544,17 @@ const BasicForm: React.FC<BasicFormProps> = () => {
 
 
           <GridItem colSpan={[12, 12, 6]}>
-            
+          <AuthInput
+              control={control}
+              fontSize={"sm"}
+              type="date"
+              label="Date of establishment"
+              name="date_of_establishment"
+              value={defaultValues["date_of_establishment"]}
+              rules={{
+                required: "Date of establishment is required"
+              }}
+            />
           </GridItem>
 
           <GridItem colSpan={[12, 12, 4]}>
@@ -460,15 +592,29 @@ const BasicForm: React.FC<BasicFormProps> = () => {
               control={control}
               fontSize={"sm"}
               isSelect
-              selectProps={{ isMulti: true }}
-              data={facilityScopeData}
+              selectProps={{ isMulti: true, isCreatable: true }}
+              data={labelValueMap(serviceScope)}
               label="Scope of the services in the facility"
-              name="facility_scope"
+              name="service_scope"
+              value={defaultValues["service_scope"]}
               rules={{}}
             />
           </GridItem>
         </Grid>
       </Stack>
+
+      <FormFooter 
+        activeStep={activeStep} 
+        setActiveStep={setActiveStep} 
+        handleAction={handleSaveFacilityInfo}
+        nextButtonProps={{
+          isLoading,
+          loadingText
+        }}
+        prevButtonProps={{ isDisabled: isLoading }}
+      />
+
+      { isFetching && <Loader /> }
     </Stack>
   )
 }

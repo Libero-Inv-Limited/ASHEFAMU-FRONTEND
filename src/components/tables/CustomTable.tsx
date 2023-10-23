@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react"
 import DataTable, { TableProps } from "react-data-table-component"
-import { LIGHT_GREEN } from "../../utils/color"
+import { DARK, LIGHT_GREEN } from "../../utils/color"
 
 interface CustomTableProps extends TableProps<any> { 
 }
@@ -34,7 +34,12 @@ const CustomTable: React.FC<CustomTableProps> = (props) => {
           style: {
             textTransform: "uppercase"
           }
+        },
+      cells: {
+        style: {
+          color: DARK
         }
+      }
       }}
       subHeader
       selectableRows

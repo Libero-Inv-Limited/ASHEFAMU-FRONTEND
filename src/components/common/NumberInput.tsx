@@ -47,7 +47,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ name, rules, control, setValu
     <FormControl isInvalid={Boolean(error)}>
       <FormLabel color={TEXT_DARK} fontSize={"14px"} mb={1} fontWeight={"500"} fontFamily={"body"} {...labelStyles}>{label}</FormLabel>
       <InputGroup 
-        // maxW={"150px"}
+        maxW={"200px"}
       >
 
         <InputLeftElement>

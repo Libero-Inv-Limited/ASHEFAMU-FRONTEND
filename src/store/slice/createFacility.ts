@@ -7,15 +7,29 @@ export const FORM_STEPS = {
   BEGIN:ROUTES.CREATE_FACILITY_ROUTE,
   INTENT:ROUTES.CREATE_INTENT_ROUTE,
   FILL_FORM:ROUTES.FILL_FORM_ROUTE,
+  SERVICES: 1,
+  DOCUMENT: 2,
+  STAFFS: 3,
+}
+
+export enum STEPS {
+  BEGIN="BEGIN",
+  INTENT="INTENT",
+  FILL_FORM="FILL_FORM",
+  SERVICES="SERVICES",
+  DOCUMENT="DOCUMENT",
+  STAFFS="STAFFS",
 }
 
 type InitialStateType = {
   currentStep: keyof typeof FORM_STEPS,
-  data: any
+  data: any,
+  savedFacility: FacilityData | null,
 }
 const initialState:InitialStateType  = {
   currentStep: "BEGIN",
-  data: {}
+  data: {},
+  savedFacility: null
 };
 
 const createFacility = createSlice({
@@ -29,10 +43,14 @@ const createFacility = createSlice({
     clearLevelState: (state) => {
       state.currentStep = "BEGIN",
       state.data = {}
+    },
+    updateSavedFacility: (state, action) => {
+      const prev = state.savedFacility
+      state.savedFacility = prev ? { ...prev, ...action.payload } : action.payload
     }
   }
 })
 
 
-export const { clearLevelState, updateLevel } = createFacility.actions;
+export const { clearLevelState, updateLevel, updateSavedFacility } = createFacility.actions;
 export default createFacility.reducer;

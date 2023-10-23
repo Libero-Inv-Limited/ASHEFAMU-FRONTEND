@@ -2,23 +2,28 @@
 import { useTheme } from "@chakra-ui/react";
 import React, { ComponentProps } from "react"
 import Select, { StylesConfig } from 'react-select';
+import CreatableSelect from 'react-select/creatable';
+import { TEXT_DARK } from "../../utils/color";
+
 
 interface CustomSelectProps extends ComponentProps<Select> { 
   fontSize?: "sm" | "md";
-  styles?: StylesConfig
+  styles?: StylesConfig;
+  isCreatable?: boolean;
 }
-const CustomSelect: React.FC<CustomSelectProps> = ({ fontSize, styles, ...rest }) => {
+const CustomSelect: React.FC<CustomSelectProps> = ({ fontSize, isCreatable, styles, ...rest }) => {
   const theme = useTheme()
 
   const customSelect: StylesConfig = {
     control: (styles) => ({
       ...styles,
-      height: "45px",
+      minHeight: "45px",
       display: "flex",
       alignItems: "center",
+      color: TEXT_DARK,
       padding: theme.sizes['1'],
       borderRadius: "6px",
-      fontSize: fontSize === "sm" ? ".9rem" : "1rem",
+      fontSize: fontSize === "sm" ? ".875rem" : "1rem",
       border: `1px solid ${theme.colors.gray['200']}`,
       ":hover": {
         borderColor: theme.colors.gray['300']
@@ -47,6 +52,16 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ fontSize, styles, ...rest }
     }),
     ...styles
   }
+
+  if (isCreatable) return (
+    <CreatableSelect
+      classNamePrefix={"custom"}
+      styles={customSelect}
+      className="custom-select"
+      isSearchable={true}
+      {...rest}
+    />
+  )
   return (
     <Select
       classNamePrefix={"custom"}

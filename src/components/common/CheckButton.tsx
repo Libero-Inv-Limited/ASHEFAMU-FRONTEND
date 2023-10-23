@@ -10,7 +10,7 @@ interface CheckButtonProps extends ButtonProps {
 const CheckButton: React.FC<CheckButtonProps> = ({ isActive, handleClick, ...props }) => {
   return (
     <Button
-      height={"40px"}
+      height={"45px"}
       rounded={"6px"}
       fontSize={"sm"}
       fontWeight={500}
