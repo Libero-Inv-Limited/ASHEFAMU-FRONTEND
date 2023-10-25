@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ADD_DOCUMENT_ENDPOINT, ADD_FACILITY_ENDPOINT, ADD_PROFESSIONAL_INCHARGE_ENDPOINT, GET_ALL_FACILITIES_ENDPOINT, LETTER_OF_INTENT_ENDPOINT, UPDATE_FACILITY_SERVICE_ENDPOINT } from "."
+import { ADD_DOCUMENT_ENDPOINT, ADD_FACILITY_ENDPOINT, ADD_NON_PROF_STAFF_ENDPOINT, ADD_PROFESSIONAL_INCHARGE_ENDPOINT, ADD_PROF_STAFF_ENDPOINT, GET_ALL_FACILITIES_ENDPOINT, LETTER_OF_INTENT_ENDPOINT, UPDATE_FACILITY_SERVICE_ENDPOINT } from "."
 import { log } from "../utils/helpers"
 
 export const executeCreateIntent = async (data: FormData , token: string): Promise<ResponseDataType> => {
@@ -116,6 +116,52 @@ export const executeUploadFacilityDocs = async (data: FormData, token: string): 
       }
     }
     const request = await fetch(ADD_DOCUMENT_ENDPOINT, options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("DOCS [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}
+
+
+
+export const executeAddProfessional = async (data: ProfessionStaff, token: string): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        "Accept": "application/json"
+      }
+    }
+    const request = await fetch(ADD_PROF_STAFF_ENDPOINT, options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("DOCS [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}
+
+
+
+export const executeAddNonProfessional = async (data: NonProfessionStaff, token: string): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        "Accept": "application/json"
+      }
+    }
+    const request = await fetch(ADD_NON_PROF_STAFF_ENDPOINT, options)
     const response = await request.json() satisfies ResponseDataType
     return response
   }

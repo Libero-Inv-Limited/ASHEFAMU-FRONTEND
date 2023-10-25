@@ -129,5 +129,20 @@ type ProctectiveItemType = {
 type NonComplimentListType = {
   id: number;
   name: string;
-  status: "active" | "inactive"
+  status: "active" | "inactive";
+};
+
+type StaffComplimentType = {
+  complement: string;
+  employment_type: string;
+  fullname: string;
+  address: string;
+  basic_qualification: string;
+  institution_attended: string;
+  year_of_qualification: string;
+  registration_number: string;
+  post_graduate_qualification: string;
+  post_institution_attended: string;
+  post_year_of_qualification: string;
+  post_registration_number: string;
 };

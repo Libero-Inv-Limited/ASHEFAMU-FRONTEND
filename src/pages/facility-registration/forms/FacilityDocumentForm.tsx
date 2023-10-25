@@ -121,7 +121,7 @@ const FacilityDocumentForm: React.FC<FacilityDocumentFormProps> = ({ activeStep,
               fontSize={"sm"}
               iconProp={{ fontSize: "xl" }}
               name="fullname"
-              value={defaultValues['fullname']}
+              value={defaultValues?.['fullname']}
               rules={{ required: "Full name is required" }}
               Icon={FaRegUser}
             />
@@ -133,7 +133,7 @@ const FacilityDocumentForm: React.FC<FacilityDocumentFormProps> = ({ activeStep,
               label={"Address"}
               fontSize={"sm"}
               name="address"
-              value={defaultValues['address']}
+              value={defaultValues?.['address']}
               rules={{ required: "Address is required" }}
               Icon={HiOutlineLocationMarker}
             />
@@ -147,7 +147,7 @@ const FacilityDocumentForm: React.FC<FacilityDocumentFormProps> = ({ activeStep,
               fontSize={"sm"}
               label={"Nationality"}
               name="nationality"
-              value={defaultValues['nationality']}
+              value={defaultValues?.['nationality']}
               isSelect
               rules={{ required: "Nationality is required" }}
             />
@@ -166,7 +166,7 @@ const FacilityDocumentForm: React.FC<FacilityDocumentFormProps> = ({ activeStep,
               fontSize={"sm"}
               iconProp={{ fontSize: "xl" }}
               name="qualification"
-              value={defaultValues['qualification']}
+              value={defaultValues?.['qualification']}
               rules={{ required: "Qualification is required" }}
               Icon={FaRegFileAlt}
             />
@@ -178,7 +178,7 @@ const FacilityDocumentForm: React.FC<FacilityDocumentFormProps> = ({ activeStep,
               label={"Institution"}
               fontSize={"sm"}
               name="institution"
-              value={defaultValues['institution']}
+              value={defaultValues?.['institution']}
               rules={{ required: "Institution is required" }}
               Icon={TbBuilding}
             />
@@ -190,7 +190,7 @@ const FacilityDocumentForm: React.FC<FacilityDocumentFormProps> = ({ activeStep,
               label={"Registration number"}
               fontSize={"sm"}
               name="registration_number"
-              value={defaultValues['registration_number']}
+              value={defaultValues?.['registration_number']}
               rules={{ required: "Registration number is required" }}
             />
           </GridItem>
@@ -203,7 +203,7 @@ const FacilityDocumentForm: React.FC<FacilityDocumentFormProps> = ({ activeStep,
               isSelect
               data={yearOption as any}
               name="year_of_qualification"
-              value={defaultValues['year_of_qualification']}
+              value={defaultValues?.['year_of_qualification']}
               rules={{ required: "Year of qualification is required" }}
             />
           </GridItem>
@@ -216,7 +216,7 @@ const FacilityDocumentForm: React.FC<FacilityDocumentFormProps> = ({ activeStep,
               data={yearOption as any}
               isSelect
               name="year_of_registration"
-              value={defaultValues['year_of_registration']}
+              value={defaultValues?.['year_of_registration']}
               rules={{ required: "Year of registration is required" }}
             />
           </GridItem>
@@ -229,7 +229,7 @@ const FacilityDocumentForm: React.FC<FacilityDocumentFormProps> = ({ activeStep,
               fontSize={"sm"}
               // isSelect
               name="approving_authority"
-              value={defaultValues['approving_authority']}
+              value={defaultValues?.['approving_authority']}
               rules={{ required: "Approving authority is required" }}
             />
           </GridItem>

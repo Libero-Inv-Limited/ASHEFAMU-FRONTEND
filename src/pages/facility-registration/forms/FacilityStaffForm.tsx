@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Grid, GridItem, Icon, List, ListIcon, ListItem, Stack, useDisclosure } from "@chakra-ui/react"
-import React from "react"
+import { Grid, GridItem, Icon, List, ListIcon, ListItem, Stack, useDisclosure, useToast } from "@chakra-ui/react"
+import React, { useEffect, useState } from "react"
 import FormTitle from "../../../components/common/FormTitle"
 import { BsDot } from "react-icons/bs"
 import { TEXT_DARK_GRAY } from "../../../utils/color"
@@ -13,7 +13,13 @@ import NumberInput from "../../../components/common/NumberInput"
 import FormFooter from "../../../components/layout-components/FormFooter"
 import useWaitingText from "../../../hooks/useWaitingText"
 import useFetchFacilityData from "../../../hooks/useFetchFacilityData"
-import { getSlug } from "../../../utils/helpers"
+import { convertToSnakecase, handleConvertCSVToArray, readFile } from "../../../utils/helpers"
+import StaffCompliment from "../../../components/common/StaffCompliment"
+import { executeAddNonProfessional, executeAddProfessional } from "../../../apis/facility"
+import { useAppDispatch, useAppSelector } from "../../../store/hook"
+import { clearLevelState } from "../../../store/slice/createFacility"
+import { useNavigate } from "react-router-dom"
+import ROUTES from "../../../utils/routeNames"
 
 interface FacilityStaffFormProps {
   setActiveStep: (no: any) => void;
@@ -21,23 +27,96 @@ interface FacilityStaffFormProps {
 }
 const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setActiveStep }) => {
   const { register, setError, setValue, watch, formState: { errors } } = useForm<{ staff_list: File | undefined }>({ mode: "onSubmit" })
-  const { control, setValue: setNumberValue, getValues } = useForm({ mode: "onSubmit" })
+  const { control, setValue: setNumberValue, getValues, trigger } = useForm({ mode: "onSubmit" })
+  const [ staffs, setStaffs ] = useState<StaffComplimentType[]>([])
 
-  const { isOpen: isLoading } = useDisclosure()
-  const { loadingText } = useWaitingText(['Validating', 'Submitting', 'Proccessing'], 2000)
+  const { isOpen: isLoading, onClose: closeLoading, onOpen: openLoading } = useDisclosure()
+  const token = useAppSelector(state => state.accountStore.tokenStore?.token)
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(['Validating', 'Submitting', 'Proccessing'], 2000)
   const { nonComplimentList } = useFetchFacilityData()
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const toast = useToast({
+    position: "bottom",
+    isClosable: true,
+    variant: "subtle",
+  })
+
   const handleSaveInfo = async () => {
+    if(! await trigger()) return
     try {
-      const data = {...getValues()}
-      console.log("DATA:", data)
+      openLoading()
+      startLoadingText()
+      // ADD PROF STAFFS
+      const facilityId = sessionStorage.getItem("FACILITY_ID")
+      const profStaffPayload:ProfessionStaff = {
+        facility_id: +facilityId!,
+        staff_csv: staffs.map(item => {
+          const newItem: StaffComplimentType | any = {}
+          Object.entries(item).forEach(([key, val]) => {
+            newItem[convertToSnakecase(key) as keyof StaffComplimentType] = val
+          })
+          return newItem
+        })
+      }
+      const resultProf = await executeAddProfessional(profStaffPayload, token!)
+      if(resultProf.status === "error") throw new Error(resultProf.message)
+
+      const values = getValues()
+      const mappedValue = Object.entries(values).map(([key, value]) => {
+        const mainKey = +key.split("-")[1]
+        return { non_prof_staff_complement_id: mainKey, value }
+      })
+      // console.log("MAPPED VAL:", mappedValue)
+      const nonProfPayload:NonProfessionStaff = {
+        facility_id: +facilityId!,
+        complements: mappedValue
+      }
+      const resultNonProf = await executeAddNonProfessional(nonProfPayload, token!)
+      if(resultNonProf.status === "error") throw new Error(resultNonProf.message)
+
+      // SHOW ALERT
+      toast({
+        title: "Facility Created!",
+        status: "success"
+      })
+
+      // CLEAR STORAGES
+      sessionStorage.clear()
+      dispatch(clearLevelState())
+      navigate(ROUTES.FACILITY_ROUTE)
+
     }
     catch (e: any) {
       console.log("ERROR:", e.message)
+      toast({
+        title: e.message,
+        status: "error"
+      })
     }
     finally {
-      // closeLoading()
+      closeLoading()
+      stopLoadingText()
     }
   }
+  const file = watch("staff_list")
+  const handleFileUpload = async () => {
+    if(!file) return
+    const csvText = await readFile(file)
+    const arr = handleConvertCSVToArray(csvText as string)
+    setStaffs(arr)
+  }
+  
+  useEffect(() => {
+    handleFileUpload()
+  }, [file])
+
+  
+  useEffect(() => {
+    console.log("STAFFS", staffs)
+  }, [staffs])
+
+
   return (
     <Stack spacing={14}>
       <Stack spacing={6}>
@@ -61,10 +140,15 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
           setError={setError as any}
           setValue={setValue as any}
           error={errors.staff_list?.message}
-          value={watch("staff_list")}
+          value={file}
           name="staff_list"
           accept=".csv"
         />
+      </Stack>
+
+
+      <Stack>
+        { staffs.map((staff, index) => <StaffCompliment staffs={staffs} index={index} setStaffs={setStaffs} key={`val-${index}`} {...staff}/>) }
       </Stack>
 
       <Stack spacing={6}>
@@ -75,7 +159,7 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
               <NumberInput
                 control={control}
                 label={list.name}
-                name={getSlug(list.name)}
+                name={`nonstaff-${list.id}`}
                 setValue={setNumberValue}
                 rules={{ required: list.name + " is required" }}
               />

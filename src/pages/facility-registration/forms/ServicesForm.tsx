@@ -102,7 +102,7 @@ const ServicesForm: React.FC<ServicesFormProps> = ({ activeStep, setActiveStep }
             fontSize={"sm"}
             control={control}
             name="number_of_couches"
-            value={defaultValues['number_of_couches']}
+            value={defaultValues?.['number_of_couches']}
             rules={{ required: "No of couche is required" }}
           />
         </GridItem>
@@ -113,7 +113,7 @@ const ServicesForm: React.FC<ServicesFormProps> = ({ activeStep, setActiveStep }
             fontSize={"sm"}
             control={control}
             name="number_of_observation_beds"
-            value={defaultValues['number_of_observation_beds']}
+            value={defaultValues?.['number_of_observation_beds']}
             rules={{ required: "No of observation bed is required" }}
           />
         </GridItem>
@@ -124,7 +124,7 @@ const ServicesForm: React.FC<ServicesFormProps> = ({ activeStep, setActiveStep }
             control={control}
             fontSize={"sm"}
             name="number_of_admission_beds"
-            value={defaultValues['number_of_admission_beds']}
+            value={defaultValues?.['number_of_admission_beds']}
             rules={{ required: "No of admission bed is required" }}
           />
         </GridItem>
@@ -141,7 +141,7 @@ const ServicesForm: React.FC<ServicesFormProps> = ({ activeStep, setActiveStep }
             control={control}
             label="Water source"
             name="waterSources"
-            value={defaultValues['waterSources']}
+            value={defaultValues?.['waterSources']}
             fontSize={"sm"}
             data={waterSources}
             isSelect
@@ -156,7 +156,7 @@ const ServicesForm: React.FC<ServicesFormProps> = ({ activeStep, setActiveStep }
             fontSize={"sm"}
             data={powerSources}
             name="powerSources"
-            value={defaultValues['powerSources']}
+            value={defaultValues?.['powerSources']}
             isSelect
             selectProps={{ isMulti: true, isCreatable: true }}
           />
@@ -175,7 +175,7 @@ const ServicesForm: React.FC<ServicesFormProps> = ({ activeStep, setActiveStep }
             fontSize={"sm"}
             label="Human waste disposal"
             name="human_waste"
-            value={defaultValues['human_waste']}
+            value={defaultValues?.['human_waste']}
             data={wasteDisposalMethods.map(item => ({ label: item.name, value: item.name }))}
             isSelect
             selectProps={{ isMulti: true }}
@@ -189,7 +189,7 @@ const ServicesForm: React.FC<ServicesFormProps> = ({ activeStep, setActiveStep }
             label="Refuse disposal"
             data={wasteDisposalMethods.map(item => ({ label: item.name, value: item.name }))}
             name="refuse_disposal"
-            value={defaultValues['refuse_disposal']}
+            value={defaultValues?.['refuse_disposal']}
             isSelect
             selectProps={{ isMulti: true }}
           />
@@ -202,7 +202,7 @@ const ServicesForm: React.FC<ServicesFormProps> = ({ activeStep, setActiveStep }
             fontSize={"sm"}
             data={wasteDisposalMethods.map(item => ({ label: item.name, value: item.name }))}
             name="medical_waste"
-            value={defaultValues['medical_waste']}
+            value={defaultValues?.['medical_waste']}
             isSelect
             selectProps={{ isMulti: true }}
           />
@@ -222,7 +222,7 @@ const ServicesForm: React.FC<ServicesFormProps> = ({ activeStep, setActiveStep }
             fontSize={"sm"}
             data={protectiveItems.map(item => ({ label: item.name, value: item.name }))}
             name="protectiveItems"
-            value={defaultValues['protectiveItems']}
+            value={defaultValues?.['protectiveItems']}
             isSelect
             selectProps={{ isMulti: true }}
           />

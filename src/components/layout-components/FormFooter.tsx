@@ -24,10 +24,10 @@ const FormFooter: React.FC<FormFooterProps> = ({ setActiveStep, handleAction, ac
     const index = steps.indexOf(currentStep)
     setActiveStep(index - 1)
   }
+  console.log("ACTIVE INDEX:", activeStep)
   return (
     <HStack alignItems={"center"} justifyContent={"space-between"}>
-      <CustomButton
-        isDisabled={activeStep <= 1} onClick={handlePrev} variant={"outline"} leftIcon={<Icon fontSize={"xl"} as={BsArrowLeft} />} {...prevButtonProps}>Previous</CustomButton>
+      <CustomButton onClick={handlePrev} variant={"outline"} leftIcon={<Icon fontSize={"xl"} as={BsArrowLeft} />} {...prevButtonProps} isDisabled={activeStep < 1}>Previous</CustomButton>
 
       <CustomButton onClick={handleNext} rightIcon={!(activeStep >= 3) ? <Icon fontSize={"xl"} as={BsArrowRight} /> : undefined} {...nextButtonProps}>{ activeStep >= 3 ? "Complete Registration" : "Next" }</CustomButton>
     </HStack>

@@ -9,6 +9,7 @@ const ROUTES = {
 
   DASHBOARD_ROUTE: "/dashboard",
   CREATE_FACILITY_ROUTE: "/dashboard/facilities/register-facility",
+  FACILITY_ROUTE: "/dashboard/facilities?tab=registration",
   CREATE_INTENT_ROUTE: "/dashboard/facilities/register-facility/intent",
   FILL_FORM_ROUTE: "/dashboard/facilities/register-facility/fill-form",
 }

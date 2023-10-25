@@ -19,9 +19,9 @@ interface NumberInputProps extends InputProps {
   label: string;
   labelStyles?: FormLabelProps
 }
-const NumberInput: React.FC<NumberInputProps> = ({ name, rules, control, setValue, label, labelStyles, ...rest }) => {
+const NumberInput: React.FC<NumberInputProps> = ({ name, rules, control, value, setValue, label, labelStyles, ...rest }) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
-  const [numberValue, setNumberValue] = useState<number>(0)
+  const [numberValue, setNumberValue] = useState<number>(value as number || 0)
   const { field, fieldState: { error } } = useController({
     name,
     control,
@@ -30,14 +30,14 @@ const NumberInput: React.FC<NumberInputProps> = ({ name, rules, control, setValu
   })
   const handleClick = (type: "minus" | "plus") => {
     if(type === "plus") {
-      const newValue = numberValue + 1
+      const newValue = +numberValue + 1
       setValue(name, newValue)
       setNumberValue(newValue)
       setIsDisabled(false)
       return
     }
     if(numberValue <= 0) return setIsDisabled(true)
-    const newValue =  numberValue - 1
+    const newValue =  +numberValue - 1
     if(newValue === 0) setIsDisabled(true)
     setValue(name, newValue)
     setNumberValue(newValue)

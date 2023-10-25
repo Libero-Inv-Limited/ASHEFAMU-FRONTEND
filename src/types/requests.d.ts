@@ -101,3 +101,13 @@ type ResponseDataType = {
   data?: any;
   code?: number;
 };
+
+type ProfessionStaff = {
+  facility_id: number;
+  staff_csv: StaffComplimentType[];
+};
+
+type NonProfessionStaff = {
+  facility_id: number;
+  complements: {non_prof_staff_complement_id: number; value: number}[];
+};

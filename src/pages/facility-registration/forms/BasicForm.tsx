@@ -163,7 +163,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               fontSize={"sm"}
               label="Facility name"
               name="facility_name"
-              value={defaultValues["facility_name"]}
+              value={defaultValues?.["facility_name"]}
               rules={{
                 required: "Facility name is required"
               }}
@@ -178,7 +178,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               fontSize={"sm"}
               label="Facility sector category"
               name="facility_sector"
-              value={defaultValues["facility_sector"]}
+              value={defaultValues?.["facility_sector"]}
               isSelect
               data={labelValueMap(sectorCategory)}
               rules={{
@@ -195,7 +195,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               fontSize={"sm"}
               label="Facility category"
               name="facility_category"
-              value={defaultValues["facility_category"]}
+              value={defaultValues?.["facility_category"]}
               isSelect
               data={labelValueMap(facilityCategory)}
               rules={{
@@ -211,7 +211,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               fontSize={"sm"}
               label="CAC Number"
               name="cac_number"
-              value={defaultValues["cac_number"]}
+              value={defaultValues?.["cac_number"]}
               rules={{
                 required: "CAC Number is required"
               }}
@@ -251,7 +251,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               fontSize={"sm"}
               label="Facility phone"
               name="facility_phone"
-              value={defaultValues["facility_phone"]}
+              value={defaultValues?.["facility_phone"]}
               rules={{
                 required: "Facility phone is required"
               }}
@@ -265,7 +265,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               fontSize={"sm"}
               label="Address"
               name="address"
-              value={defaultValues["address"]}
+              value={defaultValues?.["address"]}
               rules={{
                 required: "Address is required"
               }}
@@ -288,7 +288,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               fontSize={"sm"}
               label="Local Government Area"
               name="local_gov_area"
-              value={defaultValues["local_gov_area"]}
+              value={defaultValues?.["local_gov_area"]}
               rules={{
                 required: "Local Government Area is required"
               }}
@@ -302,7 +302,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               fontSize={"sm"}
               label="Closest landmark"
               name="closet_landmark"
-              value={defaultValues["closet_landmark"]}
+              value={defaultValues?.["closet_landmark"]}
               rules={{
                 required: "Closest landmark is required"
               }}
@@ -317,7 +317,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               fontSize={"sm"}
               label="Building type"
               name="building_type"
-              value={defaultValues["building_type"]}
+              value={defaultValues?.["building_type"]}
               rules={{
                 required: "Building type is required"
               }}
@@ -338,7 +338,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               fontSize={"sm"}
               label="Local council development area"
               name="local_council_dev_area"
-              value={defaultValues["local_council_dev_area"]}
+              value={defaultValues?.["local_council_dev_area"]}
               rules={{
                 required: "Local council development area is required"
               }}
@@ -354,7 +354,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
                 label=""
                 placeholder="X: Latitude"
                 name="latitude"
-                value={defaultValues["latitude"]}
+                value={defaultValues?.["latitude"]}
                 rules={{
                   required: "Latitude is required"
                 }}
@@ -365,7 +365,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
                 label=""
                 placeholder="Y: Longitude"
                 name="longitude"
-                value={defaultValues["longitude"]}
+                value={defaultValues?.["longitude"]}
                 rules={{
                   required: "Longitude is required"
                 }}
@@ -519,7 +519,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               iconProp={{ fontSize: "xl" }}
               label="Opening time"
               name="opening_time"
-              value={defaultValues["opening_time"]}
+              value={defaultValues?.["opening_time"]}
               rules={{
                 required: "Full name is required"
               }}
@@ -535,7 +535,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               type="time"
               label="Closing time"
               name="closing_time"
-              value={defaultValues["closing_time"]}
+              value={defaultValues?.["closing_time"]}
               rules={{
                 required: "Closing time is required"
               }}
@@ -550,7 +550,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               type="date"
               label="Date of establishment"
               name="date_of_establishment"
-              value={defaultValues["date_of_establishment"]}
+              value={defaultValues?.["date_of_establishment"]}
               rules={{
                 required: "Date of establishment is required"
               }}
@@ -596,7 +596,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               data={labelValueMap(serviceScope)}
               label="Scope of the services in the facility"
               name="service_scope"
-              value={defaultValues["service_scope"]}
+              value={defaultValues?.["service_scope"]}
               rules={{}}
             />
           </GridItem>
