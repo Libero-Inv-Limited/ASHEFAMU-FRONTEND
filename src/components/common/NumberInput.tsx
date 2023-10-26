@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FormControl, FormLabel, FormLabelProps, Icon, IconButton, Input, InputGroup, InputLeftElement, InputProps, InputRightElement } from "@chakra-ui/react"
-import React, { useRef, useState } from "react"
+import React, { useState } from "react"
 import { useController } from "react-hook-form";
 import { TEXT_DARK, TEXT_DARK_GRAY } from "../../utils/color";
 import { BsPlus } from "react-icons/bs";

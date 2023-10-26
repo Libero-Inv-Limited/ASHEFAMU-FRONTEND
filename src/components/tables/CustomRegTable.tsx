@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Center, HStack, Icon, IconButton, Input, InputGroup, InputLeftElement, Spacer, Text } from "@chakra-ui/react";
+import { Center, HStack, Icon, IconButton, Input, InputGroup, InputLeftElement, Spacer, Text } from "@chakra-ui/react";
 import React from "react"
 import { AiOutlineSearch } from "react-icons/ai";
 import { RED, TEXT_GRAY, YELLOW } from "../../utils/color";
@@ -15,11 +15,11 @@ import useFetchFacilityData from "../../hooks/useFetchFacilityData";
 import { useAppSelector } from "../../store/hook";
 
 
-const colorMap = {
-  pending: "#FCBB4D",
-  awaiting: "#62C28D",
-  payment: "#146BD1"
-}
+// const colorMap = {
+//   pending: "#FCBB4D",
+//   awaiting: "#62C28D",
+//   payment: "#146BD1"
+// }
 
 interface CustomRegTableProps { }
 
