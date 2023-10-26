@@ -19,7 +19,7 @@ const Landing: React.FC<LandingProps> = () => {
   }, [])
 
   return (
-    <Box>
+    <Box sx={{ overflowY: "hidden" }}>
       <Header />
       <Hero />
       <ServiceSection />
