@@ -32,6 +32,10 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ fontSize, isCreatable, styl
         borderColor: theme.colors.brand['500']
       },
     }),
+    singleValue: (styles) => ({
+      ...styles,
+      fontSize: fontSize === "sm" ? ".875rem" : "1rem",
+    }),
     multiValue: (styles: any) => {
       return {
         ...styles,

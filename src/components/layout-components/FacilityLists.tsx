@@ -1,5 +1,5 @@
-import { Center, Collapse, Flex, Icon, IconButton, Input, InputGroup, InputLeftElement, Stack, VStack } from "@chakra-ui/react"
-import React from "react"
+import { Center, Collapse, Flex, Icon, IconButton, Input, InputGroup, InputRightElement, Stack, Text, VStack } from "@chakra-ui/react"
+import React, { useEffect, useState } from "react"
 import { DARK, LIGHT_GRAY, TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color"
 // import { facilities } from "../../utils/data"
 import useIsFacility from "../../hooks/useIsFacility"
@@ -19,15 +19,32 @@ const FacilityLists: React.FC<FacilityListsProps> = ({ isOpen, onToggle }) => {
   const { isLoadingData } = useAppContext()
   const { facilities } = useAppSelector(state => state.dataStore)
 
+  const [ changingFacilities, setChangingFacilities ] = useState<FacilityData[]>(facilities)
+  const [search, setSearch] = useState<string>("")
+
+  const handleSearch = () => {
+    const data = facilities.filter(item => item.name?.toLowerCase().includes(search.toLocaleLowerCase()))
+    setChangingFacilities(data)
+  }
+
+  useEffect(() => {
+    setChangingFacilities(facilities)
+  }, [facilities])
+
+  useEffect(() => {
+    if(!search.trim().length) return setChangingFacilities(facilities)
+    handleSearch()
+  }, [search])
+
   return (
     <Collapse in={isFacility && isOpen}>
       <Stack h={"full"} w={"250px"} px={3} pos={"relative"} borderRight={"1px solid " + LIGHT_GRAY}>
         <Flex alignItems={"center"} fontFamily={"rubik"} color={DARK} fontWeight={600} borderBottom={"1px solid " + LIGHT_GRAY} justifyContent={"center"} minH={"90px"}>
           <InputGroup>
-            <InputLeftElement as={Center}>
-              <Icon fontSize={"2xl"} color={TEXT_GRAY} as={AiOutlineSearch} />
-            </InputLeftElement>
-            <Input fontSize={"sm"} color={TEXT_DARK_GRAY} />
+            <InputRightElement as={Center}>
+              <Icon fontSize={"xl"} color={TEXT_GRAY} as={AiOutlineSearch} />
+            </InputRightElement>
+            <Input placeholder="Search" onChange={(e) => setSearch(e.target.value)} fontSize={"sm"} color={TEXT_DARK_GRAY} />
           </InputGroup>
         </Flex>
         {isOpen && (
@@ -48,7 +65,9 @@ const FacilityLists: React.FC<FacilityListsProps> = ({ isOpen, onToggle }) => {
           {
             isLoadingData ?
               (new Array(8).fill("-")).map((_, index) => <FileSkeleton isSingle key={`facilities-skeleton-${index}`} />) :
-              facilities.map((sidebarContents, index) => <FacilityListItem key={`facility-${sidebarContents.name}-${index}`} {...sidebarContents} />)
+              changingFacilities.length ? 
+              changingFacilities.map((sidebarContents, index) => <FacilityListItem key={`facility-${sidebarContents.name}-${index}`} {...sidebarContents} />) : 
+              <Text fontSize={"sm"} color={TEXT_DARK_GRAY}>No facility found</Text>
           }
         </Stack>
       </Stack>

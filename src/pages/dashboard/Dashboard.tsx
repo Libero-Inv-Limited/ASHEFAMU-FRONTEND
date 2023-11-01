@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef } from "react"
 import DashboardLayout from "../../components/layouts/DashboardLayout"
-import { Center, HStack, Icon, IconButton, IconProps, Stack, Text, Wrap, WrapItem } from "@chakra-ui/react"
+import { Box, Center, HStack, Icon, IconButton, IconProps, Stack, Text, Wrap, WrapItem } from "@chakra-ui/react"
 import { DARK, GRAY_BORDER, TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color"
 import CustomButton from "../../components/common/CustomButton"
 import DashboardCard from "../../components/common/DashboardCard"
@@ -13,6 +13,11 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import NotificationCard from "../../components/common/NotificationCard"
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
+import usePaginatedTableData from "../../hooks/usePaginatedTableData"
+import { useAppSelector } from "../../store/hook"
+import { executeGetUserNotification } from "../../apis/user"
+import DataLoader from "../../components/common/loader/DataLoader"
+import EmptyTable from "../../components/states/EmptyTable"
 
 interface CustomizeIconProps extends IconProps { }
 const CustomizeIcon = (props: CustomizeIconProps) => (
@@ -27,6 +32,8 @@ const CustomizeIcon = (props: CustomizeIconProps) => (
 interface DashboardProps { }
 const Dashboard: React.FC<DashboardProps> = () => {
   const swiper = useRef(null)
+  const token = useAppSelector(state => state.accountStore.tokenStore!.token)
+  const { data, loadingData } = usePaginatedTableData((page, perPage) => executeGetUserNotification(token!, page, perPage), 9)
 
   useEffect(() => {
     console.log("SWIPER", swiper)
@@ -56,53 +63,63 @@ const Dashboard: React.FC<DashboardProps> = () => {
         </Stack>
 
         {/* NOTIFICATIONS */}
-        <HStack p={4} pr={2} bg={"white"} alignItems={"stretch"} rounded={"md"}>
-          <Swiper
-            ref={swiper}
-            slidesPerView={1}
-            spaceBetween={20}
-            breakpoints={{
-              640: {
-                slidesPerView: 1,
-                spaceBetween: 20,
-              },
-              992: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-              },
-              1024: {
-                slidesPerView: 3,
-                spaceBetween: 20,
-              },
-            }}
-          >
-            {["error", "info", "error", "info", "warning", "warning", "info", "warning"].map((type) => (
-              <SwiperSlide key={type} style={{ width: "fit-content" }}>
-                <NotificationCard type={type as any} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+        <Box p={4} bg={"white"} rounded={"md"}>
 
-          <Center>
-            <Stack spacing={6}>
-              <IconButton 
-                size={"xs"}
-                onClick={() => (swiper as any).current.swiper.slideNext()}
-                aria-label="next"
-                variant={"ghost"}
-                icon={<Icon fontSize={"2xl"} color={TEXT_GRAY} as={IoIosArrowForward} />}
-              />
+          {loadingData ? <Center py={8}>
+            <DataLoader />
+          </Center> : data.length ?
+            (
+              <HStack pr={2} alignItems={"stretch"}>
+                <Swiper
+                  ref={swiper}
+                  slidesPerView={1}
+                  spaceBetween={20}
+                  breakpoints={{
+                    640: {
+                      slidesPerView: 1,
+                      spaceBetween: 20,
+                    },
+                    992: {
+                      slidesPerView: 2,
+                      spaceBetween: 20,
+                    },
+                    1024: {
+                      slidesPerView: 3,
+                      spaceBetween: 20,
+                    },
+                  }}
+                >
+                  {data.map((type: NotificationDataType) => (
+                    <SwiperSlide key={type.id} style={{ width: "fit-content" }}>
+                      <NotificationCard {...type} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
 
-              <IconButton 
-                size={"xs"}
-                onClick={() => (swiper as any).current.swiper.slidePrev()}
-                aria-label="prev"
-                variant={"ghost"}
-                icon={<Icon fontSize={"2xl"} color={TEXT_GRAY} as={IoIosArrowBack} />}
-              />
-            </Stack>
-          </Center>
-        </HStack>
+                <Center>
+                  <Stack spacing={6}>
+                    <IconButton
+                      size={"xs"}
+                      onClick={() => (swiper as any).current.swiper.slideNext()}
+                      aria-label="next"
+                      variant={"ghost"}
+                      icon={<Icon fontSize={"2xl"} color={TEXT_GRAY} as={IoIosArrowForward} />}
+                    />
+
+                    <IconButton
+                      size={"xs"}
+                      onClick={() => (swiper as any).current.swiper.slidePrev()}
+                      aria-label="prev"
+                      variant={"ghost"}
+                      icon={<Icon fontSize={"2xl"} color={TEXT_GRAY} as={IoIosArrowBack} />}
+                    />
+                  </Stack>
+                </Center>
+              </HStack>
+            ) :
+            (<EmptyTable text="No notifications found" />)
+          }
+        </Box>
       </Stack>
     </DashboardLayout>
   )

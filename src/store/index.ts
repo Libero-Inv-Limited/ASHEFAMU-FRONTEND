@@ -18,6 +18,7 @@ const appReducer = combineReducers({
   facilityDataStore: facilityDataReducer,
   dataStore: dataReducer,
 });
+
 const persistedReducer = persistReducer({ 
   key: "root", 
   storage,

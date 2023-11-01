@@ -6,7 +6,8 @@ const ROUTES = {
   CHANGE_PASSWORD_ROUTE:(email: string) => `/change-password/${email}`,
   VERIFY_CONTACT_ROUTE:(email: string) => `/verify-contact/${email}`,
   SUCCESS_ROUTE:(type: string) => `/success/${type}`,
-
+  
+  EDIT_FACILITY_ROUTE:(name: string) => `/dashboard/facilities/${name}/edit-facility/`,
   DASHBOARD_ROUTE: "/dashboard",
   CREATE_FACILITY_ROUTE: "/dashboard/facilities/register-facility",
   FACILITY_ROUTE: "/dashboard/facilities?tab=registration",
@@ -15,3 +16,4 @@ const ROUTES = {
 }
 
 export default ROUTES
+

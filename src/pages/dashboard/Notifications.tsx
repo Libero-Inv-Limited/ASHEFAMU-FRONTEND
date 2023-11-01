@@ -1,23 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react"
+import React from "react"
 import DashboardLayout from "../../components/layouts/DashboardLayout"
-import { HStack, Select, SimpleGrid, Stack, Text } from "@chakra-ui/react"
+import { Box, Center, HStack, Select, SimpleGrid, Stack, Text } from "@chakra-ui/react"
 import { notificationSearchData } from "../../utils/data"
 import CustomSelect from "../../components/common/CustomSelect";
 import NotificationCard from "../../components/common/NotificationCard";
 import CustomButton from "../../components/common/CustomButton";
+import usePaginatedTableData from "../../hooks/usePaginatedTableData";
+import { executeGetUserNotification } from "../../apis/user";
+import { useAppSelector } from "../../store/hook";
+import DataLoader from "../../components/common/loader/DataLoader";
+import EmptyTable from "../../components/states/EmptyTable";
 
 interface NotificationProps { }
 const Notification: React.FC<NotificationProps> = () => {
-  const [page, setPage] = useState(1)
-  const data = ["error", "info", "error", "info", "warning", "warning", "info", "warning"]
-  const perPage = 9
-  const last = Math.ceil(data.length / perPage ) 
+  const token = useAppSelector(state => state.accountStore.tokenStore?.token)
+  const { currentPage, data, loadingData, handlePageChange, handleReloadData, lastPage } = usePaginatedTableData((page, perPage) => executeGetUserNotification(token!, page, perPage), 9)
   // const last = div <= perPage ? perPage : div
   return (
     <DashboardLayout>
       <Stack>
         <CustomSelect
+          fontSize="sm"
           styles={{
             container: (style) => ({
               ...style,
@@ -31,24 +35,36 @@ const Notification: React.FC<NotificationProps> = () => {
       </Stack>
 
       {/* NOTIFICATIONS */}
-      <SimpleGrid p={4} mt={6} spacing={4} flexWrap={"wrap"} bg={"white"} columns={[1, 2, 3]} rounded={"md"}>
-        {data.map((type) => (
-          <NotificationCard type={type as any} />
-        ))}
-      </SimpleGrid>
+      <Box p={4} mt={6} bg={"white"} rounded={"md"}>
+        {
+          loadingData ? (
+            <Center>
+              <DataLoader />
+            </Center>
+          ) : data.length ?
+            data.map((type: NotificationDataType) => (
+              <SimpleGrid key={type.id} spacing={4} flexWrap={"wrap"} columns={[1, 2, 3]}>
+                <NotificationCard handleReload={handleReloadData} {...type} />
+              </SimpleGrid>
+            )) :
+            <EmptyTable text={"No notifications found"} />
+        }
+      </Box>
 
-      <HStack alignItems={"center"} justifyContent={"center"} mt={10}>
-        <CustomButton h={"40px"} colorScheme="primary">Previous</CustomButton>
-        <HStack alignItems={"center"} justifyContent={"center"}>
-          <Select value={page} onChange={(e) => setPage(+e.target.value)}>
-            { (new Array(last)).fill("-").map((_, index) => (
-              <option key={`option-${index}`} value={index + 1}>{index + 1}</option>
-            )) }
-          </Select>
-          <Text whiteSpace={"nowrap"}>of {last}</Text>
+      {!!data.length && (
+        <HStack position={"sticky"} bottom={0} left={0} alignItems={"center"} justifyContent={"center"} mt={10}>
+          <CustomButton h={"40px"} isDisabled={currentPage <= 1} onClick={() => handlePageChange(currentPage - 1)} colorScheme="primary">Previous</CustomButton>
+          <HStack alignItems={"center"} justifyContent={"center"}>
+            <Select value={currentPage} onChange={(e) => handlePageChange(+e.target.value)}>
+              {(new Array(lastPage)).fill("-").map((_, index) => (
+                <option key={`option-${index}`} selected={(index + 1) === currentPage} value={index + 1}>{index + 1}</option>
+              ))}
+            </Select>
+            <Text whiteSpace={"nowrap"}>of {lastPage}</Text>
+          </HStack>
+          <CustomButton isDisabled={currentPage >= lastPage} onClick={() => handlePageChange(currentPage + 1)} h={"40px"} colorScheme="primary">Next</CustomButton>
         </HStack>
-        <CustomButton h={"40px"} colorScheme="primary">Next</CustomButton>
-      </HStack>
+      )}
     </DashboardLayout>
   )
 }

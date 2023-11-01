@@ -14,7 +14,7 @@ const SidebarItem: React.FC<SidebarItemProps> = (item) => {
   const { pathname } = useLocation()
   const param = useParams()
   const isActive = param?.name ? 
-    pathname.split(param.name)[0].toLowerCase().includes(item.name) : 
+    pathname.split(param.name)[0].trim().toLowerCase().split("/").filter(item => item).slice(1).includes(item.name):  // GET'S THE PATH (/../..) AND CHECK IF IT CONTAINS THE NAME OF THE ROUTE
     pathname.toLowerCase().split("/").reverse()[0] === item.name.toLowerCase() ||
     item.name.toLowerCase() === "dashboard" && pathname === "/"
 

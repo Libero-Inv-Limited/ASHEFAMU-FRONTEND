@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ChangeEvent, useEffect } from "react"
 import DashboardLayout from "../../components/layouts/DashboardLayout"
-import { ButtonGroup, Container, Divider, Stack, Text, useDisclosure } from "@chakra-ui/react"
+import { ButtonGroup, Container, Divider, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react"
 import CustomButton from "../../components/common/CustomButton"
 import useSearchParam from "../../hooks/useSearchParam"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -9,12 +9,12 @@ import { DARK, TEXT_DARK_GRAY } from "../../utils/color"
 import { useForm } from "react-hook-form"
 import AuthInput from "../../components/common/AuthInput"
 import { useAppSelector } from "../../store/hook"
-import { FaRegUser } from "react-icons/fa"
-import { IoMailOutline } from "react-icons/io5"
 import { MdOutlinePhoneEnabled } from "react-icons/md"
-import { log } from "../../utils/helpers"
 import RoleUpgrade from "../../components/modals/RoleUpgrade"
-import RoleUpgradeSuccess from "../../components/modals/RoleUpgradeSuccess"
+import RoleUpgradeSuccess from "../../components/modals/SuccessModal"
+import { MailIcon, UserIcon } from "../../components/icons"
+import { executeUpdateProfile } from "../../apis/auth"
+import { useAppContext } from "../../contexts/AppContext"
 
 interface ProfilePageProps { }
 const ProfilePage: React.FC<ProfilePageProps> = () => {
@@ -36,23 +36,50 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
   }
 
   const isGeneral = activeTab?.toLowerCase() === "general-settings"
-  const { control } = useForm({
+  const { control, getValues, trigger } = useForm<UpdateProfile>({
     mode: "onSubmit"
   })
 
-  const { control: passwordControl, watch } = useForm<{
-    oldpwd: string,
-    pwd: string,
-    confirm: string;
-  }>({
-    mode: "onSubmit"
-  })
-
-  const password = watch("pwd")
-
+  const { getUsersProfile } = useAppContext()
   const user = useAppSelector(state => state.accountStore.user)
-  log('USER:', user)
-  const handleSave = () => { }
+  const token = useAppSelector(state => state.accountStore.tokenStore?.token)
+  const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
+  const toast = useToast({
+    position: "bottom",
+    isClosable: true,
+    variant: "subtle",
+  })
+
+  const handleSave = async () => {
+    if (!await trigger()) return
+    try {
+      openLoading()
+      const payload: UpdateProfile = {
+        ...getValues(),
+        id: user!.user.id!
+      }
+
+      const result = await executeUpdateProfile(payload, token!)
+      if (result.status === "error") throw new Error(result.message)
+      console.log("RESULT:", result)
+      toast({
+        title: result.message,
+        status: "success"
+      })
+
+      // UPDATE PROFILE STATE
+      getUsersProfile(token!)
+    }
+    catch (e: any) {
+      toast({
+        title: e.message,
+        status: "error"
+      })
+    }
+    finally {
+      closeLoading()
+    }
+  }
   return (
     <DashboardLayout>
       <Container maxW={"md"} mx={"unset"}>
@@ -68,15 +95,14 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
           <Stack mt={8} spacing={4}>
             <Stack p={4} bg={"white"} rounded={"md"} spacing={4}>
               <AuthInput
-                // labelStyles={{
-                //   fontWeight: "500"
-                // }}
                 iconProp={{ fontSize: "xl" }}
                 color={DARK}
                 name="firstname"
                 control={control}
                 label="First name"
-                Icon={FaRegUser}
+                value={user?.user.firstname}
+                isIconComponent
+                Icon={<UserIcon w={"24px"} h={"24px"} fill={"#A3AEBD"} />}
                 rules={{
                   required: "First name is required",
                   minLength: {
@@ -87,15 +113,14 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
               />
 
               <AuthInput
-                // labelStyles={{
-                //   fontWeight: "500"
-                // }}
                 iconProp={{ fontSize: "xl" }}
                 color={DARK}
                 name="lastname"
                 control={control}
                 label="Last name"
-                Icon={FaRegUser}
+                value={user?.user.lastname}
+                Icon={<UserIcon w={"24px"} h={"24px"} fill={"#A3AEBD"} />}
+                isIconComponent
                 rules={{
                   required: "Last name is required",
                   minLength: {
@@ -112,7 +137,9 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
                 control={control}
                 name="email"
                 type="email"
-                Icon={IoMailOutline}
+                value={user?.user.email}
+                isIconComponent
+                Icon={<MailIcon w={"24px"} h={"24px"} fill={"#363A43"} stroke={"#A3AEBD"} />}
                 label="Email"
                 rules={{
                   required: "Email is required",
@@ -128,6 +155,8 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
                 name="mobile"
                 type="tel"
                 Icon={MdOutlinePhoneEnabled}
+                value={user?.user.mobile_number}
+                iconProp={{ w: "24px", h: "24px" }}
                 label="Phone no"
                 rules={{
                   required: "Phone number is required",
@@ -142,7 +171,7 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
                 }}
               />
 
-              <CustomButton onClick={handleSave} w={"full"}>Save changes</CustomButton>
+              <CustomButton isLoading={isLoading} onClick={handleSave} w={"full"}>Save changes</CustomButton>
             </Stack>
             {/* ROLE UPGRADE */}
             <Divider my={4} />
@@ -152,62 +181,114 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
             </Stack>
           </Stack>
         ) : (
-          <Stack mt={8} spacing={4}>
-            <Stack p={4} bg={"white"} rounded={"md"} spacing={4}>
-              {/* PASSWORD */}
-              <AuthInput
-                control={passwordControl}
-                name="oldpwd"
-                type="password"
-                isPassword
-                label="Old password"
-                rules={{
-                  required: "Old passwprd is required",
-                  minLength: {
-                    value: 8,
-                    message: "Password should be at least 8 characters."
-                  }
-                }}
-              />
-
-              <AuthInput
-                control={passwordControl}
-                name="pwd"
-                type="password"
-                isPassword
-                label="Password"
-                rules={{
-                  required: "Password is required",
-                  minLength: {
-                    value: 8,
-                    message: "Password should be at least 8 characters."
-                  }
-                }}
-              />
-
-              {/* C PASWORD */}
-              <AuthInput
-                control={passwordControl}
-                name="confirm"
-                type="password"
-                isPassword
-                label="Confirm Password"
-                rules={{
-                  validate: (value: string) => {
-                    return value !== password ? "Wrong password" : undefined
-                  }
-                }}
-              />
-              <CustomButton onClick={handleSave} w={"full"}>Change password</CustomButton>
-            </Stack>
-          </Stack>
+          <PasswordForm />
         )}
       </Container>
 
       <RoleUpgrade isOpen={isRoleUpgradeOpen} onClose={closeRoleUpgrade} />
-      <RoleUpgradeSuccess isOpen={isRoleUpgradeSuccessOpen} onClose={closeRoleUpgradeSuccess} />
+      <RoleUpgradeSuccess
+        title="Request sent successfully"
+        text="You won't be able to do this again until after 30 days. Check your notification section for confirmation or rejection of your request"
+        isOpen={isRoleUpgradeSuccessOpen}
+        onClose={closeRoleUpgradeSuccess}
+      />
     </DashboardLayout>
   )
 }
 
 export default ProfilePage
+
+
+
+
+
+// PASSWORD FORM
+const PasswordForm = () => {
+  // const token = useAppSelector(state => state.accountStore.tokenStore?.token)
+  const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
+  const toast = useToast({
+    position: "bottom",
+    isClosable: true,
+    variant: "subtle",
+  })
+  const { control: passwordControl, watch: passWatch, trigger } = useForm({
+    mode: "onSubmit"
+  })
+  const password = passWatch("pwd")
+
+  const handlePasswordChange = async () => {
+    if(!await trigger()) return
+    try {
+      openLoading()
+      // const result = await ex
+      // toast({
+      //   title: result.,
+      //   status: "error"
+      // })
+    }
+    catch(e: any) {
+      toast({
+        title: e.message,
+        status: "error"
+      })
+    }
+    finally {
+      closeLoading()
+    }
+  }
+
+  return (
+    <Stack mt={8} spacing={4}>
+      <Stack p={4} bg={"white"} rounded={"md"} spacing={4}>
+        {/* PASSWORD */}
+        <AuthInput
+          control={passwordControl}
+          name="oldpwd"
+          type="password"
+          value={""}
+          isPassword
+          label="Old password"
+          rules={{
+            required: "Old passwprd is required",
+            minLength: {
+              value: 8,
+              message: "Password should be at least 8 characters."
+            }
+          }}
+        />
+
+        <AuthInput
+          control={passwordControl}
+          name="pwd"
+          type="password"
+          value={""}
+          isPassword
+          label="Password"
+          rules={{
+            required: "Password is required",
+            minLength: {
+              value: 8,
+              message: "Password should be at least 8 characters."
+            }
+          }}
+        />
+
+        {/* C PASWORD */}
+        <AuthInput
+          control={passwordControl}
+          name="confirm"
+          type="password"
+          value={""}
+          isPassword
+          label="Confirm Password"
+          rules={{
+            validate: (value: string) => {
+              return value !== password ? "Wrong password" : undefined
+            }
+          }}
+        />
+        <CustomButton isLoading={isLoading} onClick={handlePasswordChange} w={"full"}>Change password</CustomButton>
+      </Stack>
+    </Stack>
+  )
+}

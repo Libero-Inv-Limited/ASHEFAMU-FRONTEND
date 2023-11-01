@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { log } from '../utils/helpers';
-import { CHANGE_PASSWORD_ENDPOINT, FORGOT_PASSWORD_ENDPOINT, LOGIN_ENDPOINT, PROFILE_ENDPOINT, REGISTER_ENDPOINT, RESEND_OTP_ENDPOINT, VERIFY_CONTACTS_ENDPOINT } from './index';
+import { CHANGE_PASSWORD_ENDPOINT, FORGOT_PASSWORD_ENDPOINT, LOGIN_ENDPOINT, PROFILE_ENDPOINT, REGISTER_ENDPOINT, RESEND_OTP_ENDPOINT, UPDATE_PASSWORD_ENDPOINT, VERIFY_CONTACTS_ENDPOINT } from './index';
 
 
 
@@ -133,6 +133,27 @@ export const executeForgotPassword = async (email: string): Promise<ResponseData
       }
     }
     const request = await fetch(FORGOT_PASSWORD_ENDPOINT, options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("FORGOT_PASSWORD [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}
+
+
+export const executeUpdateProfile = async (data: UpdateProfile, token: string): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    }
+    const request = await fetch(UPDATE_PASSWORD_ENDPOINT, options)
     const response = await request.json() satisfies ResponseDataType
     return response
   }

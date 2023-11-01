@@ -1,5 +1,11 @@
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
+
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const SHOW_LOGS = true;
+
 
 export const log = (...args: any[]) => SHOW_LOGS && console.log(...args);
 
@@ -51,7 +57,7 @@ export const generateYear = (startingYear: number = 1970): number[] => {
   return yearsArray;
 };
 
-export const readFile = (file: File, type: "text" | "base64" = "text") => new Promise((res, rej) => {
+export const readFile = (file: File | Blob, type: "text" | "base64" = "text") => new Promise((res, rej) => {
   const reader = new FileReader()
   if(type === "text") reader.readAsText(file)
   if(type === "base64") reader.readAsDataURL(file)
@@ -75,4 +81,17 @@ export const handleConvertCSVToArray = (text: string) => {
     data.push(value)
   })
   return data
+}
+
+
+// HUMAN REDABLE DATE
+export const humanReadableDate = (isoTimestamp: string) => {
+  const parsedTimestamp = dayjs(isoTimestamp);
+  return parsedTimestamp.fromNow();
+}
+
+export const formatDate = (date: string) => {
+  const options: any = { year: 'numeric', month: 'short', day: 'numeric' };
+  const formattedDate = new Date(date).toLocaleDateString('en-US', options);
+  return formattedDate.replace(/(\d)(st|nd|rd|th)/, '$1');
 }

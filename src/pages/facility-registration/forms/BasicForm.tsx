@@ -93,6 +93,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
           longitude: getValues("longitude"),
         }),
         cac_number: getValues("cac_number"),
+        facility_sector: getValues("facility_sector").value,
         multiple_branch: getValues("has_multiple_facility") === "yes",
         closest_landmark: getValues("closet_landmark"),
         local_gov_area: getValues("local_gov_area").value,
@@ -521,7 +522,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               name="opening_time"
               value={defaultValues?.["opening_time"]}
               rules={{
-                required: "Full name is required"
+                required: "Opening time is required"
               }}
             />
           </GridItem>

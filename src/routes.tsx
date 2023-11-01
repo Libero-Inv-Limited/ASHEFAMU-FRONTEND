@@ -21,6 +21,7 @@ import CreateIntent from "./pages/facility-registration/CreateIntent";
 import FacilityForm from "./pages/facility-registration/FacilityForm";
 import Landing from "./pages/home/Landing";
 import ProfilePage from "./pages/dashboard/ProfilePage";
+import FacilityFormEdit from "./pages/facility-registration/FacilityFormEdit";
 
 export default [
   // HOME PAGE
@@ -121,6 +122,11 @@ export default [
     path: "/dashboard/facilities/register-facility/fill-form",
     element: <FacilityForm />,
     name: "Facility Form"
+  },
+  {
+    path: "/dashboard/facilities/:facility/edit-facility/",
+    element: <FacilityFormEdit />,
+    name: "Facility Edit Form"
   },
 
   // PAYMENT

@@ -12,11 +12,12 @@ interface InvoiceModalProps {
   invoiceId: string;
   status: string;
   isOpen: boolean;
+  isLoading?: boolean;
   onClose: () => void;
   handleAction: (name: MethodType) => void;
   handleViewInvoice: () => void;
 }
-const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose, handleAction, handleViewInvoice, invoiceId, status }) => {
+const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, isLoading, onClose, handleAction, handleViewInvoice, invoiceId, status }) => {
   const [isPaying, setIsPaying] = useState<boolean>(false)
 
   const toast = useToast({
@@ -29,7 +30,7 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose, handleActi
     if (status.toLowerCase() === "paid") {
       toast({
         title: "Invoice already paid!",
-        status: "info"
+        status: "info",
       })
       onClose()
       return
@@ -55,7 +56,7 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose, handleActi
 
             <SimpleGrid columns={2} mt={6} gap={4}>
               {paymentMethods.map((method) => (
-                <Button isDisabled={method.isDisabled} onClick={() => handleAction(method.name as MethodType)} key={`pay-method-${method.name}`} display={"flex"} h={40} flex={1} fontSize={"xl"}>
+                <Button isDisabled={method.isDisabled} isLoading={isLoading} onClick={() => handleAction(method.name as MethodType)} key={`pay-method-${method.name}`} display={"flex"} h={40} flex={1} fontSize={"xl"}>
                   <Center>
                     <Image src={method.image} h={8} />
                   </Center>

@@ -1,16 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Center, HStack, Icon, Input, InputGroup, InputLeftElement, Select, Spacer, Text } from "@chakra-ui/react";
-import React from "react"
+import { Box, Center, HStack, Icon, Input, InputGroup, InputLeftElement, Spacer, Stack, Text } from "@chakra-ui/react";
+import React, { useState } from "react"
 import { AiOutlineSearch } from "react-icons/ai";
-import { TEXT_DARK, TEXT_GRAY } from "../../utils/color";
+import { TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color";
 import CustomTable from "./CustomTable";
-import { invoiceData } from "../../utils/data";
+import usePaginatedTableData from "../../hooks/usePaginatedTableData";
+import { executeGetFacilityInvoices } from "../../apis/facility";
+import { useAppContext } from "../../contexts/AppContext";
+import { useAppSelector } from "../../store/hook";
+import CustomSelect from "../common/CustomSelect";
 
 
-const invoice = {
-  data: invoiceData,
-  columns: [
+interface CustomInvoiceTableProps { }
+
+const CustomInvoiceTable: React.FC<CustomInvoiceTableProps> = () => {
+  const { currentFacility } = useAppContext()
+  const token = useAppSelector(state => state.accountStore.tokenStore!.token)
+  const { data, totalRows, handlePageChange, handlePerRowsChange, loadingData, } = usePaginatedTableData((page, perPage) => executeGetFacilityInvoices(currentFacility!.id, token!, page, perPage))
+  const [invoices, setInvoices] = useState<InvoiceDataType[]>(data)
+
+  const columns = [
     {
       name: "Invoice ID",
       selector: "id",
@@ -18,10 +28,8 @@ const invoice = {
     },
     {
       name: "Date Sent",
-      selector: "created_at",
-      cell: (data: InvoiceData) => {
-        const date = new Date(data.created_at)
-        console.log(date)
+      cell: (data: InvoiceDataType) => {
+        const date = new Date(+data.invoice_date)
         return (
           <Text>{date.toLocaleDateString()}</Text>
         )
@@ -35,15 +43,18 @@ const invoice = {
     },
     {
       name: "Amount (N)",
-      selector: "amount",
+      cell: (data: InvoiceDataType) => {
+        return (
+          <Text>{(+data.amount).toLocaleString()}</Text>
+        )
+      },
       sortable: true,
     },
     {
       name: "Due date",
       selector: "due_date",
-      cell: (data: InvoiceData) => {
-        const date = new Date(data.due_date)
-        console.log(date)
+      cell: (data: InvoiceDataType) => {
+        const date = new Date(+data.due_date)
         return (
           <Text>{date.toDateString()}</Text>
         )
@@ -53,25 +64,22 @@ const invoice = {
     {
       name: "Status",
       selector: "status",
-      cell: (data: InvoiceData) => {
-        const color = data.status === "paid" ? "#48A874" : "#DC2626"
+      cell: (data: InvoiceDataType) => {
+        const isPaid = data.status === "paid"
+        const color = isPaid ? "#48A874" : "#DC2626"
+        const paymentInfo = JSON.parse(data.payments[0].payment_method) as PaymentDataType
         return (
-          <Text color={color} fontWeight={"semibold"} textTransform={"capitalize"}>{data.status}</Text>
+          <Stack spacing={0}>
+            <Text color={color} fontWeight={"semibold"} textTransform={"capitalize"}>{data.status}</Text>
+            {isPaid && <Text color={TEXT_DARK_GRAY} fontSize={"xs"}>with {paymentInfo.authorization.channel}</Text>}
+          </Stack>
         )
       },
     },
   ]
-}
 
-
-interface CustomInvoiceTableProps {}
-
-const CustomInvoiceTable: React.FC<CustomInvoiceTableProps> = () => {
-  const { data, columns } = invoice
   const [filterText, setFilterText] = React.useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-  const filteredItems = data.filter((item) => item.id && item.id.toString().toLowerCase().includes(filterText.toLowerCase()),
-  );
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
@@ -81,18 +89,34 @@ const CustomInvoiceTable: React.FC<CustomInvoiceTableProps> = () => {
       }
     };
 
+
+    const handleChange = (item: { label: string, value: string }) => {
+      const val = item.value
+      if(!val || val === "*") return setInvoices(data)
+      const filtered = (data as InvoiceDataType[]).filter(elem => elem.status.toLowerCase() === val.toLowerCase())
+      setInvoices(filtered)
+    }
+
     return (
-      <FilterComponent onFilter={(e) => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />
+      <FilterComponent onChange={handleChange} onFilter={(e) => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />
     );
   }, [filterText, resetPaginationToggle]);
 
   return (
-    <CustomTable
-      columns={columns as any}
-      data={filteredItems}
-      paginationResetDefaultPage={resetPaginationToggle}
-      subHeaderComponent={subHeaderComponentMemo}
-    />
+    <Box p={4} bg={"white"} rounded={"md"}>
+      <CustomTable
+        columns={columns as any}
+        data={invoices}
+        paginationResetDefaultPage={resetPaginationToggle}
+        subHeaderComponent={subHeaderComponentMemo}
+        progressPending={loadingData}
+        pagination
+        paginationServer
+        paginationTotalRows={totalRows}
+        onChangeRowsPerPage={handlePerRowsChange}
+        onChangePage={handlePageChange}
+      />
+    </Box>
   )
 }
 
@@ -100,10 +124,16 @@ const CustomInvoiceTable: React.FC<CustomInvoiceTableProps> = () => {
 // TABLE HEADER 
 interface FilterComponentProp {
   onFilter: (e: any) => void;
+  onChange: (data: { label: string, value: string }) => void;
   onClear: () => void;
   filterText: string;
 }
-const FilterComponent: React.FC<FilterComponentProp> = ({ onFilter, filterText }) => {
+const FilterComponent: React.FC<FilterComponentProp> = ({ onChange, onFilter, filterText }) => {
+  const filterData = [
+    {label: "All", value: "*"},
+    {label: "Paid", value: "paid"},
+    {label: "Unpaid", value: "unpaid"},
+  ]
   return (
     <HStack flexWrap={"wrap"} flexDir={['column-reverse', 'column-reverse', 'row']} spacing={2} alignItems={["flex-start", "flex-start", "center"]} w={"full"}>
       <InputGroup flex={1} maxW={['full', 'full', 435]}>
@@ -113,9 +143,11 @@ const FilterComponent: React.FC<FilterComponentProp> = ({ onFilter, filterText }
         <Input fontSize={"sm"} onChange={onFilter} value={filterText} placeholder="Search" />
       </InputGroup>
       <Spacer />
-      <Select maxW={150} fontSize={"sm"} color={TEXT_DARK}>
-        <option value="">Filter</option>
-      </Select>
+      <CustomSelect
+        onChange={(value) => onChange(value as any)}
+        options={filterData}
+        fontSize="sm"
+      />
     </HStack>
   )
 }

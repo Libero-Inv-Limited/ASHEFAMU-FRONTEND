@@ -4,67 +4,75 @@ import React from "react"
 import { AiOutlineSearch } from "react-icons/ai";
 import { RED, TEXT_DARK, TEXT_GRAY, YELLOW } from "../../utils/color";
 import CustomTable from "./CustomTable";
-import { membersNonProData } from "../../utils/data";
 import { BiEdit, BiTrash } from "react-icons/bi";
 
 
-const accreditedData = {
-  data: membersNonProData,
-  columns: [
-    {
-      name: "Name",
-      selector: "name",
-      sortable: false,
-    },
-    {
-      name: "Compliment",
-      selector: "compliment",
-      sortable: false,
-    },
-    {
-      name: "Type",
-      selector: "type",
-      sortable: true,
-    },
-    {
-      name: "Actions",
-      selector: "",
-      sortable: false,
-      cell: () => {
-        return (
-          <HStack>
-            <IconButton
-              _hover={{ bg: "#FFEBC9" }}
-              rounded={"full"}
-              bg={"#FFEBC9"}
-              aria-label="edit"
-              icon={<Icon fontSize={"xl"} as={BiEdit} color={YELLOW} />}
-            />
-            <IconButton
-              bg={"#FEE2E2"}
-              _hover={{ bg: "#FEE2E2" }}
-              rounded={"full"}
-              colorScheme="red"
-              aria-label="delete"
-              icon={<Icon fontSize={"xl"} as={BiTrash} color={RED} />}
-            />
-          </HStack>
-        )
-      },
-    },
-  ]
+interface CustomNonProMemberTableProps { 
+  data: any[];
+  deletingMemberId: number | null;
+  loadingData: boolean;
+  isLoading: boolean;
+  handlePageChange: (page: number) => void;
+  handlePerRowsChange:(newPerPage: number, page: number) => Promise<void>;
+  totalRows: number;
+  handleDeleteMember: (id: number) => void;
+  handleEditMember: (item: NonProfessionalStaffData) => void;
 }
+const CustomNonProMemberTable: React.FC<CustomNonProMemberTableProps> = ({ data: loadedData, handleDeleteMember, handleEditMember, handlePageChange, handlePerRowsChange, loadingData, isLoading, totalRows, deletingMemberId }) => {
 
+  const accreditedData = {
+    columns: [
+      {
+        name: "Name",
+        selector: "name",
+        sortable: false,
+      },
+      {
+        name: "Compliment",
+        selector: "complement",
+        sortable: false,
+      },
+      {
+        name: "Type",
+        selector: "staff_type",
+        sortable: true,
+      },
+      {
+        name: "Actions",
+        selector: "",
+        sortable: false,
+        cell: (item: NonProfessionalStaffData) => {
+          return (
+            <HStack>
+              <IconButton
+                _hover={{ bg: "#FFEBC9" }}
+                rounded={"full"}
+                onClick={() => handleEditMember(item)}
+                bg={"#FFEBC9"}
+                aria-label="edit"
+                icon={<Icon fontSize={"xl"} as={BiEdit} color={YELLOW} />}
+              />
+              <IconButton
+                bg={"#FEE2E2"}
+                _hover={{ bg: "#FEE2E2" }}
+                rounded={"full"}
+                isLoading={(deletingMemberId === item.id) && isLoading}
+                colorScheme="red"
+                onClick={() => handleDeleteMember(item.id)}
+                aria-label="delete"
+                icon={<Icon fontSize={"xl"} as={BiTrash} color={RED} />}
+              />
+            </HStack>
+          )
+        },
+      },
+    ]
+  }
 
-interface CustomNonProMemberTableProps { }
-const CustomNonProMemberTable: React.FC<CustomNonProMemberTableProps> = () => {
-  const { data, columns } = accreditedData
+  const { columns } = accreditedData
 
   const [filterText, setFilterText] = React.useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-  const filteredItems = data.filter((item) => item.name && item.name.toLowerCase().includes(filterText.toLowerCase()),
-  );
-
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
@@ -82,9 +90,15 @@ const CustomNonProMemberTable: React.FC<CustomNonProMemberTableProps> = () => {
   return (
     <CustomTable
       columns={columns as any}
-      data={filteredItems}
+      data={loadedData}
       paginationResetDefaultPage={resetPaginationToggle}
       subHeaderComponent={subHeaderComponentMemo}
+			progressPending={loadingData}
+			pagination
+			paginationServer
+			paginationTotalRows={totalRows}
+			onChangeRowsPerPage={handlePerRowsChange}
+			onChangePage={handlePageChange}
     />
   )
 }

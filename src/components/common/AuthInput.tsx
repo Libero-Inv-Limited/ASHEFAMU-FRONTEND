@@ -12,7 +12,8 @@ import CustomSelect from "./CustomSelect";
 interface AuthInputProps extends InputProps {
   label: string;
   control: any;
-  Icon?: IconType;
+  Icon?: any;
+  isIconComponent?: boolean;
   name: string;
   rules: any;
   isPassword?: boolean;
@@ -24,7 +25,7 @@ interface AuthInputProps extends InputProps {
 }
 
 
-const AuthInput: React.FC<AuthInputProps> = ({ label, value, iconProp, rules, labelStyles, selectProps, control, data, isPassword, isSelect, name, Icon, ...rest }) => {
+const AuthInput: React.FC<AuthInputProps> = ({ label, value, iconProp, isIconComponent, rules, labelStyles, selectProps, control, data, isPassword, isSelect, name, Icon, ...rest }) => {
   const { fontSize } = rest
   const { field, fieldState: { error } } = useController({
     defaultValue: value || "",
@@ -54,7 +55,7 @@ const AuthInput: React.FC<AuthInputProps> = ({ label, value, iconProp, rules, la
       <FormLabel color={TEXT_DARK} fontSize={"14px"} mb={1} fontWeight={"500"} fontFamily={"body"} {...labelStyles}>{label}</FormLabel>
       <InputGroup alignItems={"center"}>
         {Icon && <InputLeftElement as={Center} h={"full"} w={12} color={"gray.400"} fontSize={"lg"}>
-          <ChakraIcon as={Icon} fontSize={"24px"} {...iconProp} />
+          { isIconComponent ? Icon : <ChakraIcon as={Icon as IconType} fontSize={"24px"} {...iconProp} />}
         </InputLeftElement>}
 
         {isPassword && (

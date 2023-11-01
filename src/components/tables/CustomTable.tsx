@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react"
 import DataTable, { TableProps } from "react-data-table-component"
-import { DARK, LIGHT_GREEN } from "../../utils/color"
+import { DARK, LIGHT_GREEN, TEXT_DARK_GRAY } from "../../utils/color"
+import { CircularProgress, HStack, Text } from "@chakra-ui/react"
+import CustomPagination from "./CustomPagination"
+import EmptyTable from "../states/EmptyTable"
+
+
 
 interface CustomTableProps extends TableProps<any> { 
 }
@@ -10,6 +15,11 @@ const CustomTable: React.FC<CustomTableProps> = (props) => {
     <DataTable
       pagination
       customStyles={{
+        tableWrapper: {
+          style: {
+            background: "#fff",
+          }
+        },
         subHeader: {
           style: {
             padding: 0
@@ -20,7 +30,9 @@ const CustomTable: React.FC<CustomTableProps> = (props) => {
             border: `1px solid #E2E6EB`,
             borderBottom: 0,
             marginTop: 16,
-            borderRadius: 0
+            borderRadius: 0,
+            color: TEXT_DARK_GRAY,
+            fontSize: ".9rem"
           }
         },
         headRow: {
@@ -42,11 +54,19 @@ const CustomTable: React.FC<CustomTableProps> = (props) => {
       }
       }}
       subHeader
-      selectableRows
+      noDataComponent={<EmptyTable />}
       persistTableHead
+      progressComponent={
+        <HStack py={6}>
+          <CircularProgress isIndeterminate color='brand.300' size={6} />
+          <Text color={TEXT_DARK_GRAY} fontSize={"sm"}>Loading data...</Text>
+        </HStack>
+      }
+      paginationComponent={(props: any) => <CustomPagination {...props} />}
       {...props}
     />
   )
 }
+
 
 export default CustomTable

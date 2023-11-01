@@ -42,6 +42,14 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
     variant: "subtle",
   })
 
+  const handleDownloadFile = () => {
+    const a = document.createElement("a")
+    a.href = "/files/staff_complementss.xlsx"
+    a.download = "sample_template.xlsx"
+    a.click()
+    a.remove()
+  }
+
   const handleSaveInfo = async () => {
     if(! await trigger()) return
     try {
@@ -128,7 +136,7 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
               {item}</ListItem>
           ))}
         </List>
-        <CustomButton leftIcon={<Icon as={FiDownload} fontSize={"xl"} />} w={"fit-content"}>Download template</CustomButton>
+        <CustomButton onClick={handleDownloadFile} leftIcon={<Icon as={FiDownload} fontSize={"xl"} />} w={"fit-content"}>Download template</CustomButton>
       </Stack>
 
       <Stack spacing={6}>

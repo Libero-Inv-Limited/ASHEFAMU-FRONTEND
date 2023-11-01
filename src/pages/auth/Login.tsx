@@ -11,9 +11,10 @@ import CustomButton from "../../components/common/CustomButton"
 import { TEXT_DARK } from "../../utils/color"
 import ROUTES from "../../utils/routeNames"
 import useWaitingText from "../../hooks/useWaitingText"
-import { executeGetProfile, executeLogin } from "../../apis/auth"
+import { executeLogin } from "../../apis/auth"
 import { useAppDispatch } from "../../store/hook"
-import { populateToken, populateUser } from "../../store/slice/accountSlice"
+import { populateToken } from "../../store/slice/accountSlice"
+import { useAppContext } from "../../contexts/AppContext"
 
 interface LoginProps { }
 const Login: React.FC<LoginProps> = () => {
@@ -22,6 +23,7 @@ const Login: React.FC<LoginProps> = () => {
   })
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const { getUsersProfile } = useAppContext()
   const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
   const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Submitting", "Searching user", "Matching cred..."])
   const toast = useToast({
@@ -48,12 +50,8 @@ const Login: React.FC<LoginProps> = () => {
       const tokenData = result.data.token
       dispatch(populateToken(tokenData))
 
-      // GET USER DATA
-      const userData = await executeGetProfile(tokenData.token)
-      if(userData.status === "error") throw new Error("Failed to get account information, Try again")
-
-      console.log("DATA:", userData)
-      dispatch(populateUser(userData.data))
+      // GET PROFILE
+      getUsersProfile(tokenData.token!)
 
       // SHOW SUCCESS TOAST
       toast({

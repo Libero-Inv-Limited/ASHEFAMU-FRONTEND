@@ -95,11 +95,26 @@ type MedicalProfessional = {
   approving_authority: string;
 };
 
+type UpdateProfile = {
+  firstname: string;
+  lastname: string;
+  email: string;
+  mobile: string;
+  id: number;
+};
+
 type ResponseDataType = {
   status: "success" | "error";
   message: string;
   data?: any;
   code?: number;
+};
+
+type NotificationRequest = {
+  source: "user" | "facility" | "all";
+  facility_id?: number;
+  page: number;
+  perPage: number;
 };
 
 type ProfessionStaff = {
@@ -109,5 +124,17 @@ type ProfessionStaff = {
 
 type NonProfessionStaff = {
   facility_id: number;
-  complements: {non_prof_staff_complement_id: number; value: number}[];
+  complements: { non_prof_staff_complement_id: number; value: number }[];
+};
+
+type PayOptions = "paystack" | "remita" | "interswitch" | "paypal";
+
+type PayInvoice = {
+  paymentMethod: PayOptions;
+  invoiceId: number;
+};
+
+type UpgradeData = {
+  facility_id: number;
+  request_details: string;
 };

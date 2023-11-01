@@ -7,9 +7,7 @@ import { BsHospital, BsHospitalFill } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { IoCardOutline, IoCard } from "react-icons/io5";
 import { IoMdNotifications, IoMdNotificationsOutline } from "react-icons/io";
-import { RiApps2Line, RiFacebookFill, RiLinkedinFill, RiTwitterXLine, RiYoutubeFill } from "react-icons/ri";
-import { FaRegFileAlt, FaUsers, FaRegUser } from "react-icons/fa";
-import documentImage from "../assets/doc.png"
+import { RiFacebookFill, RiLinkedinFill, RiTwitterXLine, RiYoutubeFill } from "react-icons/ri";
 import scrollIcon from "../assets/landing-icon/file.png"
 import eyeIcon from "../assets/landing-icon/eye.png"
 import paintIcon from "../assets/landing-icon/paint.png"
@@ -18,6 +16,7 @@ import remita from "../assets/remita.png"
 import paypal from "../assets/paypal.png"
 import paystack from "../assets/paystack.png"
 import interswitch from "../assets/interswitch.png"
+import { ChartIcon, DashIcon, FileIcon, MemberIcon, NotificationIcon, UserIcon } from "../components/icons";
 
 // PAYMENT METHODS
 export const paymentMethods = [
@@ -127,32 +126,41 @@ export const secondarySidebarContents = [
   {
     name: "dashboard",
     link: "/dashboard/facilities/:name",
-    icon: RiApps2Line,
+    icon: <DashIcon w={"25px"} h={"25px"} fill={"none"} stroke={"inherit"} />,
+    hasStroke: true,
+    isElementIcon: true
   },
   {
     name: "documents",
     link: "/dashboard/facilities/:name/documents",
-    icon: FaRegFileAlt,
+    icon: <FileIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} stroke={"inherit"} />,
+    hasStroke: true,
+    isElementIcon: true
   },
   {
     name: "members",
     link: "/dashboard/facilities/:name/members",
-    icon: FaUsers,
+    icon: <MemberIcon w={"23px"} h={"15px"} color={"inherit"} fill={"inherit"} />,
+    isElementIcon: true
   },
   {
     name: "profile",
     link: "/dashboard/facilities/:name/profile",
-    icon: FaRegUser,
+    icon: <UserIcon w={"24px"} h={"24px"} color={"inherit"} fill={"inherit"} />,
+    isElementIcon: true
+    
   },
   {
     name: "analytics",
     link: "/dashboard/facilities/:name/analytics",
-    icon: BiBarChartSquare,
+    icon: <ChartIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
+    isElementIcon: true
   },
   {
     name: "notifications",
     link: "/dashboard/facilities/:name/notifications",
-    icon: IoMdNotificationsOutline,
+    icon: <NotificationIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
+    isElementIcon: true
   },
 ];
 
@@ -264,114 +272,6 @@ export const dashboardCards = [
     amount: "2d 03h",
     isGreen: false,
     isActive: true,
-  },
-];
-
-
-export const documentContents = [
-  {
-    name: "Letter of introduction from LAWMA/LAWMA medical certificate",
-    src: documentImage,
-    
-  },
-  {
-    name: "Letter of introduction from LAWMA/LAWMA medical certificate",
-    src: documentImage,
-    
-  },
-  {
-    name: "Letter of introduction from LAWMA/LAWMA medical certificate",
-    src: documentImage,
-    
-  },
-  {
-    name: "Letter of introduction from LAWMA/LAWMA medical certificate",
-    src: documentImage,
-    
-  },
-  {
-    name: "Letter of introduction from LAWMA/LAWMA medical certificate",
-    src: documentImage,
-    
-  },
-  {
-    name: "Letter of introduction from LAWMA/LAWMA medical certificate",
-    src: documentImage,
-    
-  },
-  {
-    name: "Letter of introduction from LAWMA/LAWMA medical certificate",
-    src: documentImage,
-    
-  },
-  {
-    name: "Letter of introduction from LAWMA/LAWMA medical certificate",
-    src: documentImage,
-    
-  },
-  {
-    name: "Letter of introduction from LAWMA/LAWMA medical certificate",
-    src: "",
-  },
-  {
-    name: "Letter of introduction from LAWMA/LAWMA medical certificate",
-    src: "",
-  },
-  {
-    name: "Letter of introduction from LAWMA/LAWMA medical certificate",
-    src: "",
-  },
-  {
-    name: "Letter of introduction from LAWMA/LAWMA medical certificate",
-    src: "",
-  },
-];
-
-
-export const invoiceData: InvoiceData[] = [
-  {
-    facility_id: 4,
-    amount: "10000.00",
-    description: "Test invoice",
-    due_date: 1696785677.101,
-    invoice_date: 1696440077.101,
-    status: "unpaid",
-    created_at: "2023-10-04T18:21:17.102+01:00",
-    updated_at: "2023-10-04T18:21:17.102+01:00",
-    id: 1,
-  },
-  {
-    facility_id: 4,
-    amount: "21000.00",
-    description: "Service invoice",
-    due_date: 1696786677.101,
-    invoice_date: 1696440077.101,
-    status: "paid",
-    created_at: "2023-10-04T18:21:17.102+01:00",
-    updated_at: "2023-10-04T18:21:17.102+01:00",
-    id: 2,
-  },
-  {
-    facility_id: 4,
-    amount: "1000.00",
-    description: "Test invoice",
-    due_date: 1696735677.101,
-    invoice_date: 1696440077.101,
-    status: "unpaid",
-    created_at: "2023-10-04T18:21:17.102+01:00",
-    updated_at: "2023-10-04T18:21:17.102+01:00",
-    id: 3,
-  },
-  {
-    facility_id: 4,
-    amount: "30000.00",
-    description: "Test invoice",
-    due_date: 1696785677.101,
-    invoice_date: 1696440077.101,
-    status: "unpaid",
-    created_at: "2023-10-04T18:21:17.102+01:00",
-    updated_at: "2023-10-04T18:21:17.102+01:00",
-    id: 4,
   },
 ];
 

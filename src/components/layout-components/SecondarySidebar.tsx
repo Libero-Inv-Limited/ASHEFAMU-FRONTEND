@@ -16,6 +16,7 @@ interface SecondarySidebarProps {
 const SecondarySidebar: React.FC<SecondarySidebarProps> = ({ isOpen, onToggle }) => {
   const { isFacility } = useIsFacility()
   const param = useParams()
+
   return (
     <Collapse in={isFacility && isOpen}>
       <Stack h={"full"} w={"250px"} px={3} pos={"relative"} borderRight={"1px solid " + LIGHT_GRAY}>
