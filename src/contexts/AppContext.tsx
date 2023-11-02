@@ -10,6 +10,8 @@ import { useLocation } from "react-router-dom";
 
 interface AppContextProps {
   logoutAccount: () => void;
+  closeLoadingData: () => void;
+  openLoadingData: () => void;
   getUsersProfile: (token: string) => Promise<void>;
   isLoadingData: boolean; 
   currentFacility: OneFacilityDataType | null;
@@ -43,7 +45,6 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
       logoutAccount()
       clearInterval(id)
     }, 2000)
-
   }
 
   // LOGOUT ACCOUNT
@@ -87,10 +88,10 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
   useEffect(() => {
     handleGetFacilities()
-  }, [])
+  }, [tokenStore])
 
   return (
-    <AppContext.Provider value={{ logoutAccount, isLoadingData, currentFacility, getUsersProfile, setCurrentFacility }}>
+    <AppContext.Provider value={{ logoutAccount, isLoadingData, currentFacility, openLoadingData, closeLoadingData, getUsersProfile, setCurrentFacility }}>
       {children}
     </AppContext.Provider>
   )

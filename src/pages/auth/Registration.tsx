@@ -16,7 +16,7 @@ import useWaitingText from "../../hooks/useWaitingText"
 interface RegistrationProps { }
 const Registration: React.FC<RegistrationProps> = () => {
   const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
-  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validaing", "Submitting", "Finalizing"])
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validating", "Submitting", "Finalizing"])
   const { control, watch, trigger, getValues } = useForm<RegisterData>({
     mode: "onSubmit"
   })

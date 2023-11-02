@@ -30,7 +30,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = () => {
   const { isOpen: isResending, onOpen: openResending, onClose: closeResending } = useDisclosure()
   const navigate = useNavigate()
   const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
-  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validaing", "Submitting", "Updating credentials", "Finalizing"], 2000)
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validating", "Submitting", "Updating credentials", "Finalizing"], 2000)
   const toast = useToast({
     position: "bottom",
     isClosable: true,

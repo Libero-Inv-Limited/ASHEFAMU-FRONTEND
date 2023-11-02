@@ -26,7 +26,7 @@ const VerifyEmailAndPhone: React.FC<VerifyEmailAndPhoneProps> = () => {
   const navigate = useNavigate()
   const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
   const { isOpen: isResending, onOpen: openResending, onClose: closeResending } = useDisclosure()
-  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validaing", "Submitting", "Comparing"])
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validating", "Submitting", "Comparing"])
   const toast = useToast({
     position: "bottom",
     isClosable: true,

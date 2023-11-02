@@ -15,7 +15,7 @@ interface SideNavigationProps {
 }
 const SideNavigation: React.FC<SideNavigationProps> = ({ onClose }) => {
   const [isOpen, setIsOpen] = useState(true)
-  const { setCurrentFacility } = useAppContext()
+  const { setCurrentFacility, openLoadingData, closeLoadingData } = useAppContext()
   const navigate = useNavigate()
 
   const onToggle = () => setIsOpen(prev => !prev) 
@@ -26,15 +26,24 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ onClose }) => {
 
   // GET THE CURRENT FACILITY
   const handleGetCurrentFacility = async () => {
+    openLoadingData()
     const name = decodeSlug(param.name!)
     const facility = facilities.find(state => state.name?.toLowerCase().includes(name.toLocaleLowerCase()))
 
     // GET FACILITY
-    if (!facility) return navigate(ROUTES.FACILITY_ROUTE)
+    if (!facility) {
+      closeLoadingData()
+      navigate(ROUTES.FACILITY_ROUTE)
+      return
+    }
     const response = await executeGetOneFacility(facility.id, token!)
-    if (response.status === "error") return navigate(ROUTES.FACILITY_ROUTE)
+    if (response.status === "error") {
+      closeLoadingData()
+      navigate(ROUTES.FACILITY_ROUTE)
+      return
+    }
     setCurrentFacility(response.data)
-
+    closeLoadingData()
   }
   useEffect(() => {
     if(!isFacility) return

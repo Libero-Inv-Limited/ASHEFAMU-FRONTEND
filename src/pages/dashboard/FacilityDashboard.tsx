@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from "react"
-import { Box, Center, HStack, Icon, IconButton, SimpleGrid, Stack, Text, WrapItem } from "@chakra-ui/react"
+import { Box, Center, HStack, Icon, IconButton, SimpleGrid, Skeleton, Stack, Text, WrapItem } from "@chakra-ui/react"
 import { TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color"
 import DashboardCard from "../../components/common/DashboardCard"
 // import DashboardQRCard from "../../components/common/DashboardQRCard"
@@ -20,13 +20,14 @@ import { useAppContext } from "../../contexts/AppContext"
 import { formatDate } from "../../utils/helpers"
 import { useNavigate } from "react-router-dom"
 import ROUTES from "../../utils/routeNames"
+import Loader from "../../components/common/loader/Loader"
 // import { useAppContext } from "../../contexts/AppContext"
 
 interface FacilityDashboardProps { }
 const FacilityDashboard: React.FC<FacilityDashboardProps> = () => {
   const swiper = useRef(null)
   const token = useAppSelector(state => state.accountStore.tokenStore!.token)
-  const { currentFacility } = useAppContext()
+  const { currentFacility, isLoadingData } = useAppContext()
   const { data, loadingData } = usePaginatedTableData((page, perPage) => executeGetFacilityNotification(currentFacility!.id, token!, page, perPage), 9)
   const navigate = useNavigate()
   const [cardsToShow, setCardsToShow] = useState<DashboardCardType[]>([])
@@ -39,13 +40,14 @@ const FacilityDashboard: React.FC<FacilityDashboardProps> = () => {
   }
 
   useEffect(() => {
+    if(isLoadingData) return
     if (currentFacility) return
     navigate(ROUTES.FACILITY_ROUTE, { replace: true })
-  }, [currentFacility])
+  }, [isLoadingData])
 
   useEffect(() => {
     handleGetCards()
-  }, [])
+  }, [isLoadingData])
   return (
     <DashboardLayout>
       <Stack spacing={10} pb={10} w={"full"}>
@@ -56,7 +58,9 @@ const FacilityDashboard: React.FC<FacilityDashboardProps> = () => {
 
           {/* CARDS SECTION */}
           <SimpleGrid columns={[1, 2, 3, 4]} spacing={3}>
-            {cardsToShow.map((cardItem, index) => (
+            { isLoadingData ? (new Array(4).fill("-")).map((_, index) => (
+              <Skeleton maxW={500} w={"full"} rounded={"md"} h={131} key={`loading-card-${index}`} />
+            )) : cardsToShow.map((cardItem, index) => (
               <WrapItem key={`dash-card-${cardItem.name}-${index}`} flex={1}>
                 <DashboardCard {...cardItem} />
               </WrapItem>
@@ -122,6 +126,8 @@ const FacilityDashboard: React.FC<FacilityDashboardProps> = () => {
           }
         </Box>
       </Stack>
+
+      { isLoadingData && <Loader /> }
     </DashboardLayout>
   )
 }
