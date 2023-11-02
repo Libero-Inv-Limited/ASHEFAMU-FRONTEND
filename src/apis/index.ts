@@ -67,3 +67,4 @@ export const PAY_INVOICE_ENDPOINT = BASE_URL + "/pay-invoice"
 export const GET_CONDUCTED_ENDPOINT = (facilityID: number, page: number = 1, perPage: number = 15) => BASE_URL + `/inspection-records/${facilityID}/${page}/${perPage}`
 export const GET_SCHEDULE_ENDPOINT = (facilityID: number, page: number = 1, perPage: number = 15) => BASE_URL + `/inspection-schedules/${facilityID}/${page}/${perPage}`
 export const DASHBOARD_CARD_ENDPOINT = BASE_URL + `/dashboard-cards`
+export const DASHBOARD_FACILITY_CARD_ENDPOINT = (id: number) => BASE_URL + `/dashboard-cards/` + id
