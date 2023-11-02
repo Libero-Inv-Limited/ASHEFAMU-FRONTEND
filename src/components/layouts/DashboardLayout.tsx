@@ -37,7 +37,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   }
 
   useEffect(() => {
-    if(dashboardCards.length || !token) return
     handleGetDashboardCard()
   }, [token])
 
