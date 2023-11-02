@@ -21,12 +21,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const dashboardCards = useAppSelector(state => state.dataStore.dashboardCards)
   const dispatch = useAppDispatch()
-  const token = useAppSelector(state => state.accountStore.tokenStore!.token)
+  const token = useAppSelector(state => state.accountStore.tokenStore)
 
   // GET DASHBOARD CARD
   const handleGetDashboardCard = async () => {
+    if(!token) return
     try {
-      const result = await executeGetDashboardCards(token!)
+      const result = await executeGetDashboardCards(token.token)
       if(result.status === "error") throw new Error(result.message) 
       dispatch(populateDashboardCards(result.data))
     }
@@ -38,7 +39,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   useEffect(() => {
     if(dashboardCards.length || !token) return
     handleGetDashboardCard()
-  }, [])
+  }, [token])
 
 
   const user = useAppSelector(state => state.accountStore.user)
