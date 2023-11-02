@@ -80,7 +80,9 @@ const DashboardSort: React.FC<DashboardSortProps> = ({ onCancel }) => {
         onDragEnd={handleDragEnd as any}
       >
         <Droppable direction="vertical" droppableId="dash-sort">
-          {(dropProps, snapshot) => (
+          {(dropProps, snapshot) => { 
+            console.log("SNAP:", snapshot)
+            return (
             <ModalBody as={VStack} minH={360} spacing={4} pt={6} textAlign={"center"} {...dropProps.droppableProps} ref={dropProps.innerRef}>
               {tempState.map((item, index) => (
                 <Draggable index={index} draggableId={`item-${item.name}`}>
@@ -101,7 +103,7 @@ const DashboardSort: React.FC<DashboardSortProps> = ({ onCancel }) => {
               ))}
               {dropProps.placeholder}
             </ModalBody>
-          )}
+          )}}
         </Droppable>
       </DragDropContext>
 
