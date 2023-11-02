@@ -201,7 +201,7 @@ type UserData = {
       roleDetails: {
         name: string;
         id: number;
-      }[];
+      };
     };
   };
   permissions: [];
