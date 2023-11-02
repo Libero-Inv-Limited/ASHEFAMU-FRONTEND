@@ -32,7 +32,7 @@ const CustomizeIcon = (props: CustomizeIconProps) => (
 interface DashboardProps { }
 const Dashboard: React.FC<DashboardProps> = () => {
   const swiper = useRef(null)
-  const token = useAppSelector(state => state.accountStore.tokenStore!.token)
+  const token = useAppSelector(state => state.accountStore.tokenStore?.token)
   const { data, loadingData } = usePaginatedTableData((page, perPage) => executeGetUserNotification(token!, page, perPage), 9)
   const { isOpen, onClose, onOpen } = useDisclosure()
   const dashboardCards = useAppSelector(state => state.dataStore.dashboardCards)

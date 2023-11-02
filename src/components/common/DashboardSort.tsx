@@ -18,7 +18,7 @@ const DashboardSort: React.FC<DashboardSortProps> = ({ onCancel }) => {
   const [tempState, setTempState] = useState<DashboardCardType[]>(dashboardCards.filter(card => card.visibility))
   const dispatch = useAppDispatch()
   const { isOpen: isSaving, onOpen: openSaving, onClose: closeSaving } = useDisclosure()
-  const token = useAppSelector(state => state.accountStore.tokenStore!.token)
+  const token = useAppSelector(state => state.accountStore.tokenStore)
   const toast = useToast({
     position: "bottom",
     isClosable: true,
@@ -43,13 +43,14 @@ const DashboardSort: React.FC<DashboardSortProps> = ({ onCancel }) => {
   };
 
   const handleSaveChange = async () => {
+    if(!token) return
     const sortedData = [...tempState, ...dashboardCards.filter(card => !card.visibility)].map((card, index) => ({ ...card, position: index + 1 }))
     try{
       openSaving()
       const payload: UpdateDashboardCard = {
         card_records: sortedData
       } 
-      const response = await executeUpdateDashboardCards(payload, token)
+      const response = await executeUpdateDashboardCards(payload, token.token)
       if(response.status === "error") throw new Error(response.message)
       dispatch(populateDashboardCards(sortedData))
      
