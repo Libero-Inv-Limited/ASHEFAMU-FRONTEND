@@ -24,7 +24,6 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
   const tokenStore = useAppSelector(state => state.accountStore.tokenStore)
   const dispatch = useAppDispatch()
   const [currentFacility, setCurrentFacility] = useState<OneFacilityDataType | null>(null)
-  const { facilities } = useAppSelector(state => state.dataStore)
   const { isOpen: isLoadingData, onOpen: openLoadingData, onClose: closeLoadingData } = useDisclosure()
   const toast = useToast({
     position: "bottom",
@@ -62,9 +61,10 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
   }, [])
 
   const handleGetFacilities = async () => {
+    if(!tokenStore) return
     try {
       openLoadingData()
-      const result = await executeGetFacilities(tokenStore!.token)
+      const result = await executeGetFacilities(tokenStore.token)
       if(result.status === "error") throw new Error(result.message) 
       dispatch(populateFacilities(result.data.data))
     }
@@ -82,7 +82,6 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
   }
 
   useEffect(() => {
-    if(facilities.length || !tokenStore) return
     handleGetFacilities()
   }, [])
 

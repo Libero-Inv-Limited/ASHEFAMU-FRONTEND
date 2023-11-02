@@ -39,7 +39,8 @@ const Login: React.FC<LoginProps> = () => {
       openLoading()
       startLoadingText()
       const payload: LoginData = {
-        ...getValues()
+        password: getValues("password").trim(),
+        username: getValues("username").trim(),
       }
       delete (payload as any)['confirm']
 
