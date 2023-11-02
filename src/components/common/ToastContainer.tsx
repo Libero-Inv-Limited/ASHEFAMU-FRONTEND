@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react"
-import { Center, HStack, Icon, IconButton, Stack, Text } from "@chakra-ui/react"
+import { Center, HStack, Icon, IconButton, Stack, Text,  UseToastOptions } from "@chakra-ui/react"
 import { CheckIcon, InfoIcon, CautionIcon } from "../icons";
-import { TEXT_DARK } from "../../utils/color";
+import { TEXT_DARK, TEXT_DARK_GRAY } from "../../utils/color";
 import { RxCross1 } from "react-icons/rx";
 
-interface ToastContainerProps {
-  status: "error" | "danger" | "success" | "warning" ;
-  title: string;
-  text?: string;
+
+interface ToastContainerProps extends UseToastOptions {
+  onClose: () => void;
 }
 
 const dataMap = {
@@ -50,22 +50,24 @@ const iconShadeColor = {
   "success": { bg: "#D7FDD6" },
   "warning": { bg: "#FFF0D4" }
 }
-const ToastContainer: React.FC<ToastContainerProps> = ({ status, title, text }) => {
+const ToastContainer: React.FC<ToastContainerProps> = ({ onClose, title, description, status }) => {
   return (
-    <HStack borderRadius={"4px"} py={4} {...dataMap[status]}>
-      <Center {...iconShadeColor[status]} rounded={"full"} w={"40px"} h={"40px"}>
-        { IconMap[status] }
+    <HStack borderRadius={"4px"} minW={300} p={2} {...(dataMap as any)[status as any]}>
+      <Center {...(iconShadeColor as any)[status as any]} rounded={"full"} w={"40px"} h={"40px"}>
+        { (IconMap as any)[status as any] }
       </Center>
 
       <Stack flex={1} spacing={0}>
         <Text fontSize={"sm"} fontWeight={500} color={TEXT_DARK}>{title}</Text>
-        { text && <Text fontSize={"xs"} color={TEXT_DARK}>{text}</Text> }
+        { description && <Text fontSize={"xs"} color={TEXT_DARK}>{description}</Text> }
       </Stack>
 
       <IconButton 
         aria-label="close"
         size={"sm"}
-        icon={<Icon as={RxCross1} fontSize={"24px"} color={TEXT_DARK} />}
+        variant={"unstyled"}
+        onClick={onClose}
+        icon={<Icon as={RxCross1} fontSize={"xl"} color={TEXT_DARK_GRAY} />}
       />
     </HStack>
   )

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ChangeEvent, useEffect } from "react"
 import DashboardLayout from "../../components/layouts/DashboardLayout"
-import { ButtonGroup, Container, Divider, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react"
+import { ButtonGroup, Container, Stack, useDisclosure, useToast } from "@chakra-ui/react"
 import CustomButton from "../../components/common/CustomButton"
 import useSearchParam from "../../hooks/useSearchParam"
 import { useLocation, useNavigate } from "react-router-dom"
-import { DARK, TEXT_DARK_GRAY } from "../../utils/color"
+import { DARK } from "../../utils/color"
 import { useForm } from "react-hook-form"
 import AuthInput from "../../components/common/AuthInput"
 import { useAppSelector } from "../../store/hook"
@@ -15,6 +15,7 @@ import RoleUpgradeSuccess from "../../components/modals/SuccessModal"
 import { MailIcon, UserIcon } from "../../components/icons"
 import { executeUpdateProfile } from "../../apis/auth"
 import { useAppContext } from "../../contexts/AppContext"
+import { executeUpdatePassword } from "../../apis/user"
 
 interface ProfilePageProps { }
 const ProfilePage: React.FC<ProfilePageProps> = () => {
@@ -23,7 +24,7 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
   const navigate = useNavigate()
 
   // MODAL CONTROLS
-  const { isOpen: isRoleUpgradeOpen, onOpen: openRoleUpgrade, onClose: closeRoleUpgrade } = useDisclosure()
+  const { isOpen: isRoleUpgradeOpen, onClose: closeRoleUpgrade } = useDisclosure()
   const { isOpen: isRoleUpgradeSuccessOpen, onClose: closeRoleUpgradeSuccess } = useDisclosure()
 
   useEffect(() => {
@@ -80,6 +81,7 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
       closeLoading()
     }
   }
+
   return (
     <DashboardLayout>
       <Container maxW={"md"} mx={"unset"}>
@@ -174,11 +176,11 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
               <CustomButton isLoading={isLoading} onClick={handleSave} w={"full"}>Save changes</CustomButton>
             </Stack>
             {/* ROLE UPGRADE */}
-            <Divider my={4} />
+            {/* <Divider my={4} />
             <Stack>
               <Text fontWeight={"600"} fontSize={"sm"} color={TEXT_DARK_GRAY}>Request role upgrade</Text>
               <CustomButton w={"fit-content"} colorScheme="gray" onClick={openRoleUpgrade} variant={"outline"}>SEND REQUEST</CustomButton>
-            </Stack>
+            </Stack> */}
           </Stack>
         ) : (
           <PasswordForm />
@@ -204,27 +206,34 @@ export default ProfilePage
 
 // PASSWORD FORM
 const PasswordForm = () => {
-  // const token = useAppSelector(state => state.accountStore.tokenStore?.token)
+  const token = useAppSelector(state => state.accountStore.tokenStore!.token)
   const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
+  const user = useAppSelector(state => state.accountStore.user)
   const toast = useToast({
     position: "bottom",
     isClosable: true,
     variant: "subtle",
   })
-  const { control: passwordControl, watch: passWatch, trigger } = useForm({
-    mode: "onSubmit"
+  const { control, watch, trigger, getValues, reset } = useForm({
+    mode: "onTouched"
   })
-  const password = passWatch("pwd")
+  const password = watch("pwd")
 
   const handlePasswordChange = async () => {
     if(!await trigger()) return
     try {
       openLoading()
-      // const result = await ex
-      // toast({
-      //   title: result.,
-      //   status: "error"
-      // })
+      const payload: UpdatePassword = {
+        password: getValues("pwd"),
+        user_id: user!.user.id
+      }
+      const result = await executeUpdatePassword(payload, token!)
+      if(result.status === "error") throw new Error(result.message)
+      toast({
+        title: result.message,
+        status: "success"
+      })
+      reset()
     }
     catch(e: any) {
       toast({
@@ -242,7 +251,7 @@ const PasswordForm = () => {
       <Stack p={4} bg={"white"} rounded={"md"} spacing={4}>
         {/* PASSWORD */}
         <AuthInput
-          control={passwordControl}
+          control={control}
           name="oldpwd"
           type="password"
           value={""}
@@ -258,12 +267,12 @@ const PasswordForm = () => {
         />
 
         <AuthInput
-          control={passwordControl}
+          control={control}
           name="pwd"
           type="password"
           value={""}
           isPassword
-          label="Password"
+          label="New Password"
           rules={{
             required: "Password is required",
             minLength: {
@@ -275,7 +284,7 @@ const PasswordForm = () => {
 
         {/* C PASWORD */}
         <AuthInput
-          control={passwordControl}
+          control={control}
           name="confirm"
           type="password"
           value={""}
@@ -283,7 +292,7 @@ const PasswordForm = () => {
           label="Confirm Password"
           rules={{
             validate: (value: string) => {
-              return value !== password ? "Wrong password" : undefined
+              return value !== password ? "Passwords doesn't match" : undefined
             }
           }}
         />

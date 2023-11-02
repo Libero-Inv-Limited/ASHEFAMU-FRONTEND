@@ -60,17 +60,17 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ id,  priority, cont
   }
 
   return (
-    <Stack p={6} bg={color.bgColor} w={"full"} flex={1} minW={"250px"} minH={130} rounded={"md"} onDoubleClick={handleMarkAsRead}>
+    <Stack p={6} bg={color.bgColor} w={"full"} flex={1} minW={"250px"} minH={151} rounded={"md"} onDoubleClick={handleMarkAsRead}>
       <HStack alignItems={"flex-start"}>
         <Stack flex={1} spacing={1}>
-          <Text fontWeight={"600"} color={DARK} fontSize={"lg"}>{sender}</Text>
+          <Text fontWeight={"600"} color={DARK} fontSize={"md"}>{sender}</Text>
           <Breadcrumb separator={<Center><Icon as={BsDot} /></Center>}>
             <BreadcrumbItem fontWeight={"medium"} fontSize={"sm"} color={TEXT_GRAY}>
               <Text>{humanReadableDate(created_at)}</Text>
             </BreadcrumbItem>
           </Breadcrumb>
 
-          <Text mt={2} color={DARK}>{content}</Text>
+          <Text mt={2} fontSize={"sm"} color={DARK}>{content}</Text>
         </Stack>
 
         <Icon as={LuInfo}  color={color.color} fontSize={"2xl"} />

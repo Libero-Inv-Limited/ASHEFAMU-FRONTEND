@@ -20,7 +20,7 @@ const FacilityNotification: React.FC<FacilityNotificationProps> = () => {
   // const last = div <= perPage ? perPage : div
   return (
     <DashboardLayout>
-      <Stack>
+      <Stack flexDir={['column', 'column', 'row']}>
         <CustomSelect
           fontSize="sm"
           styles={{
@@ -43,17 +43,17 @@ const FacilityNotification: React.FC<FacilityNotificationProps> = () => {
               <DataLoader />
             </Center>
           ) : data.length ?
-            data.map((type: NotificationDataType) => (
-              <SimpleGrid key={type.id} spacing={4} flexWrap={"wrap"} columns={[1, 2, 3]}>
-                <NotificationCard handleReload={handleReloadData} {...type} />
-              </SimpleGrid>
-            )) :
+            <SimpleGrid alignItems={"flex-start"} minH={`calc(100vh - 150px)`} spacing={4} flexWrap={"wrap"} columns={[1, 2, 3]}>
+              {data.map((type: NotificationDataType) => (
+                <NotificationCard key={type.id} handleReload={handleReloadData} {...type} />
+              ))}
+            </SimpleGrid> :
             <EmptyTable text={"No notifications found"} />
         }
       </Box>
 
       {!!data.length && (
-        <HStack position={"sticky"} bottom={0} left={0} alignItems={"center"} justifyContent={"center"} mt={10}>
+        <HStack bg={"white"} py={3} position={"sticky"} bottom={0} left={0} alignItems={"center"} justifyContent={"center"} mt={10}>
           <CustomButton h={"40px"} isDisabled={currentPage <= 1} onClick={() => handlePageChange(currentPage - 1)} colorScheme="primary">Previous</CustomButton>
           <HStack alignItems={"center"} justifyContent={"center"}>
             <Select value={currentPage} onChange={(e) => handlePageChange(+e.target.value)}>

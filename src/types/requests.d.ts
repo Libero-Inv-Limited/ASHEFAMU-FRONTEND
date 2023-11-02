@@ -138,3 +138,34 @@ type UpgradeData = {
   facility_id: number;
   request_details: string;
 };
+
+type InspectionData = {
+  id: number;
+  facility_id: number;
+  inspection_date: string;
+  inspector_name: string;
+  findings: string;
+  results: string;
+  updated_at: string;
+  created_at: string;
+};
+
+type ScheduleData = {
+  id: number;
+  facility_id: number;
+  inspector_names: string;
+  schedule_date: string;
+  status: string;
+  updated_at: string;
+  created_at: string;
+};
+
+type UpdatePassword = {
+  password: string;
+  user_id: number;
+};
+
+
+type UpdateDashboardCard = {
+  card_records: DashboardCardType[]
+}

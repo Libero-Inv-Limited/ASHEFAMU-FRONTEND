@@ -152,7 +152,7 @@ type OneFacilityDataType = {
     rejection_reason: null;
     created_by: null;
   };
-  scopeOfService: { service_scope: string, id?: number  }[];
+  scopeOfService: { service_scope: string; id?: number }[];
   nonProfessionalStaffComplement: NonProfessionalStaffData[];
   categorySelection: {
     id: number;
@@ -355,4 +355,19 @@ type PaymentDataType = {
     account_name: null | string;
   };
   method: string;
+};
+
+type DashboardCardType = {
+  id: number;
+  name: string;
+  content: string;
+  associated_user: number;
+  display_preference: string;
+  position: number;
+  visibility: boolean;
+  card_template: number;
+  template: {
+    slug: string;
+    id: number;
+  };
 };

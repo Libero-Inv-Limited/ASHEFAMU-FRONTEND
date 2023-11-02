@@ -85,14 +85,14 @@ const CustomRegTable: React.FC<CustomRegTableProps> = () => {
         name: "Name",
         selector: "name",
         sortable: false,
-        cell: (data: any) => {
+        cell: (data: FacilityData) => {
           return <Link as={ReactLink} to={`/dashboard/facilities/${getSlug(data.name!)}`}>{data.name}</Link>
         },
       },
       {
         name: "Date Started",
         selector: "created_at",
-        cell: (data: any) => {
+        cell: (data: FacilityData) => {
           const date = new Date(data.date)
           return (
             <Text>{date.toLocaleString().split(", ")[0]}</Text>
@@ -103,7 +103,7 @@ const CustomRegTable: React.FC<CustomRegTableProps> = () => {
       {
         name: "Category",
         selector: "category",
-        cell: (data: any) => {
+        cell: (data: FacilityData) => {
           const category = facilityCategory.find(item => item.id === data.category.facility_category_id)
           return (
             <Text>{category?.name || ""}</Text>

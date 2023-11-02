@@ -82,7 +82,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
   }
 
   useEffect(() => {
-    if(facilities.length) return
+    if(facilities.length || !tokenStore) return
     handleGetFacilities()
   }, [])
 

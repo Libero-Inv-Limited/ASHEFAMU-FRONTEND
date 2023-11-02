@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import FormTitle from "../../../components/common/FormTitle"
 import { useForm } from "react-hook-form"
 import AuthInput from "../../../components/common/AuthInput"
-import { LIGHT_GREEN, RED, TEXT_DARK, TEXT_DARK_GRAY } from "../../../utils/color"
+import { LIGHT_BG, LIGHT_GREEN, RED, TEXT_DARK, TEXT_DARK_GRAY } from "../../../utils/color"
 import CheckButton from "../../../components/common/CheckButton"
 import { MdOutlinePhoneEnabled } from "react-icons/md"
 import { HiOutlineLocationMarker } from "react-icons/hi"
@@ -158,7 +158,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
 
           <GridItem colSpan={[5, 5, 3]}>
             <AuthInput
-              bg={"#F4F7F4"}
+              bg={LIGHT_BG}
               placeholder="Engineering"
               control={control}
               fontSize={"sm"}
@@ -173,7 +173,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
 
           <GridItem colSpan={[5, 5, 1]}>
             <AuthInput
-              bg={"#F4F7F4"}
+              bg={LIGHT_BG}
               placeholder="Public"
               control={control}
               fontSize={"sm"}
@@ -190,7 +190,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
 
           <GridItem colSpan={[5, 5, 1]}>
             <AuthInput
-              bg={"#F4F7F4"}
+              bg={LIGHT_BG}
               placeholder="Clinic"
               control={control}
               fontSize={"sm"}
@@ -207,7 +207,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
 
           <GridItem colSpan={[5, 5, 1]}>
             <AuthInput
-              bg={"#F4F7F4"}
+              bg={LIGHT_BG}
               control={control}
               fontSize={"sm"}
               label="CAC Number"

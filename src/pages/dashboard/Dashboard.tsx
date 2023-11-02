@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useRef } from "react"
+import React, { useRef } from "react"
 import DashboardLayout from "../../components/layouts/DashboardLayout"
-import { Box, Center, HStack, Icon, IconButton, IconProps, Stack, Text, Wrap, WrapItem } from "@chakra-ui/react"
-import { DARK, GRAY_BORDER, TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color"
+import { Box, Center, HStack, Icon, IconButton, IconProps, SimpleGrid, Stack, Text, WrapItem, useDisclosure } from "@chakra-ui/react"
+import { DARK, GRAY_BORDER, TEXT_GRAY } from "../../utils/color"
 import CustomButton from "../../components/common/CustomButton"
 import DashboardCard from "../../components/common/DashboardCard"
-import { dashboardCards } from "../../utils/data"
-import DashboardQRCard from "../../components/common/DashboardQRCard"
+// import DashboardQRCard from "../../components/common/DashboardQRCard"
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -18,6 +17,7 @@ import { useAppSelector } from "../../store/hook"
 import { executeGetUserNotification } from "../../apis/user"
 import DataLoader from "../../components/common/loader/DataLoader"
 import EmptyTable from "../../components/states/EmptyTable"
+import CustomizeModal from "../../components/modals/CustomizeModal"
 
 interface CustomizeIconProps extends IconProps { }
 const CustomizeIcon = (props: CustomizeIconProps) => (
@@ -34,32 +34,28 @@ const Dashboard: React.FC<DashboardProps> = () => {
   const swiper = useRef(null)
   const token = useAppSelector(state => state.accountStore.tokenStore!.token)
   const { data, loadingData } = usePaginatedTableData((page, perPage) => executeGetUserNotification(token!, page, perPage), 9)
-
-  useEffect(() => {
-    console.log("SWIPER", swiper)
-  }, [swiper])
+  const { isOpen, onClose, onOpen } = useDisclosure()
+  const dashboardCards = useAppSelector(state => state.dataStore.dashboardCards)
+  const cardsToShow = dashboardCards.filter(card => card.visibility)
+  
   return (
     <DashboardLayout>
       <Stack spacing={10} pb={10} w={"full"}>
         <Stack spacing={4}>
-          <HStack justifyContent={"space-between"}>
-            <Text alignSelf={"flex-end"} noOfLines={1} fontSize={"0.875rem"} fontWeight={500} color={TEXT_DARK_GRAY}>Registered on 02 Sept 2023</Text>
-            <CustomButton fontSize={"0.875rem"} p={4} borderColor={GRAY_BORDER} _hover={{ borderColor: "brand.500", color: "brand.500" }} color={DARK} bg={"white"} variant={"outline"} leftIcon={<CustomizeIcon fontSize={"1.5rem"} />}>
+          <HStack justifyContent={"flex-end"}>
+            <CustomButton onClick={onOpen} fontSize={"0.875rem"} p={4} borderColor={GRAY_BORDER} _hover={{ borderColor: "brand.500", color: "brand.500" }} color={DARK} bg={"white"} variant={"outline"} leftIcon={<CustomizeIcon fontSize={"1.5rem"} />}>
               <Text display={["none", "none", "block"]}>Customize</Text>
             </CustomButton>
           </HStack>
 
           {/* CARDS SECTION */}
-          <Wrap spacing={3}>
-            {dashboardCards.map((cardItem, index) => (
+          <SimpleGrid columns={[1, 2, 3, 4]} spacing={3}>
+            {cardsToShow.map((cardItem, index) => (
               <WrapItem key={`dash-card-${cardItem.name}-${index}`} flex={1}>
                 <DashboardCard {...cardItem} />
               </WrapItem>
             ))}
-            <WrapItem flex={1}>
-              <DashboardQRCard />
-            </WrapItem>
-          </Wrap>
+          </SimpleGrid>
         </Stack>
 
         {/* NOTIFICATIONS */}
@@ -121,6 +117,8 @@ const Dashboard: React.FC<DashboardProps> = () => {
           }
         </Box>
       </Stack>
+
+      <CustomizeModal isOpen={isOpen} onClose={onClose} />
     </DashboardLayout>
   )
 }
