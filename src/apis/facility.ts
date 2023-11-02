@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ADD_DOCUMENT_ENDPOINT, ADD_FACILITY_ENDPOINT, ADD_NON_PROF_STAFF_ENDPOINT, ADD_PROFESSIONAL_INCHARGE_ENDPOINT, ADD_PROF_STAFF_ENDPOINT, DELETE_FACILITY_ENDPOINT, GET_ALL_FACILITIES_ENDPOINT, GET_PROFFESSIONAL_STAFF_ENDPOINT, LETTER_OF_INTENT_ENDPOINT, UPDATE_FACILITY_SERVICE_ENDPOINT, DELETE_PROFFESSIONAL_STAFF_ENDPOINT, ADD_PROF_MEMBER_ENDPOINT, DELETE_NON_PROFFESSIONAL_STAFF_ENDPOINT, GET_NON_PROFFESSIONAL_STAFF_ENDPOINT, ADD_NON_PROF_MEMBER_ENDPOINT, GET_NOTIFICATIONS_ENDPOINT, GET_INVOICE_STAFF_ENDPOINT, GET_ONE_FACILITY_ENDPOINT, UPGRADE_FACILITY_ENDPOINT} from "."
+import { ADD_DOCUMENT_ENDPOINT, ADD_FACILITY_ENDPOINT, ADD_NON_PROF_STAFF_ENDPOINT, ADD_PROFESSIONAL_INCHARGE_ENDPOINT, ADD_PROF_STAFF_ENDPOINT, DELETE_FACILITY_ENDPOINT, GET_ALL_FACILITIES_ENDPOINT, GET_PROFFESSIONAL_STAFF_ENDPOINT, LETTER_OF_INTENT_ENDPOINT, UPDATE_FACILITY_SERVICE_ENDPOINT, DELETE_PROFFESSIONAL_STAFF_ENDPOINT, ADD_PROF_MEMBER_ENDPOINT, DELETE_NON_PROFFESSIONAL_STAFF_ENDPOINT, GET_NON_PROFFESSIONAL_STAFF_ENDPOINT, ADD_NON_PROF_MEMBER_ENDPOINT, GET_NOTIFICATIONS_ENDPOINT, GET_INVOICE_STAFF_ENDPOINT, GET_ONE_FACILITY_ENDPOINT, UPGRADE_FACILITY_ENDPOINT, DASHBOARD_FACILITY_CARD_ENDPOINT} from "."
 import { log } from "../utils/helpers"
 
 export const executeCreateIntent = async (data: FormData , token: string): Promise<ResponseDataType> => {
@@ -397,3 +397,21 @@ export const executeFacilityUpgrade = async (data: UpgradeData, token: string): 
   }
 }
 
+
+export const executeGetFacilityDashboardCards = async (facilityId: number, token: string): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      }
+    }
+    const request = await fetch(DASHBOARD_FACILITY_CARD_ENDPOINT(facilityId), options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("DASHBOARD CARD [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}

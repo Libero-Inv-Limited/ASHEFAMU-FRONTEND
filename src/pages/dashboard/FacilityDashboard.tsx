@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { Box, Center, HStack, Icon, IconButton, SimpleGrid, Stack, Text, WrapItem } from "@chakra-ui/react"
 import { TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color"
 import DashboardCard from "../../components/common/DashboardCard"
@@ -15,7 +15,7 @@ import usePaginatedTableData from "../../hooks/usePaginatedTableData"
 import { useAppSelector } from "../../store/hook"
 import DataLoader from "../../components/common/loader/DataLoader"
 import EmptyTable from "../../components/states/EmptyTable"
-import { executeGetFacilityNotification } from "../../apis/facility"
+import { executeGetFacilityDashboardCards, executeGetFacilityNotification } from "../../apis/facility"
 import { useAppContext } from "../../contexts/AppContext"
 import { formatDate } from "../../utils/helpers"
 import { useNavigate } from "react-router-dom"
@@ -29,9 +29,14 @@ const FacilityDashboard: React.FC<FacilityDashboardProps> = () => {
   const { currentFacility } = useAppContext()
   const { data, loadingData } = usePaginatedTableData((page, perPage) => executeGetFacilityNotification(currentFacility!.id, token!, page, perPage), 9)
   const navigate = useNavigate()
-  const dashboardCards = useAppSelector(state => state.dataStore.dashboardCards)
-  const cardsToShow = dashboardCards.filter(card => card.visibility)
+  const [cardsToShow, setCardsToShow] = useState<DashboardCardType[]>([])
 
+  const handleGetCards = async () => {
+    if(!currentFacility || !token) return
+    const response = await executeGetFacilityDashboardCards(currentFacility.id, token)
+    if(response.status === "error") return 
+    setCardsToShow(response.data as DashboardCardType[])
+  }
 
   useEffect(() => {
     if (currentFacility) return
@@ -39,8 +44,8 @@ const FacilityDashboard: React.FC<FacilityDashboardProps> = () => {
   }, [currentFacility])
 
   useEffect(() => {
-    console.log("SWIPER", swiper)
-  }, [swiper])
+    handleGetCards()
+  }, [])
   return (
     <DashboardLayout>
       <Stack spacing={10} pb={10} w={"full"}>
