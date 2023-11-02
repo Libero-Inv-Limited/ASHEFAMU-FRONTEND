@@ -15,7 +15,7 @@ import ActionModal from "../modals/ActionModal";
 interface CustomAccredTableProps { }
 const CustomAccredTable: React.FC<CustomAccredTableProps> = () => {
   const allFacilities = useAppSelector(state => state.dataStore.facilities)
-  const facilities = allFacilities.filter(item => item.status && item.status.approval_date)
+  const facilities = allFacilities.filter(item => !item?.enable_documentation)
   const [deletingFacility, setDeletingFacility] = useState<number | null>(null)
   const token = useAppSelector(state => state.accountStore.tokenStore?.token)
   const { isOpen: isLoading, onClose: closeLoading, onOpen: openLoading } = useDisclosure()

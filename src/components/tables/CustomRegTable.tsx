@@ -25,7 +25,7 @@ interface CustomRegTableProps { }
 
 const CustomRegTable: React.FC<CustomRegTableProps> = () => {
   const allFacilities = useAppSelector(state => state.dataStore.facilities)
-  const facilities = allFacilities.filter(item => !item.status || !item.status.approval_date)
+  const facilities = allFacilities.filter(item => item?.enable_documentation)
   const [editId, setEditId] = useState<number>()
   const { isLoadingData, setCurrentFacility } = useAppContext()
   const { isOpen: isEditing, onOpen: openEditing, onClose: closeEditing } = useDisclosure()

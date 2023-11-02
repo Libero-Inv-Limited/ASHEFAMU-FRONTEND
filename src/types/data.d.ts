@@ -11,6 +11,7 @@ type FacilityData = {
   building_type: string | null;
   gps_cordinates: string | null;
   any_other_use_of_premises: string | null;
+  enable_documentation: boolean;
   created_at: string | null;
   updated_at: string | null;
   protective_items: any;
