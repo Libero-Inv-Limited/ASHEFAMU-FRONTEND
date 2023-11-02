@@ -6,6 +6,7 @@ import { executeGetFacilities } from "../apis/facility";
 import { populateFacilities } from "../store/slice/dataSlice";
 import { useDisclosure, useToast } from "@chakra-ui/react";
 import { executeGetProfile } from "../apis/auth";
+import { useLocation } from "react-router-dom";
 
 interface AppContextProps {
   logoutAccount: () => void;
@@ -22,6 +23,7 @@ interface AppContextProviderProps {
 }
 const AppContextProvider = ({ children }: AppContextProviderProps) => {
   const tokenStore = useAppSelector(state => state.accountStore.tokenStore)
+  const {pathname} = useLocation()
   const dispatch = useAppDispatch()
   const [currentFacility, setCurrentFacility] = useState<OneFacilityDataType | null>(null)
   const { isOpen: isLoadingData, onOpen: openLoadingData, onClose: closeLoadingData } = useDisclosure()
@@ -61,6 +63,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
   }, [])
 
   const handleGetFacilities = async () => {
+    if(!pathname.includes("dashboard")) return
     if(!tokenStore) return
     try {
       openLoadingData()
@@ -71,6 +74,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     catch(err: any){
       console.log("Error:", err.message)
       const isNetwork = err.message.toLowerCase().includes("network")
+      if(!pathname.includes("dashboard")) return
       toast({
         title: isNetwork ? "Can't connect to internet, check your network settings" : err.message,
         status: isNetwork ? "warning" : "error"
