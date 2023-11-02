@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Text } from "@chakra-ui/react";
-import React, { useState } from "react"
+import React from "react"
 import CustomTable from "./CustomTable";
 import usePaginatedTableData from "../../hooks/usePaginatedTableData";
 import { useAppContext } from "../../contexts/AppContext";
