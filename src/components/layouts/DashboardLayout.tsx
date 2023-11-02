@@ -19,7 +19,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const data = useTheme()
   const [isMobile] = useMediaQuery(`(max-width: ${(data as any).sizes?.container?.lg})`)
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const dashboardCards = useAppSelector(state => state.dataStore.dashboardCards)
   const dispatch = useAppDispatch()
   const token = useAppSelector(state => state.accountStore.tokenStore)
 

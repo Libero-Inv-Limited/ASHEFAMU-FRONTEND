@@ -14,7 +14,7 @@ interface FilterComponentProp extends InputProps {
 }
 const FilterComponent: React.FC<FilterComponentProp> = ({ onFilter, customRightElement, filterText, ...rest }) => {
   return (
-    <HStack spacing={0} alignItems={"center"} w={"full"}>
+    <HStack spacing={2} alignItems={"center"} w={"full"}>
       <InputGroup maxW={300}>
         <InputLeftElement as={Center}>
           <Icon as={AiOutlineSearch} fontSize={"24px"} color={TEXT_GRAY} />
