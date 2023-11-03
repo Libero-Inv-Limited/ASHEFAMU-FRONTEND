@@ -186,6 +186,7 @@ type UserData = {
     mobile_number: string;
     firstname: string;
     lastname: string;
+    username: string;
     role: number;
     last_login: string;
     verifiedContacts: {
@@ -201,12 +202,21 @@ type UserData = {
       roleDetails: {
         name: string;
         id: number;
-      }[];
+      };
     };
   };
   permissions: [];
 };
 
+type UserPayload = {
+  firstname: string;
+  lastname: string;
+  email: string;
+  mobile: string;
+  username: string;
+  password: string;
+  role: number;
+}
 type RequireDocumentType = {
   id: number;
   name: string;

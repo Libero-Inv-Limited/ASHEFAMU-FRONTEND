@@ -119,6 +119,12 @@ export const sidebarContents = [
     icon: IoMdNotificationsOutline,
     activeIcon: IoMdNotifications,
   },
+  {
+    name: "users",
+    link: "/dashboard/users",
+    icon: IoMdNotificationsOutline,
+    activeIcon: IoMdNotifications,
+  },
 ];
 
 // SECONDARY SIDEBAR CONTENTS

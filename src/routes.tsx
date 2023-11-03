@@ -21,6 +21,7 @@ import CreateIntent from "./pages/facility-registration/CreateIntent";
 import FacilityForm from "./pages/facility-registration/FacilityForm";
 import Landing from "./pages/home/Landing";
 import ProfilePage from "./pages/dashboard/ProfilePage";
+import Users from "./pages/dashboard/users"
 import FacilityFormEdit from "./pages/facility-registration/FacilityFormEdit";
 
 export default [
@@ -162,5 +163,16 @@ export default [
     name: "Notfound"
   },
 
+  // USER MANAGEMENT
+  {
+    path: "/dashboard/users",
+    element: <Users />,
+    name: "Users"
+  },
+  {
+    path: "/dashboard/facilities/create-user",
+    element: <CreateFacility />,
+    name: "Create Facility"
+  },
 
 ]

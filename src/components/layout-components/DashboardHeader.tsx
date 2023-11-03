@@ -79,7 +79,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onOpen }) => {
           <MenuList pt={0}>
             <Stack spacing={0} bg={LIGHT_GRAY} p={3}>
               <Text fontSize={".7rem"} textTransform={"uppercase"} fontWeight={"500"} color={TEXT_GRAY} fontFamily={"rubik"}>User Role:</Text>
-              <Text fontSize={"sm"} fontFamily={"rubik"} color={"brand.600"}>{user.user.userRole?.roleDetails[0].name}</Text>
+              <Text fontSize={"sm"} fontFamily={"rubik"} color={"brand.600"}>{user.user.userRole?.roleDetails.name}</Text>
             </Stack>
             <MenuItem _hover={{ bg: LIGHT_GREEN }} onClick={() => navigate(ROUTES.EDIT_PROFILE)} py={3} >
               <Text fontSize={"sm"} color={DARK}>Edit profile</Text>

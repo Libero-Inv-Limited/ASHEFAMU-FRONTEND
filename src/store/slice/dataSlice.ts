@@ -3,9 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 
 type InitialStateType = {
   facilities: FacilityData[]
+  users: UserData[]
 }
 const initialState:InitialStateType = {
-  facilities: []
+  facilities: [], 
+  users: []
 };
 
 
@@ -15,10 +17,13 @@ const dataSlice = createSlice({
   reducers:{
     populateFacilities: (state, action) => {
       state.facilities = action.payload
+    },
+    populateUsers: (state, action) => {
+      state.users = action.payload
     }
   }
 })
 
 
-export const { populateFacilities } = dataSlice.actions;
+export const { populateFacilities, populateUsers } = dataSlice.actions;
 export default dataSlice.reducer;

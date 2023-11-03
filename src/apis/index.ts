@@ -59,6 +59,9 @@ export const NON_COMP_LIST_ENDPOINT = BASE_URL + "/non-prof-staff-complements"
 
 // OTHERS
 export const GET_NOTIFICATIONS_ENDPOINT = BASE_URL + "/get-notifications"
+export const GET_USERS_ENDPOINT = BASE_URL + "/all-users"
+export const CREATE_USER_ENDPOINT = BASE_URL + "/create-user"
+export const GET_ROLES_ENDPOINT = BASE_URL + "/all-roles"
 export const READ_NOTIFICATIONS_ENDPOINT = (id: number) => BASE_URL + "/read-notification/" + id
 export const GET_INVOICE_STAFF_ENDPOINT = (facilityID: number, page: number = 1, perPage: number = 15) => BASE_URL + `/invoices/${facilityID}/${page}/${perPage}`
 export const PAY_INVOICE_ENDPOINT = BASE_URL + "/pay-invoice"
