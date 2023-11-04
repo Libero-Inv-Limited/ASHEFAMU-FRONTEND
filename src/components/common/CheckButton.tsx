@@ -8,7 +8,7 @@ interface CheckButtonProps extends ButtonProps {
   value?: string;
   handleClick?: () => void;
 }
-const CheckButton: React.FC<CheckButtonProps> = ({ isActive, value, handleClick, ...props }) => {
+const CheckButton: React.FC<CheckButtonProps> = ({ isActive, handleClick, ...props }) => {
   return (
     <Button
       height={"45px"}
@@ -17,7 +17,7 @@ const CheckButton: React.FC<CheckButtonProps> = ({ isActive, value, handleClick,
       fontWeight={500}
       color={TEXT_DARK}
       _hover={{ bg: isActive && "#E5F3E5"  }}
-      rightIcon={(isActive || (value?.toLowerCase() === (props.children as string).toLowerCase())) ? <Icon fontSize={"xl"} color={"brand.500"} as={BsCheck2} /> : undefined}
+      rightIcon={isActive ? <Icon fontSize={"xl"} color={"brand.500"} as={BsCheck2} /> : undefined}
       onClick={handleClick}
       variant={"outline"} colorScheme="gray"
       bg={isActive ? "#E5F3E5" : "transparent"} {...props} />
