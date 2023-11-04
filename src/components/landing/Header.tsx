@@ -28,14 +28,17 @@ const Header: React.FC<HeaderProps> = () => {
           ))}
         </HStack>
 
-        <CustomButton as={Link} to={ROUTES.REGISTER_ROUTE} w={150} variant={"outline"} rounded={"full"} fontSize={"md"} fontWeight={"600"} display={['none', 'none', 'flex']}>Register</CustomButton>
-        <IconButton
-          display={['block', 'block', 'none']}
-          onClick={onOpen}
-          aria-label="menu"
-          variant={"ghost"}
-          icon={<MenuIcon fontSize={"xl"} />}
-        />
+        <HStack spacing={4}>
+          <CustomButton as={Link} to={ROUTES.LOGIN_ROUTE} variant={"outline"} w={150} rounded={"full"} fontSize={"md"} fontWeight={"600"} display={['none', 'none', 'flex']}>Login</CustomButton>
+          <CustomButton as={Link} to={ROUTES.REGISTER_ROUTE} w={150} variant={"solid"} rounded={"full"} fontSize={"md"} fontWeight={"600"} display={['none', 'none', 'flex']}>Register</CustomButton>
+          <IconButton
+            display={['block', 'block', 'none']}
+            onClick={onOpen}
+            aria-label="menu"
+            variant={"ghost"}
+            icon={<MenuIcon fontSize={"xl"} />}
+          />
+        </HStack>
       </HStack>
 
       <Sidebar isOpen={isOpen} onClose={onClose} />

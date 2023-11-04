@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 
 interface AppContextProps {
   logoutAccount: () => void;
+  handleGetFacilities: () => Promise<void>;
   closeLoadingData: () => void;
   openLoadingData: () => void;
   getUsersProfile: (token: string) => Promise<void>;
@@ -63,6 +64,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     checkTokenExpiration()
   }, [])
 
+
   const handleGetFacilities = async () => {
     if(!pathname.includes("dashboard")) return
     if(!tokenStore) return
@@ -91,7 +93,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
   }, [tokenStore])
 
   return (
-    <AppContext.Provider value={{ logoutAccount, isLoadingData, currentFacility, openLoadingData, closeLoadingData, getUsersProfile, setCurrentFacility }}>
+    <AppContext.Provider value={{ handleGetFacilities, logoutAccount, isLoadingData, currentFacility, openLoadingData, closeLoadingData, getUsersProfile, setCurrentFacility }}>
       {children}
     </AppContext.Provider>
   )

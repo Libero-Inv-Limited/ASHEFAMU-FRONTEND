@@ -45,8 +45,8 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
 
   const handleDownloadFile = () => {
     const a = document.createElement("a")
-    a.href = "/files/staff_complementss.xlsx"
-    a.download = "sample_template.xlsx"
+    a.href = "/files/sample.csv"
+    a.download = "sample.csv"
     a.click()
     a.remove()
   }
@@ -93,6 +93,7 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
       // CLEAR STORAGES
       sessionStorage.clear()
       dispatch(clearLevelState())
+
       navigate(ROUTES.FACILITY_ROUTE)
 
     }

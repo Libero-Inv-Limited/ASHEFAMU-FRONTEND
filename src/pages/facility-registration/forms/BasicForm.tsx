@@ -8,7 +8,6 @@ import { LIGHT_BG, LIGHT_GREEN, RED, TEXT_DARK, TEXT_DARK_GRAY } from "../../../
 import CheckButton from "../../../components/common/CheckButton"
 import { MdOutlinePhoneEnabled } from "react-icons/md"
 import { HiOutlineLocationMarker } from "react-icons/hi"
-import { FaRegUser } from "react-icons/fa"
 import CustomButton from "../../../components/common/CustomButton"
 import { LGAs, countries, generalBuildingTypes } from "../../../utils/data"
 import { BsPlus } from "react-icons/bs"
@@ -22,6 +21,7 @@ import { labelValueMap } from "../../../utils/helpers"
 import { executeDocumentFacility } from "../../../apis/facility"
 import { useAppDispatch, useAppSelector } from "../../../store/hook"
 import { STEPS, updateLevel, updateSavedFacility } from "../../../store/slice/createFacility"
+import { UserIcon } from "../../../components/icons"
 
 
 interface BasicFormProps { 
@@ -224,10 +224,12 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               <FormLabel color={TEXT_DARK} fontSize={"14px"} mb={1} fontWeight={"500"}>Does the facility have multiple branches?</FormLabel>
               <ButtonGroup>
                 <CheckButton
+                  value={defaultValues?.["has_multiple_facility"]}
                   handleClick={() => setValue("has_multiple_facility", "yes")}
                   isActive={hasMultipleFacility === "yes"}>Yes</CheckButton>
 
                 <CheckButton
+                  value={defaultValues?.["has_multiple_facility"]}
                   handleClick={() => setValue("has_multiple_facility", "no")}
                   isActive={hasMultipleFacility === "no"}>No</CheckButton>
               </ButtonGroup>
@@ -379,10 +381,12 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               <FormLabel color={TEXT_DARK} fontSize={"14px"} mb={1} fontWeight={"500"}>Any other use of the premises?</FormLabel>
               <ButtonGroup>
                 <CheckButton
+                  value={defaultValues?.["any_other_use_of_premises"]}
                   handleClick={() => setValue("any_other_use_of_premises", "yes")}
                   isActive={hasUseOfPremesis === "yes"}>Yes</CheckButton>
 
                 <CheckButton
+                value={defaultValues?.["any_other_use_of_premises"]}
                   handleClick={() => setValue("any_other_use_of_premises", "no")}
                   isActive={hasUseOfPremesis === "no"}>No</CheckButton>
               </ButtonGroup>
@@ -403,7 +407,8 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
           <GridItem colSpan={[12, 12, 6]}>
             <AuthInput
               control={propControl}
-              Icon={FaRegUser}
+              isIconComponent
+                Icon={<UserIcon w={"24px"} h={"24px"} fill={"#A3AEBD"} />}
               fontSize={"sm"}
               iconProp={{ fontSize: "xl" }}
               label="Full Name"

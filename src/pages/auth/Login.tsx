@@ -5,7 +5,6 @@ import { HStack, Heading, Link, Stack, Text, useDisclosure, useToast } from "@ch
 import { Link as ReactLink, useNavigate } from "react-router-dom"
 import AuthInput from "../../components/common/AuthInput"
 import { useForm } from "react-hook-form"
-import { IoMailOutline } from "react-icons/io5"
 import { MdOutlineLock } from "react-icons/md"
 import CustomButton from "../../components/common/CustomButton"
 import { TEXT_DARK } from "../../utils/color"
@@ -15,6 +14,7 @@ import { executeLogin } from "../../apis/auth"
 import { useAppDispatch } from "../../store/hook"
 import { populateToken } from "../../store/slice/accountSlice"
 import { useAppContext } from "../../contexts/AppContext"
+import { UserIcon } from "../../components/icons"
 
 interface LoginProps { }
 const Login: React.FC<LoginProps> = () => {
@@ -25,7 +25,7 @@ const Login: React.FC<LoginProps> = () => {
   const dispatch = useAppDispatch()
   const { getUsersProfile } = useAppContext()
   const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
-  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Submitting", "Searching user", "Matching cred..."])
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Submitting", "Searching user", "Matching credentials"])
   const toast = useToast({
     position: "bottom",
     isClosable: true,
@@ -86,7 +86,8 @@ const Login: React.FC<LoginProps> = () => {
           control={control}
           name="username"
           type="text"
-          Icon={IoMailOutline}
+          isIconComponent
+          Icon={<UserIcon w={"24px"} h={"24px"} fill={"#A3AEBD"} />}
           label="Username / Email"
           rules={{
             required: "Username or email is required"
