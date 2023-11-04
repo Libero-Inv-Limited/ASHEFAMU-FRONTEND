@@ -1,4 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+type RegUserType = {
+  email: string;
+  phone: string;
+}
+
 type FacilityData = {
   id: number;
   cac_number: string | null;

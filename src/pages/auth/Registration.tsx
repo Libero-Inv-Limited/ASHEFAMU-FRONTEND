@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react"
+import React, { useEffect } from "react"
 import AuthLayout from "../../components/layouts/AuthLayout"
 import { HStack, Heading, Link, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react"
 import { Link as ReactLink, useNavigate } from "react-router-dom"
@@ -12,10 +12,12 @@ import { TEXT_DARK } from "../../utils/color"
 import ROUTES from "../../utils/routeNames"
 import { executeRegistration } from "../../apis/auth"
 import useWaitingText from "../../hooks/useWaitingText"
+import { useAppContext } from "../../contexts/AppContext"
 
 interface RegistrationProps { }
 const Registration: React.FC<RegistrationProps> = () => {
   const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
+  const { checkIncompleteReg } = useAppContext()
   const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validating", "Submitting", "Finalizing"])
   const { control, watch, trigger, getValues } = useForm<RegisterData>({
     mode: "onSubmit"
@@ -66,6 +68,10 @@ const Registration: React.FC<RegistrationProps> = () => {
       stopLoadingText()
     }
   }
+
+  useEffect(() => {
+    checkIncompleteReg()
+  }, [])
 
   return (
     <AuthLayout>

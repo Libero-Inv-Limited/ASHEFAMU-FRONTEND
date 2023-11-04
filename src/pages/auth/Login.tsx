@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react"
+import React, { useEffect } from "react"
 import AuthLayout from "../../components/layouts/AuthLayout"
 import { HStack, Heading, Link, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react"
 import { Link as ReactLink, useNavigate } from "react-router-dom"
@@ -23,7 +23,7 @@ const Login: React.FC<LoginProps> = () => {
   })
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { getUsersProfile } = useAppContext()
+  const { getUsersProfile, checkIncompleteReg } = useAppContext()
   const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
   const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Submitting", "Searching user", "Matching credentials"])
   const toast = useToast({
@@ -74,6 +74,10 @@ const Login: React.FC<LoginProps> = () => {
       stopLoadingText()
     }
   }
+
+  useEffect(() => {
+    checkIncompleteReg()
+  }, [])
 
   return (
     <AuthLayout>
