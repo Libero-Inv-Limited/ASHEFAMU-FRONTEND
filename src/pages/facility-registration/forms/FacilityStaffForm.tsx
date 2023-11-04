@@ -140,10 +140,10 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
       </Stack>
 
       <Stack spacing={6}>
-        <FormTitle>UPLOAD COMPLETED TEMPLATE (Excel, 10MB maximum size)</FormTitle>
+        <FormTitle>UPLOAD COMPLETED TEMPLATE (CSV, 10MB maximum size)</FormTitle>
 
         <UploadInput
-          label="Professional staff template document (Excel, 10MB maximum size)"
+          label="Professional staff template document (CSV, 10MB maximum size)"
           register={register}
           setError={setError as any}
           setValue={setValue as any}
