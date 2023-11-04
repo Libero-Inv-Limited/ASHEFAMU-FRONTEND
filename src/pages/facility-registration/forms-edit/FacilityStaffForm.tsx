@@ -29,7 +29,7 @@ interface FacilityStaffFormProps {
 const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setActiveStep }) => {
   const { register, setError, setValue, watch, formState: { errors } } = useForm<{ staff_list: File | undefined }>({ mode: "onSubmit" })
   const { control, setValue: setNumberValue, getValues, trigger } = useForm({ mode: "onSubmit" })
-  const { currentFacility } = useAppContext()
+  const { currentFacility, handleGetFacilities } = useAppContext()
   const [ staffs, setStaffs ] = useState<StaffComplimentType[]>(currentFacility?.staffs || [])
   const { isOpen: isLoading, onClose: closeLoading, onOpen: openLoading } = useDisclosure()
   const token = useAppSelector(state => state.accountStore.tokenStore?.token)
@@ -90,10 +90,11 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
         status: "success"
       })
 
+      await handleGetFacilities()
+
       // CLEAR STORAGES
       sessionStorage.clear()
       dispatch(clearLevelState())
-
       navigate(ROUTES.FACILITY_ROUTE)
 
     }

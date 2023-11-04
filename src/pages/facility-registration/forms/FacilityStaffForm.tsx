@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hook"
 import { clearLevelState } from "../../../store/slice/createFacility"
 import { useNavigate } from "react-router-dom"
 import ROUTES from "../../../utils/routeNames"
+import { useAppContext } from "../../../contexts/AppContext"
 
 interface FacilityStaffFormProps {
   setActiveStep: (no: any) => void;
@@ -29,6 +30,7 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
   const { register, setError, setValue, watch, formState: { errors } } = useForm<{ staff_list: File | undefined }>({ mode: "onSubmit" })
   const { control, setValue: setNumberValue, getValues, trigger } = useForm({ mode: "onSubmit" })
   const [ staffs, setStaffs ] = useState<StaffComplimentType[]>([])
+  const { handleGetFacilities } = useAppContext()
 
   const { isOpen: isLoading, onClose: closeLoading, onOpen: openLoading } = useDisclosure()
   const token = useAppSelector(state => state.accountStore.tokenStore?.token)
@@ -89,6 +91,8 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
         status: "success"
       })
 
+      await handleGetFacilities()
+      
       // CLEAR STORAGES
       sessionStorage.clear()
       dispatch(clearLevelState())
