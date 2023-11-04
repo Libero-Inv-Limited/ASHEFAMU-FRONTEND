@@ -22,6 +22,7 @@ import FacilityForm from "./pages/facility-registration/FacilityForm";
 import Landing from "./pages/home/Landing";
 import ProfilePage from "./pages/dashboard/ProfilePage";
 import Users from "./pages/dashboard/users";
+import UserFacilities from "./pages/dashboard/users/Facilities"
 import UserFormEdit from "./pages/dashboard/users/edit"
 import FacilityFormEdit from "./pages/facility-registration/FacilityFormEdit";
 
@@ -176,9 +177,13 @@ export default [
     name: "Create Facility"
   },
   {
+    path: "/dashboard/users/technnn",
+    element: <UserFacilities />,
+    name: "USER FACILITIES"
+  },
+  {
     path: "/dashboard/users/:user/edit-user/",
     element: <UserFormEdit />,
     name: "Facility Edit Form"
   },
-
 ]

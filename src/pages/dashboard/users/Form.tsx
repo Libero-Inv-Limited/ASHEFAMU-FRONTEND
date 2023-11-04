@@ -27,6 +27,9 @@ import { Text } from "@chakra-ui/react";
 import ActionModal from "../../../components/modals/ActionModal";
 import ResetPasswordModal from "./../../../components/modals/ResetPassword";
 import { useToast } from "@chakra-ui/react";
+import ROUTES from "./../../../utils/routeNames";
+import { getSlug } from "../../../utils/helpers";
+import { useNavigate } from "react-router-dom";
 
 interface BasicFormProps {
   setActiveStep: (no: any) => void;
@@ -42,6 +45,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
   });
   const prevDatas = watch();
   console.log("PREV DATA:", prevDatas);
+  const navigate = useNavigate();
 
   const {
     isOpen: isEditing,
@@ -164,6 +168,11 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
             maxW={150}
             colorScheme="gray"
             rounded={"full"}
+            onClick={() =>
+              navigate(ROUTES.VIEW_USER_FACILITIES_ROUTE(`${user.firstname}`), {
+                state: user,
+              })
+            }
           >
             View facilities
           </CustomButton>
