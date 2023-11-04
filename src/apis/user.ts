@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { GET_NOTIFICATIONS_ENDPOINT, PAY_INVOICE_ENDPOINT, READ_NOTIFICATIONS_ENDPOINT } from "."
 import { log } from "../utils/helpers"
-import { GET_USERS_ENDPOINT } from "./index"
+import { GET_USERS_ENDPOINT, GET_USER_PROFILE_ENDPOINT } from "./index"
 import { CREATE_USER_ENDPOINT } from './index';
 
 
@@ -56,6 +56,25 @@ export const executeCreateUser = async (data: UserData, token: string): Promise<
       }
     }
     const request = await fetch(CREATE_USER_ENDPOINT, options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("DOCS [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}
+
+export const executeGetUserProfile = async (id: number, token: string): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        "Accept": "application/json"
+      }
+    }
+    const request = await fetch(GET_USER_PROFILE_ENDPOINT(id), options)
     const response = await request.json() satisfies ResponseDataType
     return response
   }

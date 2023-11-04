@@ -7,7 +7,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RED, YELLOW } from "../../../utils/color";
 import CustomTable from "../../../components/tables/CustomTable";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
@@ -16,7 +16,7 @@ import usePaginatedTableData from "../../../hooks/usePaginatedTableData";
 import { useAppContext } from "../../../contexts/AppContext";
 import { useAppSelector } from "../../../store/hook";
 import CustomSelect from "../../../components/common/CustomSelect";
-import { executeCreateUser, executeGetAllUsers, executePayInvoice } from "../../../apis/user";
+import { executeCreateUser, executeGetAllUsers, executeGetUserProfile, executePayInvoice } from "../../../apis/user";
 // import { data } from "./data";
 import { IconButton } from "@chakra-ui/react";
 import { HStack } from "@chakra-ui/react";
@@ -28,11 +28,15 @@ import AddUserModal from "../../../components/modals/AddUserModal";
 import { useForm } from "react-hook-form";
 import CustomButton from "./../../../components/common/CustomButton";
 import useGetAllRoles from "../../../hooks/useGetAllRoles";
+import ROUTES from './../../../utils/routeNames';
+import { useNavigate } from 'react-router-dom';
+import { getSlug } from "../../../utils/helpers";
 
 interface UserProps {}
 const User: React.FC<UserProps> = () => {
   const { FilterComponent } = useFilterComponent();
   const [userValues, setUserValues] = useState<UserPayload | null>(null);
+  const [editId, setEditId] = useState<number>()
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
   const { control, trigger, getValues, reset, watch } =
     useForm<ProffessionalStaffData>({
@@ -44,6 +48,8 @@ const User: React.FC<UserProps> = () => {
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isEditing, onOpen: openEditing, onClose: closeEditing } = useDisclosure()
+
   const { data: rolesData } = useGetAllRoles();
   const {
     data,
@@ -66,6 +72,38 @@ const User: React.FC<UserProps> = () => {
     isClosable: true,
     variant: "subtle",
   });
+  const navigate = useNavigate()
+
+  const handleEdit = async (id: number) => {
+    try {
+      openEditing()
+      const response = await executeGetUserProfile(id, token!)
+      if (response.status === "error") throw new Error(response.message)
+
+      const firstname = response.data.user.firstname
+
+      // const responseData = response.data as OneFacilityDataType
+      // console.log("Response:", response)
+
+      // // // SET THE FACILITY UPDATE STATE
+      // // setCurrentFacility(responseData)
+
+      // NAVIGATE TO EDIT SCREEN
+      navigate(ROUTES.EDIT_USER_ROUTE(getSlug(firstname)), {state: response?.data?.user})
+    }
+    catch (e: any) {
+      console.log("Error:", e.meesage)
+    }
+    finally {
+      closeEditing()
+      setEditId(undefined)
+    }
+  }
+
+  useEffect(() => {
+    if (!editId) return
+    handleEdit(editId)
+  }, [editId])
 
   const columns = [
     {
@@ -110,6 +148,8 @@ const User: React.FC<UserProps> = () => {
               rounded={"full"}
               bg={"#FFEBC9"}
               aria-label="edit"
+              isLoading={isEditing && (item.id === editId)}
+              onClick={() => setEditId(item.id)}
               icon={<Icon fontSize={"xl"} as={BiEdit} color={YELLOW} />}
             />
             <IconButton
