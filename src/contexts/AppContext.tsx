@@ -74,7 +74,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
   // CHECK IF USER IS REGISTERING
   const checkIncompleteReg = () => {
-    const regData = sessionStorage.getItem("REG_USER");
+    const regData = localStorage.getItem("REG_USER");
     if (regData) {
       const data = JSON.parse(regData) as RegUserType;
       navigate(ROUTES.VERIFY_CONTACT_ROUTE(data.email))

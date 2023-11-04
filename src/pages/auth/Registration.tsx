@@ -51,7 +51,7 @@ const Registration: React.FC<RegistrationProps> = () => {
         title: result.message
       })
 
-      sessionStorage.setItem("REG_USER", JSON.stringify({
+      localStorage.setItem("REG_USER", JSON.stringify({
         email: getValues("email"),
         phone: getValues("mobile")
       }))

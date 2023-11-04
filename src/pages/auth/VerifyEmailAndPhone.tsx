@@ -17,7 +17,7 @@ import { executeResendOTP, executeVerifyContact } from "../../apis/auth"
 interface VerifyEmailAndPhoneProps { }
 const VerifyEmailAndPhone: React.FC<VerifyEmailAndPhoneProps> = () => {
   const [state,] = useState(() => {
-    const { phone, email } = JSON.parse(sessionStorage.getItem("REG_USER")!)
+    const { phone, email } = JSON.parse(localStorage.getItem("REG_USER")!)
     return { phone, email }
   })
   const { control, trigger, getValues } = useForm<VerifyContactData>({
@@ -56,7 +56,7 @@ const VerifyEmailAndPhone: React.FC<VerifyEmailAndPhoneProps> = () => {
         title: result.message
       })
 
-      sessionStorage.removeItem("REG_USER")
+      localStorage.removeItem("REG_USER")
       navigate(ROUTES.SUCCESS_ROUTE("register"))
     }
     catch(error: any) {
