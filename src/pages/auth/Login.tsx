@@ -91,7 +91,7 @@ const Login: React.FC<LoginProps> = () => {
           name="username"
           type="text"
           isIconComponent
-          Icon={<UserIcon w={"24px"} h={"24px"} fill={"#A3AEBD"} />}
+          Icon={<UserIcon w={"26px"} h={"26px"} fill={"#A3AEBD"} />}
           label="Username / Email"
           rules={{
             required: "Username or email is required"

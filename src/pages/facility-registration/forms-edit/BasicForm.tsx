@@ -404,7 +404,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
             <AuthInput
               control={propControl}
               isIconComponent
-              Icon={<UserIcon w={"24px"} h={"24px"} fill={"#A3AEBD"} />}
+              Icon={<UserIcon w={"26px"} h={"26px"} fill={"#A3AEBD"} />}
               fontSize={"sm"}
               iconProp={{ fontSize: "xl" }}
               label="Full Name"

@@ -104,7 +104,7 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
                 label="First name"
                 value={user?.user.firstname}
                 isIconComponent
-                Icon={<UserIcon w={"24px"} h={"24px"} fill={"#A3AEBD"} />}
+                Icon={<UserIcon w={"26px"} h={"26px"} fill={"#A3AEBD"} />}
                 rules={{
                   required: "First name is required",
                   minLength: {
@@ -121,7 +121,7 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
                 control={control}
                 label="Last name"
                 value={user?.user.lastname}
-                Icon={<UserIcon w={"24px"} h={"24px"} fill={"#A3AEBD"} />}
+                Icon={<UserIcon w={"26px"} h={"26px"} fill={"#A3AEBD"} />}
                 isIconComponent
                 rules={{
                   required: "Last name is required",

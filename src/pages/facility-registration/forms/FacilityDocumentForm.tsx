@@ -125,7 +125,7 @@ const FacilityDocumentForm: React.FC<FacilityDocumentFormProps> = ({ activeStep,
               value={defaultValues?.['fullname']}
               rules={{ required: "Full name is required" }}
               isIconComponent
-              Icon={<UserIcon w={"24px"} h={"24px"} fill={"#A3AEBD"} />}
+              Icon={<UserIcon w={"26px"} h={"26px"} fill={"#A3AEBD"} />}
             />
           </GridItem>
 
