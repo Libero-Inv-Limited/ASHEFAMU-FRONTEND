@@ -17,7 +17,7 @@ import { executeResendOTP, executeVerifyContact } from "../../apis/auth"
 interface VerifyEmailAndPhoneProps { }
 const VerifyEmailAndPhone: React.FC<VerifyEmailAndPhoneProps> = () => {
   const [state,] = useState(() => {
-    const { phone, email } = JSON.parse(sessionStorage.getItem("REG_USER")!)
+    const { phone, email } = JSON.parse(localStorage.getItem("REG_USER")!)
     return { phone, email }
   })
   const { control, trigger, getValues } = useForm<VerifyContactData>({
@@ -26,7 +26,7 @@ const VerifyEmailAndPhone: React.FC<VerifyEmailAndPhoneProps> = () => {
   const navigate = useNavigate()
   const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
   const { isOpen: isResending, onOpen: openResending, onClose: closeResending } = useDisclosure()
-  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validaing", "Submitting", "Comparing"])
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validating", "Submitting", "Comparing"])
   const toast = useToast({
     position: "bottom",
     isClosable: true,
@@ -56,7 +56,7 @@ const VerifyEmailAndPhone: React.FC<VerifyEmailAndPhoneProps> = () => {
         title: result.message
       })
 
-      sessionStorage.removeItem("REG_USER")
+      localStorage.removeItem("REG_USER")
       navigate(ROUTES.SUCCESS_ROUTE("register"))
     }
     catch(error: any) {

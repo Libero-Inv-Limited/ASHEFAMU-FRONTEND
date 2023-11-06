@@ -22,8 +22,8 @@ import FacilityForm from "./pages/facility-registration/FacilityForm";
 import Landing from "./pages/home/Landing";
 import ProfilePage from "./pages/dashboard/ProfilePage";
 import Users from "./pages/dashboard/users";
-import UserFacilities from "./pages/dashboard/users/Facilities"
-import UserFormEdit from "./pages/dashboard/users/edit"
+import UserFacilities from "./pages/dashboard/users/UserFacilities";
+import UserFormEdit from "./pages/dashboard/users/edit";
 import FacilityFormEdit from "./pages/facility-registration/FacilityFormEdit";
 
 export default [
@@ -31,45 +31,45 @@ export default [
   {
     path: "/",
     element: <Landing />,
-    name: "Landing"
+    name: "Landing",
   },
-  
+
   // AUTH PAGES
   {
     path: "/register",
     element: <Registration />,
-    name: "Register"
+    name: "Register",
   },
   {
     path: "/login",
     element: <Login />,
-    name: "Register"
+    name: "Register",
   },
   {
     path: "/forgot-password",
     element: <ForgotPassword />,
-    name: "ForgotPassword"
+    name: "ForgotPassword",
   },
   {
     path: "/change-password/:email",
     element: <ChangePassword />,
-    name: "ChangePassword"
+    name: "ChangePassword",
   },
   {
     path: "/verify-contact/:email",
     element: <VerifyEmailAndPhone />,
-    name: "VerifyEmailAndPhone"
+    name: "VerifyEmailAndPhone",
   },
   {
     path: "/success/:type",
     element: <SuccessPage />,
-    name: "SuccessPage"
+    name: "SuccessPage",
   },
   // DASHBOARD
   {
     path: "/dashboard",
     element: <Dashboard />,
-    name: "Dashboard"
+    name: "Dashboard",
   },
 
   // FACILITIES ROUTES
@@ -77,113 +77,113 @@ export default [
     path: "/dashboard/facilities",
     exact: true,
     element: <Facilities />,
-    name: "Facilities"
+    name: "Facilities",
   },
   {
     path: "/dashboard/facilities/:name/",
     element: <FacilityDashboard />,
-    name: "Facilities Dashboard"
+    name: "Facilities Dashboard",
   },
   {
     path: "/dashboard/facilities/:name/documents",
     element: <FacilityDocument />,
-    name: "Facilities Document"
+    name: "Facilities Document",
   },
   {
     path: "/dashboard/facilities/:name/members",
     element: <FacilityMember />,
-    name: "Facilities Member"
+    name: "Facilities Member",
   },
   {
     path: "/dashboard/facilities/:name/profile",
     element: <FacilityProfile />,
-    name: "Facilities"
+    name: "Facilities",
   },
   {
     path: "/dashboard/facilities/:name/analytics",
     element: <FacilityAnalytics />,
-    name: "Facilities Analytics"
+    name: "Facilities Analytics",
   },
   {
     path: "/dashboard/facilities/:name/notifications",
     element: <FacilityNotification />,
-    name: "Facilities Notification"
+    name: "Facilities Notification",
   },
 
   // FACILITY FORMS
   {
     path: "/dashboard/facilities/register-facility",
     element: <CreateFacility />,
-    name: "Create Facility"
+    name: "Create Facility",
   },
   {
     path: "/dashboard/facilities/register-facility/intent",
     element: <CreateIntent />,
-    name: "Submit Intent"
+    name: "Submit Intent",
   },
   {
     path: "/dashboard/facilities/register-facility/fill-form",
     element: <FacilityForm />,
-    name: "Facility Form"
+    name: "Facility Form",
   },
   {
     path: "/dashboard/facilities/:facility/edit-facility/",
     element: <FacilityFormEdit />,
-    name: "Facility Edit Form"
+    name: "Facility Edit Form",
   },
 
   // PAYMENT
   {
     path: "/dashboard/payments",
     element: <Payments />,
-    name: "Payments"
+    name: "Payments",
   },
 
   // ANALYTICS
   {
     path: "/dashboard/analytics",
     element: <Analytics />,
-    name: "Analytics"
+    name: "Analytics",
   },
 
   // Notifications
   {
     path: "/dashboard/notifications",
     element: <Notifications />,
-    name: "Notifications"
+    name: "Notifications",
   },
 
   // Profile
   {
     path: "/dashboard/profile",
     element: <ProfilePage />,
-    name: "Profile"
+    name: "Profile",
   },
   {
     path: "*",
     element: <Navigate to={"/login"} replace />,
-    name: "Notfound"
+    name: "Notfound",
   },
 
   // USER MANAGEMENT
   {
     path: "/dashboard/users",
     element: <Users />,
-    name: "Users"
+    name: "Users",
   },
   {
     path: "/dashboard/facilities/create-user",
     element: <CreateFacility />,
-    name: "Create Facility"
+    name: "Create Facility",
   },
   {
-    path: "/dashboard/users/technnn",
+    path: "/dashboard/users/:user/facilities",
     element: <UserFacilities />,
-    name: "USER FACILITIES"
+    name: "USER FACILITIES",
   },
   {
     path: "/dashboard/users/:user/edit-user/",
     element: <UserFormEdit />,
-    name: "Facility Edit Form"
+    name: "Facility Edit Form",
   },
-]
+];

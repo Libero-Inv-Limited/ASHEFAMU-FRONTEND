@@ -17,20 +17,21 @@ interface IuseFetchFacilityData {
 
 const useFetchFacilityData = (): IuseFetchFacilityData => {
   const [isFetching, setIsFetching] = useState<boolean>(false)
-  const token = useAppSelector(state => state.accountStore.tokenStore?.token)
+  const token = useAppSelector(state => state.accountStore.tokenStore)
   const { facilityCategory, requiredDocs, serviceScope, sectorCategory, protectiveItems, wasteDisposalMethods, nonComplimentList } = useAppSelector(state => state.facilityDataStore)
   const dispatch = useAppDispatch()
 
   const handleFetchData = async () => {
+    if (!token) return
     setIsFetching(true)
     const [requiredDocsResult, facilityCategoryResult, facilitySectorResult, serviceScopeResult, wasteMethodResult, protectiveItemsResult, nonCompList] = await Promise.all([
-      executeGetRequiredDocs(token!),
-      executeGetFacilityCategory(token!),
-      executeGetFacilitySectors(token!),
-      executeGetServiceScope(token!),
-      executeGetDisposalMethods(token!),
-      executeGetProtectiveItems(token!),
-      executeGetNonCompliments(token!),
+      executeGetRequiredDocs(token.token!),
+      executeGetFacilityCategory(token.token!),
+      executeGetFacilitySectors(token.token!),
+      executeGetServiceScope(token.token!),
+      executeGetDisposalMethods(token.token!),
+      executeGetProtectiveItems(token.token!),
+      executeGetNonCompliments(token.token!),
     ])
 
     if (requiredDocsResult.status === "success") dispatch(populateRequiredDocs(requiredDocsResult.data))

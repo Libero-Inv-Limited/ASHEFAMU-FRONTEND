@@ -1,22 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react"
+import React, { useEffect } from "react"
 import AuthLayout from "../../components/layouts/AuthLayout"
 import { HStack, Heading, Link, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react"
 import { Link as ReactLink, useNavigate } from "react-router-dom"
 import AuthInput from "../../components/common/AuthInput"
 import { useForm } from "react-hook-form"
-import {IoPersonOutline, IoMailOutline} from "react-icons/io5"
-import {MdOutlinePhoneEnabled, MdOutlineLock} from "react-icons/md"
+import { IoMailOutline } from "react-icons/io5"
+import { MdOutlinePhoneEnabled, MdOutlineLock } from "react-icons/md"
 import CustomButton from "../../components/common/CustomButton"
 import { TEXT_DARK } from "../../utils/color"
 import ROUTES from "../../utils/routeNames"
 import { executeRegistration } from "../../apis/auth"
 import useWaitingText from "../../hooks/useWaitingText"
+import { useAppContext } from "../../contexts/AppContext"
+import { UserIcon } from "../../components/icons"
 
 interface RegistrationProps { }
 const Registration: React.FC<RegistrationProps> = () => {
   const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
-  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validaing", "Submitting", "Finalizing"])
+  const { checkIncompleteReg } = useAppContext()
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validating", "Submitting", "Finalizing"])
   const { control, watch, trigger, getValues } = useForm<RegisterData>({
     mode: "onSubmit"
   })
@@ -30,7 +33,7 @@ const Registration: React.FC<RegistrationProps> = () => {
 
   const handleRegister = async () => {
     try {
-      if(! await trigger()) return
+      if (! await trigger()) return
       // MAKE REQUEST
       openLoading()
       startLoadingText()
@@ -40,7 +43,7 @@ const Registration: React.FC<RegistrationProps> = () => {
       delete (payload as any)['confirm']
 
       const result = await executeRegistration(payload)
-      if(result.status === "error") throw new Error(result.message)
+      if (result.status === "error") throw new Error(result.message)
 
       // SHOW SUCCESS TOAST
       toast({
@@ -48,13 +51,13 @@ const Registration: React.FC<RegistrationProps> = () => {
         title: result.message
       })
 
-      sessionStorage.setItem("REG_USER", JSON.stringify({ 
-        email: getValues("email"), 
-        phone: getValues("mobile") 
+      localStorage.setItem("REG_USER", JSON.stringify({
+        email: getValues("email"),
+        phone: getValues("mobile")
       }))
       navigate(ROUTES.VERIFY_CONTACT_ROUTE(getValues("email")))
     }
-    catch(error: any) {
+    catch (error: any) {
       console.log("ERROR:", error.message)
       toast({
         status: "error",
@@ -67,15 +70,20 @@ const Registration: React.FC<RegistrationProps> = () => {
     }
   }
 
+  useEffect(() => {
+    checkIncompleteReg()
+  }, [])
+
   return (
     <AuthLayout>
       <Heading fontSize={"1.8rem"} color={"gray.700"} fontWeight={"semibold"} fontFamily={"rubik"}>Create an account</Heading>
       <Stack mt={8} spacing={4} mb={16}>
         {/* FIRSTNAME */}
-        <AuthInput 
+        <AuthInput
           control={control}
           name="firstname"
-          Icon={IoPersonOutline}
+          isIconComponent
+          Icon={<UserIcon w={"26px"} h={"26px"} fill={"#A3AEBD"} />}
           label="First Name"
           rules={{
             required: "First name is required",
@@ -87,10 +95,11 @@ const Registration: React.FC<RegistrationProps> = () => {
         />
 
         {/* LASTNAME */}
-        <AuthInput 
+        <AuthInput
           control={control}
           name="lastname"
-          Icon={IoPersonOutline}
+          isIconComponent
+          Icon={<UserIcon w={"26px"} h={"26px"} fill={"#A3AEBD"} />}
           label="Last Name"
           rules={{
             required: "Last name is required",
@@ -102,10 +111,11 @@ const Registration: React.FC<RegistrationProps> = () => {
         />
 
         {/* USERNAME */}
-        <AuthInput 
+        <AuthInput
           control={control}
           name="username"
-          Icon={IoPersonOutline}
+          isIconComponent
+          Icon={<UserIcon w={"26px"} h={"26px"} fill={"#A3AEBD"} />}
           label="Username"
           rules={{
             required: "Username is required",
@@ -117,7 +127,7 @@ const Registration: React.FC<RegistrationProps> = () => {
         />
 
         {/* EMAIL */}
-        <AuthInput 
+        <AuthInput
           control={control}
           name="email"
           type="email"
@@ -133,7 +143,7 @@ const Registration: React.FC<RegistrationProps> = () => {
         />
 
         {/* PHONE */}
-        <AuthInput 
+        <AuthInput
           control={control}
           name="mobile"
           type="tel"
@@ -153,7 +163,7 @@ const Registration: React.FC<RegistrationProps> = () => {
         />
 
         {/* PASSWORD */}
-        <AuthInput 
+        <AuthInput
           control={control}
           name="password"
           type="password"
@@ -170,7 +180,7 @@ const Registration: React.FC<RegistrationProps> = () => {
         />
 
         {/* C PASWORD */}
-        <AuthInput 
+        <AuthInput
           control={control}
           name="confirm"
           type="password"

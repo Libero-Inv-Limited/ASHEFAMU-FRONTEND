@@ -48,7 +48,7 @@ const FacilityProfile: React.FC<FacilityProfileProps> = () => {
             </HStack>
           </Stack>
 
-          {!(currentFacility?.status && currentFacility.status.approval_date) && (
+          {(currentFacility?.status && currentFacility.status.approval_date) && (
             <>
               <Stack border={`2px solid #00BF55`} rounded={"md"} p={4} maxW={"300px"} pos={"relative"}>
                 <HStack justifyContent={"space-between"}>

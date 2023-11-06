@@ -22,12 +22,24 @@
 .loader ul li {
   list-style: none;
   display: inline-block;
-  font-size: 50px;
+  font-size: 3.15rem;
   font-weight: 700;
   text-shadow: 0px 0px 30px #57b481;
   text-transform: uppercase;
   margin: 0 10px;
   animation: animate 2.5s infinite linear;
+}
+
+@media (max-width: 640px) {
+  .loader ul li {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .loader ul li {
+    font-size: 1.8rem;
+  }
 }
 
 .loader ul li:nth-of-type(1) {

@@ -1,4 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+type RegUserType = {
+  email: string;
+  phone: string;
+}
+
 type FacilityData = {
   id: number;
   cac_number: string | null;
@@ -11,6 +16,7 @@ type FacilityData = {
   building_type: string | null;
   gps_cordinates: string | null;
   any_other_use_of_premises: string | null;
+  enable_documentation: boolean;
   created_at: string | null;
   updated_at: string | null;
   protective_items: any;
@@ -35,6 +41,10 @@ type FacilityData = {
     facility_category_id: number;
     created_at: string | null;
     updated_at: string | null;
+    category: {
+      id: number;
+      name: string;
+    }
   };
 };
 
@@ -152,7 +162,7 @@ type OneFacilityDataType = {
     rejection_reason: null;
     created_by: null;
   };
-  scopeOfService: { service_scope: string, id?: number  }[];
+  scopeOfService: { service_scope: string; id?: number }[];
   nonProfessionalStaffComplement: NonProfessionalStaffData[];
   categorySelection: {
     id: number;
@@ -365,4 +375,19 @@ type PaymentDataType = {
     account_name: null | string;
   };
   method: string;
+};
+
+type DashboardCardType = {
+  id: number;
+  name: string;
+  content: string;
+  associated_user: number;
+  display_preference: string;
+  position: number;
+  visibility: boolean;
+  card_template: number;
+  template: {
+    slug: string;
+    id: number;
+  };
 };

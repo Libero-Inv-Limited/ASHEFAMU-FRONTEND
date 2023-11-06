@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GET_NOTIFICATIONS_ENDPOINT, PAY_INVOICE_ENDPOINT, READ_NOTIFICATIONS_ENDPOINT } from "."
+import { DASHBOARD_CARD_ENDPOINT, GET_CONDUCTED_ENDPOINT, GET_NOTIFICATIONS_ENDPOINT, GET_SCHEDULE_ENDPOINT, PAY_INVOICE_ENDPOINT, READ_NOTIFICATIONS_ENDPOINT, UPDATE_DASHBOARD_CARD_ENDPOINT, UPDATE_USER_PASSWORD_ENDPOINT } from "."
 import { log } from "../utils/helpers"
 import { GET_USERS_ENDPOINT, GET_USER_PROFILE_ENDPOINT } from "./index"
 import { CREATE_USER_ENDPOINT } from './index';
+import { GET_USER_FACILITIES_ENDPOINT } from './index';
 
 
 export const executeGetUserNotification = async (token: string, page: number = 1, perPage: number = 9): Promise<ResponseDataType> => {
@@ -35,6 +36,25 @@ export const executeGetAllUsers = async (token: string, page: number = 1, perPag
       }
     }
     const request = await fetch(GET_USERS_ENDPOINT, options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("NOTIFICATION [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}
+
+export const executeGetUserFacilities = async (token: string, id: number, page: number = 1, perPage: number = 9): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      // body: JSON.stringify({ page, perPage, source: "user" } as NotificationRequest),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      }
+    }
+    const request = await fetch(GET_USER_FACILITIES_ENDPOINT(id), options)
     const response = await request.json() satisfies ResponseDataType
     return response
   }
@@ -102,6 +122,27 @@ export const executeGetUserProfile = async (id: number, token: string): Promise<
 // }
 
 
+export const executeUpdatePassword = async (data: UpdatePassword, token: string): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      }
+    }
+    const request = await fetch(UPDATE_USER_PASSWORD_ENDPOINT, options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("UPDATE PASSWORD [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}
+
+
 export const executeReadUserNotification = async (notifyId: number, token: string): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
@@ -142,3 +183,79 @@ export const executePayInvoice = async (data: PayInvoice, token: string): Promis
 }
 
 
+export const executeGetSchedules = async (facilityId: number, token: string, page: number = 1, perPage: number = 9): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      }
+    }
+    const request = await fetch(GET_SCHEDULE_ENDPOINT(facilityId, page, perPage), options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("SCHEDULED [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}
+
+
+export const executeGetConduted = async (facilityId: number, token: string, page: number = 1, perPage: number = 9): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      }
+    }
+    const request = await fetch(GET_CONDUCTED_ENDPOINT(facilityId, page, perPage), options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("CONDUCTED [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}
+
+
+export const executeGetDashboardCards = async (token: string): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      }
+    }
+    const request = await fetch(DASHBOARD_CARD_ENDPOINT, options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("DASHBOARD CARD [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}
+
+
+export const executeUpdateDashboardCards = async (data: UpdateDashboardCard, token: string): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      }
+    }
+    const request = await fetch(UPDATE_DASHBOARD_CARD_ENDPOINT, options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("DASHBOARD CARD [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}

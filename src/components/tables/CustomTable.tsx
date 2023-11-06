@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react"
 import DataTable, { TableProps } from "react-data-table-component"
-import { DARK, LIGHT_GREEN, TEXT_DARK_GRAY } from "../../utils/color"
+import { DARK, LIGHT_GRAY, LIGHT_GREEN, TEXT_DARK_GRAY } from "../../utils/color"
 import { CircularProgress, HStack, Text } from "@chakra-ui/react"
 import CustomPagination from "./CustomPagination"
 import EmptyTable from "../states/EmptyTable"
@@ -49,7 +49,8 @@ const CustomTable: React.FC<CustomTableProps> = (props) => {
         },
       cells: {
         style: {
-          color: DARK
+          color: DARK,
+          borderRight: `1px solid ${LIGHT_GRAY}`
         }
       }
       }}

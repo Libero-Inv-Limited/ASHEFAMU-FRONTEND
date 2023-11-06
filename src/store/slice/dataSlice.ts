@@ -2,12 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 
 type InitialStateType = {
-  facilities: FacilityData[]
-  users: UserData[]
+  facilities: FacilityData[],
+  dashboardCards: DashboardCardType[],
 }
 const initialState:InitialStateType = {
-  facilities: [], 
-  users: []
+  facilities: [],
+  dashboardCards: [],
 };
 
 
@@ -18,12 +18,13 @@ const dataSlice = createSlice({
     populateFacilities: (state, action) => {
       state.facilities = action.payload
     },
-    populateUsers: (state, action) => {
-      state.users = action.payload
-    }
+    populateDashboardCards: (state, action) => {
+      const data = action.payload as DashboardCardType[]
+      state.dashboardCards = data.sort((a, b) => a.position - b.position)
+    },
   }
 })
 
 
-export const { populateFacilities, populateUsers } = dataSlice.actions;
+export const { populateFacilities, populateDashboardCards } = dataSlice.actions;
 export default dataSlice.reducer;

@@ -1,10 +1,11 @@
 import { Button, ButtonProps, Icon } from "@chakra-ui/react"
 import React from "react"
 import { BsCheck2 } from "react-icons/bs";
-import { DARK } from "../../utils/color";
+import { TEXT_DARK } from "../../utils/color";
 
 interface CheckButtonProps extends ButtonProps {
   isActive?: boolean;
+  value?: string;
   handleClick?: () => void;
 }
 const CheckButton: React.FC<CheckButtonProps> = ({ isActive, handleClick, ...props }) => {
@@ -14,7 +15,7 @@ const CheckButton: React.FC<CheckButtonProps> = ({ isActive, handleClick, ...pro
       rounded={"6px"}
       fontSize={"sm"}
       fontWeight={500}
-      color={DARK}
+      color={TEXT_DARK}
       _hover={{ bg: isActive && "#E5F3E5"  }}
       rightIcon={isActive ? <Icon fontSize={"xl"} color={"brand.500"} as={BsCheck2} /> : undefined}
       onClick={handleClick}

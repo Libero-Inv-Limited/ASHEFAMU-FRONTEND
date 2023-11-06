@@ -4,7 +4,7 @@ import React from "react"
 import FormTitle from "../../../components/common/FormTitle"
 import { useForm } from "react-hook-form"
 import AuthInput from "../../../components/common/AuthInput"
-import { FaRegFileAlt, FaRegUser } from "react-icons/fa"
+import { FaRegFileAlt } from "react-icons/fa"
 import { HiOutlineLocationMarker } from "react-icons/hi"
 import { TbBuilding } from "react-icons/tb"
 // import { useAppSelector } from "../../../store/hook"
@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux"
 import { executeAddProIncharge, executeUploadFacilityDocs } from "../../../apis/facility"
 import { STEPS, updateLevel } from "../../../store/slice/createFacility"
 import { useAppContext } from "../../../contexts/AppContext"
+import { UserIcon } from "../../../components/icons"
 
 
 interface FacilityDocumentFormProps { 
@@ -123,7 +124,8 @@ const FacilityDocumentForm: React.FC<FacilityDocumentFormProps> = ({ activeStep,
               name="fullname"
               value={currentFacility?.medicalProffessional.fullname}
               rules={{ required: "Full name is required" }}
-              Icon={FaRegUser}
+              isIconComponent
+              Icon={<UserIcon w={"26px"} h={"26px"} fill={"#A3AEBD"} />}
             />
           </GridItem>
 

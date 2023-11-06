@@ -35,7 +35,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 {link.name}
               </ChakraLink>
             ))}
-            <CustomButton mt={2} as={Link} to={ROUTES.REGISTER_ROUTE} w={150} variant={"outline"} rounded={"full"} fontSize={"md"} fontWeight={"600"}>Register</CustomButton>
+            <Stack mt={4} w={"full"}>
+              <CustomButton as={Link} to={ROUTES.LOGIN_ROUTE} variant={"outline"} w={"full"} rounded={"full"} fontSize={"md"} fontWeight={"600"}>Login</CustomButton>
+              <CustomButton as={Link} to={ROUTES.REGISTER_ROUTE} w={"full"} variant={"solid"} rounded={"full"} fontSize={"md"} fontWeight={"600"}>Register</CustomButton>
+            </Stack>
           </VStack>
         </DrawerBody>
       </DrawerContent>

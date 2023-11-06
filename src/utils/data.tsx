@@ -152,7 +152,7 @@ export const secondarySidebarContents = [
   {
     name: "profile",
     link: "/dashboard/facilities/:name/profile",
-    icon: <UserIcon w={"24px"} h={"24px"} color={"inherit"} fill={"inherit"} />,
+    icon: <UserIcon w={"26px"} h={"26px"} color={"inherit"} fill={"inherit"} />,
     isElementIcon: true
     
   },

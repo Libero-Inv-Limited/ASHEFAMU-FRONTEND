@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useRef } from "react"
-import { Box, Center, HStack, Icon, IconButton, Stack, Text, Wrap, WrapItem } from "@chakra-ui/react"
+import React, { useEffect, useRef, useState } from "react"
+import { Box, Center, HStack, Icon, IconButton, SimpleGrid, Skeleton, Stack, Text, WrapItem } from "@chakra-ui/react"
 import { TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color"
 import DashboardCard from "../../components/common/DashboardCard"
-import { dashboardCards } from "../../utils/data"
-import DashboardQRCard from "../../components/common/DashboardQRCard"
+// import DashboardQRCard from "../../components/common/DashboardQRCard"
 import DashboardLayout from "../../components/layouts/DashboardLayout"
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -16,48 +15,57 @@ import usePaginatedTableData from "../../hooks/usePaginatedTableData"
 import { useAppSelector } from "../../store/hook"
 import DataLoader from "../../components/common/loader/DataLoader"
 import EmptyTable from "../../components/states/EmptyTable"
-import { executeGetFacilityNotification } from "../../apis/facility"
+import { executeGetFacilityDashboardCards, executeGetFacilityNotification } from "../../apis/facility"
 import { useAppContext } from "../../contexts/AppContext"
 import { formatDate } from "../../utils/helpers"
 import { useNavigate } from "react-router-dom"
 import ROUTES from "../../utils/routeNames"
+import Loader from "../../components/common/loader/Loader"
 // import { useAppContext } from "../../contexts/AppContext"
 
 interface FacilityDashboardProps { }
 const FacilityDashboard: React.FC<FacilityDashboardProps> = () => {
   const swiper = useRef(null)
   const token = useAppSelector(state => state.accountStore.tokenStore!.token)
-  const { currentFacility } = useAppContext()
+  const { currentFacility, isLoadingData } = useAppContext()
   const { data, loadingData } = usePaginatedTableData((page, perPage) => executeGetFacilityNotification(currentFacility!.id, token!, page, perPage), 9)
   const navigate = useNavigate()
+  const [cardsToShow, setCardsToShow] = useState<DashboardCardType[]>([])
+
+  const handleGetCards = async () => {
+    if(!currentFacility || !token) return
+    const response = await executeGetFacilityDashboardCards(currentFacility.id, token)
+    if(response.status === "error") return 
+    setCardsToShow(response.data as DashboardCardType[])
+  }
 
   useEffect(() => {
-    if(currentFacility) return
+    if(isLoadingData) return
+    if (currentFacility) return
     navigate(ROUTES.FACILITY_ROUTE, { replace: true })
-  }, [currentFacility])
+  }, [isLoadingData])
 
   useEffect(() => {
-    console.log("SWIPER", swiper)
-  }, [swiper])
+    handleGetCards()
+  }, [isLoadingData])
   return (
     <DashboardLayout>
       <Stack spacing={10} pb={10} w={"full"}>
         <Stack spacing={4}>
           <HStack justifyContent={"space-between"}>
-            <Text alignSelf={"flex-end"} noOfLines={1} fontSize={"0.875rem"} fontWeight={500} color={TEXT_DARK_GRAY}>Registered on  { currentFacility && formatDate((currentFacility?.created_at))}</Text>
+            <Text alignSelf={"flex-end"} noOfLines={1} fontSize={"0.875rem"} fontWeight={500} color={TEXT_DARK_GRAY}>Registered on  {currentFacility && formatDate((currentFacility?.created_at))}</Text>
           </HStack>
 
           {/* CARDS SECTION */}
-          <Wrap spacing={3}>
-            {dashboardCards.map((cardItem, index) => (
+          <SimpleGrid columns={[1, 2, 3, 4]} spacing={3}>
+            { isLoadingData ? (new Array(4).fill("-")).map((_, index) => (
+              <Skeleton maxW={500} w={"full"} rounded={"md"} h={131} key={`loading-card-${index}`} />
+            )) : cardsToShow.map((cardItem, index) => (
               <WrapItem key={`dash-card-${cardItem.name}-${index}`} flex={1}>
                 <DashboardCard {...cardItem} />
               </WrapItem>
             ))}
-            <WrapItem flex={1}>
-              <DashboardQRCard />
-            </WrapItem>
-          </Wrap>
+          </SimpleGrid>
         </Stack>
 
         {/* NOTIFICATIONS */}
@@ -118,6 +126,8 @@ const FacilityDashboard: React.FC<FacilityDashboardProps> = () => {
           }
         </Box>
       </Stack>
+
+      { isLoadingData && <Loader /> }
     </DashboardLayout>
   )
 }

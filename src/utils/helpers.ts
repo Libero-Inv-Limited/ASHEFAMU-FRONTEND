@@ -32,6 +32,7 @@ export const getSlug = (name: string) => {
 
 // DECODE
 export const decodeSlug = (name: string) => {
+  if(!name) return ""
   const words = name.split("-");
   if (words.length === 1) return name[0].toUpperCase() + name.slice(1);
   return words

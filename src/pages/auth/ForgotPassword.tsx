@@ -22,7 +22,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
   const navigate = useNavigate()
   const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
 
-  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validaing", "Submitting", "Finalizing"])
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validating", "Submitting", "Finalizing"])
   const toast = useToast({
     position: "bottom",
     isClosable: true,

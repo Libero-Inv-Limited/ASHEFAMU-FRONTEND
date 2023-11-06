@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hook"
 import { clearLevelState } from "../../../store/slice/createFacility"
 import { useNavigate } from "react-router-dom"
 import ROUTES from "../../../utils/routeNames"
+import { useAppContext } from "../../../contexts/AppContext"
 
 interface FacilityStaffFormProps {
   setActiveStep: (no: any) => void;
@@ -29,6 +30,7 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
   const { register, setError, setValue, watch, formState: { errors } } = useForm<{ staff_list: File | undefined }>({ mode: "onSubmit" })
   const { control, setValue: setNumberValue, getValues, trigger } = useForm({ mode: "onSubmit" })
   const [ staffs, setStaffs ] = useState<StaffComplimentType[]>([])
+  const { handleGetFacilities } = useAppContext()
 
   const { isOpen: isLoading, onClose: closeLoading, onOpen: openLoading } = useDisclosure()
   const token = useAppSelector(state => state.accountStore.tokenStore?.token)
@@ -44,8 +46,8 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
 
   const handleDownloadFile = () => {
     const a = document.createElement("a")
-    a.href = "/files/staff_complementss.xlsx"
-    a.download = "sample_template.xlsx"
+    a.href = "/files/sample.csv"
+    a.download = "sample.csv"
     a.click()
     a.remove()
   }
@@ -89,6 +91,8 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
         status: "success"
       })
 
+      await handleGetFacilities()
+      
       // CLEAR STORAGES
       sessionStorage.clear()
       dispatch(clearLevelState())
@@ -140,17 +144,17 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
       </Stack>
 
       <Stack spacing={6}>
-        <FormTitle>UPLOAD COMPLETED TEMPLATE (Excel, 10MB maximum size)</FormTitle>
+        <FormTitle>UPLOAD COMPLETED TEMPLATE (CSV, 10MB maximum size)</FormTitle>
 
         <UploadInput
-          label="Professional staff template document (Excel, 10MB maximum size)"
+          label="Professional staff template document (CSV, 10MB maximum size)"
           register={register}
           setError={setError as any}
           setValue={setValue as any}
           error={errors.staff_list?.message}
           value={file}
           name="staff_list"
-          accept=".csv"
+          accept=".csv, .xsl, .xlsx"
         />
       </Stack>
 

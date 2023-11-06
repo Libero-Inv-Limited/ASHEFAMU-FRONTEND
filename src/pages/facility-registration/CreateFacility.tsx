@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import DashboardLayout from "../../components/layouts/DashboardLayout"
 import { Center, Checkbox, Circle, FormControl, FormLabel, HStack, Heading, Icon, List, ListIcon, ListItem, Stack, Text, useDisclosure } from "@chakra-ui/react"
-import { DARK, LIGHT_GRAY, LIGHT_GREEN, RED, TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color"
+import { DARK, LIGHT_BG, LIGHT_GRAY, LIGHT_GREEN, RED, TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color"
 import { BsArrowRight, BsDot } from "react-icons/bs"
 import { condinateGuideline, warnings } from "../../utils/data"
 import { FaRegFileAlt } from "react-icons/fa"
@@ -77,7 +77,7 @@ const CreateFacility: React.FC<CreateFacilityProps> = () => {
               isLoading ?
                 (new Array(8).fill("-")).map((_, index) => <FileSkeleton key={`file-skeleton-${index}`} />) :
                 facilityData.requiredDocs.map((doc, index) => (
-                  <HStack py={4} maxW={600} px={2} rounded={"md"} bg={"#F4F7F4"} key={`doc-${index}`}>
+                  <HStack py={4} maxW={600} px={2} rounded={"md"} bg={LIGHT_BG} key={`doc-${index}`}>
                     <Icon as={FaRegFileAlt} color={RED} fontSize={"lg"} />
                     <Text fontSize={"sm"} color={DARK} fontWeight={"500"}>{doc.name}</Text>
                   </HStack>

@@ -3,7 +3,7 @@ import { useTheme } from "@chakra-ui/react";
 import React, { ComponentProps } from "react"
 import Select, { StylesConfig } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { TEXT_DARK } from "../../utils/color";
+import { TEXT_DARK, TEXT_DARK_GRAY } from "../../utils/color";
 
 
 interface CustomSelectProps extends ComponentProps<Select> { 
@@ -31,6 +31,26 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ fontSize, isCreatable, styl
       ":focus": {
         borderColor: theme.colors.brand['500']
       },
+    }),
+    menu: (style) => ({
+      ...style,
+      fontSize: fontSize === "sm" ? ".875rem" : "1rem",
+      color: TEXT_DARK
+    }),
+    menuList: (style) => ({
+      ...style,
+      fontSize: fontSize === "sm" ? ".875rem" : "1rem",
+      color: TEXT_DARK
+    }),
+    input: (style) => ({
+      ...style,
+      fontSize: fontSize === "sm" ? ".875rem" : "1rem",
+      color: TEXT_DARK_GRAY
+    }),
+    valueContainer: (style) => ({
+      ...style,
+      fontSize: fontSize === "sm" ? ".875rem" : "1rem",
+      color: TEXT_DARK_GRAY
     }),
     singleValue: (styles) => ({
       ...styles,

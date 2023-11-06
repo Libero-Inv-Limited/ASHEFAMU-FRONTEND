@@ -1,7 +1,7 @@
 import { Box, Center, HStack, Heading, Icon, Stack } from "@chakra-ui/react";
 import React from "react"
 import { BsCheckCircle, BsCheckCircleFill } from "react-icons/bs";
-import { DARK } from "../../utils/color";
+import { DARK, LIGHT_BG } from "../../utils/color";
 
 interface StepperProps {
   currentIndex: number;
@@ -17,7 +17,7 @@ const Stepper: React.FC<StepperProps> = ({ currentIndex, steps }) => {
             <Stack flex={1} spacing={6}>
               <Box
                 h={2} w={"100%"} rounded={"sm"}
-                bg={isActive ? "primary.500" : "#F4F7F4"} />
+                bg={isActive ? "primary.500" : LIGHT_BG} />
               <Heading flex={1} textAlign={"center"} noOfLines={2} fontWeight={"600"} textTransform={"uppercase"} fontSize={["sm", "sm", "md"]} color={DARK} fontFamily={"rubik"}>{step.title}</Heading>
             </Stack>
             <Center transform={"translateY(-6px)"} rounded={"full"}>

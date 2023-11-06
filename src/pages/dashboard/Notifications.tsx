@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react"
 import DashboardLayout from "../../components/layouts/DashboardLayout"
-import { Box, Center, HStack, Select, SimpleGrid, Stack, Text } from "@chakra-ui/react"
+import { Box, Center, HStack, Select, SimpleGrid, Text, useDisclosure } from "@chakra-ui/react"
 import { notificationSearchData } from "../../utils/data"
 import CustomSelect from "../../components/common/CustomSelect";
 import NotificationCard from "../../components/common/NotificationCard";
@@ -11,15 +11,16 @@ import { executeGetUserNotification } from "../../apis/user";
 import { useAppSelector } from "../../store/hook";
 import DataLoader from "../../components/common/loader/DataLoader";
 import EmptyTable from "../../components/states/EmptyTable";
+import InspectionsModal from "../../components/modals/InspectionsModal";
 
 interface NotificationProps { }
 const Notification: React.FC<NotificationProps> = () => {
   const token = useAppSelector(state => state.accountStore.tokenStore?.token)
   const { currentPage, data, loadingData, handlePageChange, handleReloadData, lastPage } = usePaginatedTableData((page, perPage) => executeGetUserNotification(token!, page, perPage), 9)
-  // const last = div <= perPage ? perPage : div
+  const { isOpen, onClose, onOpen } = useDisclosure()
   return (
     <DashboardLayout>
-      <Stack>
+      <HStack alignItems={"flex-start"} flexDir={['column', 'column', 'row']}>
         <CustomSelect
           fontSize="sm"
           styles={{
@@ -32,8 +33,11 @@ const Notification: React.FC<NotificationProps> = () => {
           placeholder="Search category eg. Invoice"
           options={notificationSearchData}
         />
-      </Stack>
 
+        <CustomButton onClick={onOpen} rounded={"full"} variant={"outline"} colorScheme="gray">Facility inspections</CustomButton>
+      </HStack>
+
+     
       {/* NOTIFICATIONS */}
       <Box p={4} mt={6} bg={"white"} rounded={"md"}>
         {
@@ -42,17 +46,17 @@ const Notification: React.FC<NotificationProps> = () => {
               <DataLoader />
             </Center>
           ) : data.length ?
-            data.map((type: NotificationDataType) => (
-              <SimpleGrid key={type.id} spacing={4} flexWrap={"wrap"} columns={[1, 2, 3]}>
-                <NotificationCard handleReload={handleReloadData} {...type} />
-              </SimpleGrid>
-            )) :
+            <SimpleGrid alignItems={"flex-start"} minH={`calc(100vh - 150px)`} spacing={4} flexWrap={"wrap"} columns={[1, 2, 3]}>
+              {data.map((type: NotificationDataType) => (
+                <NotificationCard key={type.id} handleReload={handleReloadData} {...type} />
+              ))}
+            </SimpleGrid> :
             <EmptyTable text={"No notifications found"} />
         }
       </Box>
 
       {!!data.length && (
-        <HStack position={"sticky"} bottom={0} left={0} alignItems={"center"} justifyContent={"center"} mt={10}>
+        <HStack bg={"white"} py={3} position={"sticky"} bottom={0} left={0} alignItems={"center"} justifyContent={"center"} mt={10}>
           <CustomButton h={"40px"} isDisabled={currentPage <= 1} onClick={() => handlePageChange(currentPage - 1)} colorScheme="primary">Previous</CustomButton>
           <HStack alignItems={"center"} justifyContent={"center"}>
             <Select value={currentPage} onChange={(e) => handlePageChange(+e.target.value)}>
@@ -65,6 +69,8 @@ const Notification: React.FC<NotificationProps> = () => {
           <CustomButton isDisabled={currentPage >= lastPage} onClick={() => handlePageChange(currentPage + 1)} h={"40px"} colorScheme="primary">Next</CustomButton>
         </HStack>
       )}
+
+      <InspectionsModal isOpen={isOpen} onClose={onClose} />
     </DashboardLayout>
   )
 }

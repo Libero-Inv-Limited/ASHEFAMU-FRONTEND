@@ -4,11 +4,10 @@ import React, { useState } from "react"
 import FormTitle from "../../../components/common/FormTitle"
 import { useForm } from "react-hook-form"
 import AuthInput from "../../../components/common/AuthInput"
-import { LIGHT_GREEN, RED, TEXT_DARK, TEXT_DARK_GRAY } from "../../../utils/color"
+import { LIGHT_BG, LIGHT_GREEN, RED, TEXT_DARK, TEXT_DARK_GRAY } from "../../../utils/color"
 import CheckButton from "../../../components/common/CheckButton"
 import { MdOutlinePhoneEnabled } from "react-icons/md"
 import { HiOutlineLocationMarker } from "react-icons/hi"
-import { FaRegUser } from "react-icons/fa"
 import CustomButton from "../../../components/common/CustomButton"
 import { LGAs, countries, generalBuildingTypes } from "../../../utils/data"
 import { BsPlus } from "react-icons/bs"
@@ -23,16 +22,17 @@ import { executeDocumentFacility } from "../../../apis/facility"
 import { useAppDispatch, useAppSelector } from "../../../store/hook"
 import { STEPS, updateLevel, updateSavedFacility } from "../../../store/slice/createFacility"
 import { useAppContext } from "../../../contexts/AppContext"
+import { UserIcon } from "../../../components/icons"
 
 
-interface BasicFormProps { 
+interface BasicFormProps {
   setActiveStep: (no: any) => void;
   activeStep: number;
 }
 
 const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
   const { currentFacility } = useAppContext()
-  const { control, watch, setValue, trigger, getValues } = useForm({ 
+  const { control, watch, setValue, trigger, getValues } = useForm({
     mode: "onSubmit"
   })
 
@@ -55,7 +55,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
   const dispatch = useAppDispatch()
 
 
-  const handleAddProprietors = async () => {    
+  const handleAddProprietors = async () => {
     if (!await propTrigger()) return
     const data: Proprietor = {
       ...propGetValues(),
@@ -76,9 +76,9 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
     try {
       startLoadingText()
       openLoading()
-      
+
       const facilityId = currentFacility!.id
-      const data = { 
+      const data = {
         id: +facilityId!,
         address: getValues("address"),
         name: getValues("facility_name"),
@@ -107,7 +107,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
         scopeOfService: getValues("service_scope").map((item: any) => ({ service_scope: item.label }))
       }
       const resultData = await executeDocumentFacility(data, token!)
-      if(resultData.status === "error") throw new Error(resultData.message)
+      if (resultData.status === "error") throw new Error(resultData.message)
 
       dispatch(updateSavedFacility(resultData.data))
 
@@ -154,7 +154,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
 
           <GridItem colSpan={[5, 5, 3]}>
             <AuthInput
-              bg={"#F4F7F4"}
+              bg={LIGHT_BG}
               placeholder="Engineering"
               control={control}
               fontSize={"sm"}
@@ -169,7 +169,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
 
           <GridItem colSpan={[5, 5, 1]}>
             <AuthInput
-              bg={"#F4F7F4"}
+              bg={LIGHT_BG}
               placeholder="Public"
               control={control}
               fontSize={"sm"}
@@ -186,7 +186,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
 
           <GridItem colSpan={[5, 5, 1]}>
             <AuthInput
-              bg={"#F4F7F4"}
+              bg={LIGHT_BG}
               placeholder="Clinic"
               control={control}
               fontSize={"sm"}
@@ -203,7 +203,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
 
           <GridItem colSpan={[5, 5, 1]}>
             <AuthInput
-              bg={"#F4F7F4"}
+              bg={LIGHT_BG}
               control={control}
               fontSize={"sm"}
               label="CAC Number"
@@ -220,10 +220,12 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               <FormLabel color={TEXT_DARK} fontSize={"14px"} mb={1} fontWeight={"500"}>Does the facility have multiple branches?</FormLabel>
               <ButtonGroup>
                 <CheckButton
+                  value={currentFacility?.multiple_branch ? "Yes" : "No"}
                   handleClick={() => setValue("has_multiple_facility", "yes")}
                   isActive={hasMultipleFacility === "yes"}>Yes</CheckButton>
 
                 <CheckButton
+                  value={currentFacility?.multiple_branch ? "Yes" : "No"}
                   handleClick={() => setValue("has_multiple_facility", "no")}
                   isActive={hasMultipleFacility === "no"}>No</CheckButton>
               </ButtonGroup>
@@ -310,7 +312,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
             <AuthInput
               control={control}
               isSelect
-              data={generalBuildingTypes.map(item => ({label: item, value: item}))}
+              data={generalBuildingTypes.map(item => ({ label: item, value: item }))}
               fontSize={"sm"}
               label="Building type"
               name="building_type"
@@ -375,10 +377,12 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               <FormLabel color={TEXT_DARK} fontSize={"14px"} mb={1} fontWeight={"500"}>Any other use of the premises?</FormLabel>
               <ButtonGroup>
                 <CheckButton
+                  value={currentFacility?.any_other_use_of_premises ? "Yes" : "No"}
                   handleClick={() => setValue("any_other_use_of_premises", "yes")}
                   isActive={hasUseOfPremesis === "yes"}>Yes</CheckButton>
 
                 <CheckButton
+                  value={currentFacility?.any_other_use_of_premises ? "Yes" : "No"}
                   handleClick={() => setValue("any_other_use_of_premises", "no")}
                   isActive={hasUseOfPremesis === "no"}>No</CheckButton>
               </ButtonGroup>
@@ -399,7 +403,8 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
           <GridItem colSpan={[12, 12, 6]}>
             <AuthInput
               control={propControl}
-              Icon={FaRegUser}
+              isIconComponent
+              Icon={<UserIcon w={"26px"} h={"26px"} fill={"#A3AEBD"} />}
               fontSize={"sm"}
               iconProp={{ fontSize: "xl" }}
               label="Full Name"
@@ -441,7 +446,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               control={propControl}
               fontSize={"sm"}
               isSelect
-              data={countries.map(item => ({label: item, value: item}))}
+              data={countries.map(item => ({ label: item, value: item }))}
               label="Nationality"
               name="nationality"
               rules={{
@@ -541,7 +546,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
 
 
           <GridItem colSpan={[12, 12, 6]}>
-          <AuthInput
+            <AuthInput
               control={control}
               fontSize={"sm"}
               type="date"
@@ -600,9 +605,9 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
         </Grid>
       </Stack>
 
-      <FormFooter 
-        activeStep={activeStep} 
-        setActiveStep={setActiveStep} 
+      <FormFooter
+        activeStep={activeStep}
+        setActiveStep={setActiveStep}
         handleAction={handleSaveFacilityInfo}
         nextButtonProps={{
           isLoading,
@@ -611,7 +616,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
         prevButtonProps={{ isDisabled: isLoading }}
       />
 
-      { isFetching && <Loader /> }
+      {isFetching && <Loader />}
     </Stack>
   )
 }

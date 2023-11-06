@@ -60,9 +60,16 @@ export const NON_COMP_LIST_ENDPOINT = BASE_URL + "/non-prof-staff-complements"
 // OTHERS
 export const GET_NOTIFICATIONS_ENDPOINT = BASE_URL + "/get-notifications"
 export const GET_USERS_ENDPOINT = BASE_URL + "/all-users"
+export const GET_USER_FACILITIES_ENDPOINT = (id: number) => BASE_URL + `/user-facilities/${id}`
 export const CREATE_USER_ENDPOINT = BASE_URL + "/create-user"
 export const GET_USER_PROFILE_ENDPOINT = (id:number) =>BASE_URL + `/user-profile/${id}` 
 export const GET_ROLES_ENDPOINT = BASE_URL + "/all-roles"
+export const UPDATE_USER_PASSWORD_ENDPOINT = BASE_URL + "/update-user-password"
+export const UPDATE_DASHBOARD_CARD_ENDPOINT = BASE_URL + "/update-card-setting"
 export const READ_NOTIFICATIONS_ENDPOINT = (id: number) => BASE_URL + "/read-notification/" + id
 export const GET_INVOICE_STAFF_ENDPOINT = (facilityID: number, page: number = 1, perPage: number = 15) => BASE_URL + `/invoices/${facilityID}/${page}/${perPage}`
 export const PAY_INVOICE_ENDPOINT = BASE_URL + "/pay-invoice"
+export const GET_CONDUCTED_ENDPOINT = (facilityID: number, page: number = 1, perPage: number = 15) => BASE_URL + `/inspection-records/${facilityID}/${page}/${perPage}`
+export const GET_SCHEDULE_ENDPOINT = (facilityID: number, page: number = 1, perPage: number = 15) => BASE_URL + `/inspection-schedules/${facilityID}/${page}/${perPage}`
+export const DASHBOARD_CARD_ENDPOINT = BASE_URL + `/dashboard-cards`
+export const DASHBOARD_FACILITY_CARD_ENDPOINT = (id: number) => BASE_URL + `/dashboard-cards/` + id
