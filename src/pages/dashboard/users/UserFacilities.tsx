@@ -35,59 +35,49 @@ import { facilitiesColumns } from "./helpers";
 import { SimpleGrid } from "@chakra-ui/react";
 import AuthInput from "../../../components/common/AuthInput";
 import { InputGroup } from "@chakra-ui/react";
-import { InputLeftElement } from "@chakra-ui/react";
-import { Center } from "@chakra-ui/react";
-import { AiOutlineSearch } from "react-icons/ai";
-import { Input } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
+import Select from "react-select";
 
 interface UserProps {}
 const Facilities: React.FC<UserProps> = () => {
   const { FilterComponent } = useFilterComponent();
   const location = useLocation();
   const { id, firstname } = location.state;
-  const [userValues, setUserValues] = useState<UserPayload | null>(null);
   const [editId, setEditId] = useState<number>();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
-  const { control, trigger, getValues, reset, watch } =
-    useForm<ProffessionalStaffData>({
-      mode: "onSubmit",
-    });
-
-  const extractIdAndName = (arr) => {
-    return arr.map((item) => ({ value: item.id, label: item.name }));
-  };
+  const allFacilities = useAppSelector((state) => state.dataStore.facilities);
+  const { control } = useForm<ProffessionalStaffData>({
+    mode: "onSubmit",
+  });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    isOpen: isEditing,
     onOpen: openEditing,
     onClose: closeEditing,
   } = useDisclosure();
 
-  const { data: rolesData } = useGetAllRoles();
   const {
     data,
     totalRows,
     handlePageChange,
     handlePerRowsChange,
     loadingData,
-    handleReloadData,
+    // handleReloadData,
   } = usePaginatedTableData((page, perPage) =>
     executeGetUserFacilities(token, id, page, perPage)
   );
 
   const [users, setUsers] = useState<InvoiceDataType[]>(data);
-  const {
-    isOpen: isLoading,
-    onClose: closeLoading,
-    onOpen: openLoading,
-  } = useDisclosure();
-  const toast = useToast({
-    position: "bottom",
-    isClosable: true,
-    variant: "subtle",
-  });
+  // const {
+  //   isOpen: isLoading,
+  //   onClose: closeLoading,
+  //   onOpen: openLoading,
+  // } = useDisclosure();
+  // const toast = useToast({
+  //   position: "bottom",
+  //   isClosable: true,
+  //   variant: "subtle",
+  // });
   const navigate = useNavigate();
 
   const handleEdit = async (id: number) => {
@@ -153,38 +143,8 @@ const Facilities: React.FC<UserProps> = () => {
     );
   }, [filterText, resetPaginationToggle]);
 
-  // HANDLE CREATE USER
-
-  const handleCreateUser = async () => {
-    if (!(await trigger())) return;
-    try {
-      openLoading();
-      const payload: UserData = {
-        ...getValues(),
-        role: (getValues("role") as any).value,
-      };
-      delete (payload as any)["confirm"];
-
-      const response = await executeCreateUser(payload, token!);
-      if (response.status === "error") throw new Error(response.message);
-
-      toast({
-        status: "success",
-        title: response.message,
-      });
-
-      reset();
-      onClose();
-      handleReloadData();
-    } catch (error: any) {
-      console.log("ERROR: ", error.message);
-      toast({
-        status: "error",
-        title: error.message,
-      });
-    } finally {
-      closeLoading();
-    }
+  const handleChange = (value) => {
+    console.log({ value });
   };
 
   return (
@@ -204,53 +164,30 @@ const Facilities: React.FC<UserProps> = () => {
         />
       </Box>
 
-      <ModalComponent isOpen={isOpen} onClose={onClose}>
+      <ModalComponent isOpen={isOpen} onClose={onClose} size="md">
         <SimpleGrid columns={[1]} gap={4}>
           <Heading size={"md"} lineHeight={"7"} color={DARK} fontSize="md">
             ASSIGN FACILITY
           </Heading>
           <InputGroup flex={1} maxW={["full", "full", 435]}>
-            <InputLeftElement as={Center}>
-              <Icon as={AiOutlineSearch} fontSize={"24px"} color={TEXT_GRAY} />
-            </InputLeftElement>
-            <Input
+            <AuthInput
+              bg={"#F4F7F4"}
+              data={allFacilities.map((item) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+              isSelect={true}
+              control={control}
               fontSize={"sm"}
-              // onChange={handleChange}
-              value={filterText}
-              placeholder="Search"
+              name="facilities"
+              onChange={handleChange}
             />
           </InputGroup>
           <Text fontSize="sm" fontWeight={500}>
             Added Facilities
           </Text>
-          <CustomButton onClick={onClose} isLoading={isLoading} isDisabled>
-            Add
-          </CustomButton>
         </SimpleGrid>
       </ModalComponent>
-
-      {/* <AddUserModal
-        control={control}
-        values={userValues}
-        roles={extractIdAndName(rolesData)}
-        watch={watch}
-        modalFooterButton={
-          <HStack>
-            <CustomButton
-              isDisabled={isLoading}
-              onClick={onClose}
-              colorScheme="gray"
-            >
-              Cancel
-            </CustomButton>
-            <CustomButton isLoading={isLoading} onClick={handleCreateUser}>
-              Update Details
-            </CustomButton>
-          </HStack>
-        }
-        onClose={onClose}
-        isOpen={isOpen}
-      /> */}
     </DashboardLayout>
   );
 };

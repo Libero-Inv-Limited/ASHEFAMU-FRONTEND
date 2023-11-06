@@ -52,6 +52,7 @@ const AuthInput: React.FC<AuthInputProps> = ({
   isSelect,
   name,
   Icon,
+  onChange,
   ...rest
 }) => {
   const { fontSize } = rest;
@@ -85,6 +86,7 @@ const AuthInput: React.FC<AuthInputProps> = ({
           className="custom-select"
           isSearchable={true}
           options={data}
+          onChange={onChange}
           fontSize={fontSize as any}
           {...selectProps}
           {...field}
