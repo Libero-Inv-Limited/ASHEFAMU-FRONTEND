@@ -3,7 +3,6 @@ import React, { useState } from "react"
 import DashboardLayout from "../../../components/layouts/DashboardLayout"
 import { Stack } from "@chakra-ui/react"
 import BasicForm from "./Form"
-import { useAppSelector } from "../../../store/hook"
 
 
 interface FacilityFormEditProps { }

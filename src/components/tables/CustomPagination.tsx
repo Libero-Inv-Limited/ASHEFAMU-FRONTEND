@@ -33,6 +33,7 @@ const TablePaginationActions: React.FC<TablePaginationActionsProps> = ({ page, c
             <option 
               value={index + 1} 
               selected={(index + 1) === page}
+              key={index}
             >{index + 1}</option>
           ))}
         </Select>

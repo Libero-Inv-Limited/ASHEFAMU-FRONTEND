@@ -3,9 +3,9 @@ import {
   BiSolidBarChartSquare,
   BiBarChartSquare,
 } from "react-icons/bi";
-import { BsHospital, BsHospitalFill } from "react-icons/bs";
+import { BsHospital, BsHospitalFill, BsPersonBadge, BsPersonVcard, BsPersonVcardFill } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
-import { IoCardOutline, IoCard } from "react-icons/io5";
+import { IoCardOutline, IoCard, IoPerson } from "react-icons/io5";
 import { IoMdNotifications, IoMdNotificationsOutline } from "react-icons/io";
 import { RiFacebookFill, RiLinkedinFill, RiTwitterXLine, RiYoutubeFill } from "react-icons/ri";
 import scrollIcon from "../assets/landing-icon/file.png"
@@ -122,8 +122,14 @@ export const sidebarContents = [
   {
     name: "users",
     link: "/dashboard/users",
-    icon: IoMdNotificationsOutline,
+    icon: IoPerson,
     activeIcon: IoMdNotifications,
+  },
+  {
+    name: "roles",
+    link: "/dashboard/roles",
+    icon: BsPersonVcard,
+    activeIcon: BsPersonVcardFill,
   },
 ];
 

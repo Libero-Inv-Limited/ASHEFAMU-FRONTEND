@@ -189,6 +189,13 @@ type Proprietor = {
   nationality: string;
 };
 
+type RoleData = {
+  id: number;
+  description: string;
+  name: string;
+  permissions: any[];
+}
+
 type UserData = {
   user: {
     id: number;
@@ -217,6 +224,16 @@ type UserData = {
   };
   permissions: [];
 };
+
+
+type Permission = {
+  id: number;
+  name: string;
+  description: string;
+  updated_at: string;
+  created_at: string;
+  category: string;
+}
 
 type UserPayload = {
   firstname: string;

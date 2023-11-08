@@ -31,7 +31,6 @@ const useFilterComponent = () => {
     isUserFacilitiesTable,
     user,
   }) => {
-    console.log({ isUserFacilitiesTable });
     return (
       <HStack
         flexWrap={"wrap"}

@@ -12,6 +12,7 @@ const ROUTES = {
   VIEW_USER_FACILITIES_ROUTE: (name: string) => `/dashboard/users/${name.toLocaleLowerCase()}/facilities`,
   DASHBOARD_ROUTE: "/dashboard",
   CREATE_FACILITY_ROUTE: "/dashboard/facilities/register-facility",
+  CREATE_ROLE_ROUTE: "/dashboard/roles/create-role",
   FACILITY_ROUTE: "/dashboard/facilities?tab=registration",
   CREATE_INTENT_ROUTE: "/dashboard/facilities/register-facility/intent",
   FILL_FORM_ROUTE: "/dashboard/facilities/register-facility/fill-form",

@@ -1,5 +1,4 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Center, Icon, useMediaQuery } from "@chakra-ui/react"
-import React from "react"
 import { Link, useLocation } from "react-router-dom"
 import { FiChevronRight } from "react-icons/fi"
 import { TEXT_DARK_GRAY } from "../../utils/color"

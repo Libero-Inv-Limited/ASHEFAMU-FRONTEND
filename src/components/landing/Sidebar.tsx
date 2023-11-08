@@ -30,8 +30,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </HStack>
 
           <VStack flex={1} justifyContent={"center"} alignItems={"center"}>
-            {headerLinks.map(link => (
-              <ChakraLink _hover={{ color: "brand.600" }} p={2} textAlign={"center"} fontWeight={"600"} as={Link} to={link.link}>
+            {headerLinks.map((link, index) => (
+              <ChakraLink key={index} _hover={{ color: "brand.600" }} p={2} textAlign={"center"} fontWeight={"600"} as={Link} to={link.link}>
                 {link.name}
               </ChakraLink>
             ))}

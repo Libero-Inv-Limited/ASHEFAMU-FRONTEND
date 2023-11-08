@@ -1,5 +1,4 @@
 import { HStack, Image, Link as ChakraLink, Box, Container, IconButton, useDisclosure } from "@chakra-ui/react"
-import React from "react"
 import { Link } from "react-router-dom"
 import logo from "../../assets/logo.png"
 import CustomButton from "../common/CustomButton"
@@ -21,8 +20,8 @@ const Header: React.FC<HeaderProps> = () => {
         </Link>
 
         <HStack spacing={6} display={['none', 'none', 'flex']}>
-          {headerLinks.map(link => (
-            <ChakraLink _hover={{ color: "brand.600" }} p={2} textAlign={"center"} fontWeight={"600"} as={Link} to={link.link}>
+          {headerLinks.map((link, index) => (
+            <ChakraLink key={index} _hover={{ color: "brand.600" }} p={2} textAlign={"center"} fontWeight={"600"} as={Link} to={link.link}>
               {link.name}
             </ChakraLink>
           ))}

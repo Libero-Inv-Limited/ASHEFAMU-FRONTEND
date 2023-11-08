@@ -1,21 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../store/hook";
-import { executeGetAllRoles } from "./../apis/role";
+import { executeGetAllPermissions } from "./../apis/permission";
+import {
+  groupPermissionsByCategory,
+} from "./../pages/dashboard/roles/helpers";
 
-
-const useGetAllRoles = () => {
-  const [data, setData] = useState([]);
+const useGetAllPermissions = () => {
+  const [data, setData] = useState<{ [key: string]: Permission[] }>({});
   const [loadingData, setLoading] = useState(false);
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await executeGetAllRoles(token);
+      const response = await executeGetAllPermissions(token);
       if (response.status === "error") throw new Error(response.message);
-      console.log(response.data, "***ppppppp")
-      setData(response.data);
+      setData(groupPermissionsByCategory(response.data));
     } catch (e: any) {
       console.log("ERROR HOOKKKK: ", e.message);
     } finally {
@@ -30,4 +31,4 @@ const useGetAllRoles = () => {
   return { data, loadingData };
 };
 
-export default useGetAllRoles;
+export default useGetAllPermissions;

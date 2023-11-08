@@ -1,5 +1,4 @@
 import { Badge, Box, Link, Container, Heading, Icon, SimpleGrid, Stack, Text, VStack, Wrap, WrapItem, useMediaQuery, HStack } from "@chakra-ui/react"
-import React from "react"
 import { serviceCards, services } from "../../utils/data"
 import { FiArrowUpRight, FiChevronRight } from "react-icons/fi"
 import { DARK } from "../../utils/color"
@@ -33,7 +32,7 @@ const ServiceSection: React.FC<ServiceSectionProps> = () => {
 
         <SimpleGrid gap={[4, 5, 6]} columns={[1, 2, 3]} mt={[12, 16, 20]}>
           {serviceCards.map((card, index) => (
-            <div data-aos="fade-in" data-aos-delay={index * 100}>
+            <div data-aos="fade-in" data-aos-delay={index * 100} key={index}>
               <ServiceCard key={`card-service-${index}`} {...card} />
             </div>
           ))}

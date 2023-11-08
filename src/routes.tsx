@@ -22,9 +22,11 @@ import FacilityForm from "./pages/facility-registration/FacilityForm";
 import Landing from "./pages/home/Landing";
 import ProfilePage from "./pages/dashboard/ProfilePage";
 import Users from "./pages/dashboard/users";
+import Roles from "./pages/dashboard/roles";
 import UserFacilities from "./pages/dashboard/users/UserFacilities";
 import UserFormEdit from "./pages/dashboard/users/edit";
 import FacilityFormEdit from "./pages/facility-registration/FacilityFormEdit";
+import CreateRole from './pages/dashboard/roles/CreateRole';
 
 export default [
   // HOME PAGE
@@ -172,9 +174,26 @@ export default [
     name: "Users",
   },
   {
-    path: "/dashboard/facilities/create-user",
-    element: <CreateFacility />,
-    name: "Create Facility",
+    path: "/dashboard/users/:user/facilities",
+    element: <UserFacilities />,
+    name: "USER FACILITIES",
+  },
+  {
+    path: "/dashboard/users/:user/edit-user/",
+    element: <UserFormEdit />,
+    name: "Facility Edit Form",
+  },
+
+   // ROLE MANAGEMENT
+   {
+    path: "/dashboard/roles",
+    element: <Roles />,
+    name: "Roles",
+  },
+  {
+    path: "/dashboard/roles/create-role",
+    element: <CreateRole />,
+    name: "Create Role",
   },
   {
     path: "/dashboard/users/:user/facilities",

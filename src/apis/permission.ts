@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GET_ROLES_ENDPOINT } from "./index";
 import { log } from "../utils/helpers";
+import { GET_PERMISSIONS_ENDPOINT } from "./index";
 
-export const executeGetAllRoles = async (
-  token: string,
-  page: number = 1,
-  perPage: number = 15
+export const executeGetAllPermissions = async (
+  token: string
 ): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
@@ -14,7 +12,7 @@ export const executeGetAllRoles = async (
         Authorization: `Bearer ${token}`,
       },
     };
-    const request = await fetch(GET_ROLES_ENDPOINT, options);
+    const request = await fetch(GET_PERMISSIONS_ENDPOINT, options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {

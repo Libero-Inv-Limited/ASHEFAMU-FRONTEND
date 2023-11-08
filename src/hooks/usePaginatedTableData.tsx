@@ -37,7 +37,7 @@ const usePaginatedTableData = (dataFunc: (page?: number, perPage?: number) => Pr
       setLoading(true);
       const response = await dataFunc(page, perPage)
       if(response.status === "error") throw new Error(response.message)
-      setData(response.data.data)
+      setData(response.data.data ? response.data.data : response.data)
       setTotalRows(response.data.meta.total);
       setLastPage(response.data.meta.last_page)
     }

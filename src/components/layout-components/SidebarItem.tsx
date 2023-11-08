@@ -1,5 +1,4 @@
 import { Link, Center, Icon, Popover, PopoverTrigger, Portal, PopoverContent, PopoverBody } from "@chakra-ui/react"
-import React from "react"
 import { IconType } from "react-icons";
 import { Link as ReactLink, useLocation, useParams } from "react-router-dom"
 import { LIGHT_GREEN, TEXT_GRAY } from "../../utils/color";

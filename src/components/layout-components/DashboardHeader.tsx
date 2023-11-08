@@ -52,7 +52,8 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onOpen }) => {
   const { isOpen, onClose, onOpen: openLogoutModal } = useDisclosure();
   const navigate = useNavigate();
   const isUserManagement = !!useParams()?.["user"];
-  console.log({ isUserManagement });
+  const isRoleManagement = !!useParams()?.["role"];
+  console.log({ isRoleManagement });
 
   if (!user || !Object.keys(user).length) {
     logoutAccount();
@@ -125,7 +126,11 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onOpen }) => {
               color={DARK}
               textTransform={"uppercase"}
             >
-              {isUserManagement ? "USER MANAGEMENT" : decodeSlug(name)}
+              {isUserManagement
+                ? "USER MANAGEMENT"
+                : isRoleManagement
+                ? "ROLE MANAGEMENT"
+                : decodeSlug(name)}
             </Heading>
           )}
           <BreadCrumbs />
