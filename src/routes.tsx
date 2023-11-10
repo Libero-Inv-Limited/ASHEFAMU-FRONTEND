@@ -25,6 +25,7 @@ import Users from "./pages/dashboard/users";
 import Roles from "./pages/dashboard/roles";
 import UserFacilities from "./pages/dashboard/users/UserFacilities";
 import UserFormEdit from "./pages/dashboard/users/edit";
+import RoleFormEdit from "./pages/dashboard/roles/Edit"
 import FacilityFormEdit from "./pages/facility-registration/FacilityFormEdit";
 import CreateRole from './pages/dashboard/roles/CreateRole';
 
@@ -196,13 +197,8 @@ export default [
     name: "Create Role",
   },
   {
-    path: "/dashboard/users/:user/facilities",
-    element: <UserFacilities />,
-    name: "USER FACILITIES",
-  },
-  {
-    path: "/dashboard/users/:user/edit-user/",
-    element: <UserFormEdit />,
+    path: "/dashboard/roles/:role/edit-role/",
+    element: <RoleFormEdit />,
     name: "Facility Edit Form",
   },
 ];

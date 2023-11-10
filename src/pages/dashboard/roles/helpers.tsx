@@ -1,12 +1,15 @@
 import { Text, HStack, IconButton, Icon, Switch } from "@chakra-ui/react";
+import { Dispatch, SetStateAction } from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { DARK, RED, YELLOW } from "./../../../utils/color";
 
 export const columns = (
-  navigate,
-  isLoading,
-  deletingRole,
-  setDeletingRole
+  isLoading: boolean,
+  deletingRole: number | null,
+  setDeletingRole: Dispatch<SetStateAction<number>>,
+  isEditing: boolean,
+  editId: number | null,
+  setEditId: Dispatch<SetStateAction<number>>,
 ) => [
   {
     name: "Name",
@@ -45,7 +48,8 @@ export const columns = (
             rounded={"full"}
             bg={"#FFEBC9"}
             aria-label="edit"
-            onClick={() => navigate(item.id)}
+            isLoading={isEditing && item.id === editId}
+            onClick={() => setEditId(item.id)}
             icon={<Icon fontSize={"xl"} as={BiEdit} color={YELLOW} />}
           />
           <IconButton

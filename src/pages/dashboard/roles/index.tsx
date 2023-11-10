@@ -8,9 +8,10 @@ import { FilterComponentTwo } from "./../../../components/common/FilterComponent
 import { columns } from "./helpers";
 import { useNavigate } from "react-router-dom";
 import useFetchHook from "./useFetchHook";
-import { executeDeleteRole } from "./../../../apis/role";
+import { executeDeleteRole, executeGetRoleDetails } from "./../../../apis/role";
 import { useAppSelector } from "../../../store/hook";
 import ActionModal from "./../../../components/modals/ActionModal";
+import { getSlug } from "../../../utils/helpers";
 
 interface RoleProps {}
 const Role: React.FC<RoleProps> = () => {
@@ -30,8 +31,15 @@ const Role: React.FC<RoleProps> = () => {
     onClose: closeDeleting,
   } = useDisclosure();
 
+  const {
+    isOpen: isEditing,
+    onOpen: openEditing,
+    onClose: closeEditing,
+  } = useDisclosure();
+
   const [filterText, setFilterText] = React.useState("");
   const [deletingRole, setDeletingRole] = React.useState<number | null>(null);
+  const [editId, setEditId] = React.useState<number>();
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
   const toast = useToast();
   const [resetPaginationToggle, setResetPaginationToggle] =
@@ -73,15 +81,46 @@ const Role: React.FC<RoleProps> = () => {
       });
     } finally {
       closeDeleting();
-      handleReloadData
+      handleReloadData;
     }
   };
+
+  const handleEdit = async (id: number) => {
+    try {
+      openEditing();
+      const response = await executeGetRoleDetails(id, token!);
+      if (response.status === "error") throw new Error(response.message);
+
+      const name = response.data.role.name;
+      navigate(ROUTES.EDIT_ROLE_ROUTE(getSlug(name)), {
+        state: response?.data?.user,
+      });
+    } catch (e: any) {
+      console.log("Error:", e.meesage);
+    } finally {
+      closeEditing();
+      setEditId(undefined);
+    }
+  };
+
+  React.useEffect(() => {
+    if (!editId) return;
+    handleEdit(editId);
+  }, [editId]);
+
   return (
     <DashboardLayout>
       <Box p={4} bg={"white"} rounded={"md"}>
         <CustomTable
           columns={
-            columns(navigate, isDeleting, deletingRole, setDeletingRole) as any
+            columns(
+              isDeleting,
+              deletingRole,
+              setDeletingRole,
+              isEditing,
+              editId,
+              setEditId
+            ) as any
           }
           data={data}
           paginationResetDefaultPage={resetPaginationToggle}

@@ -1,5 +1,5 @@
 import { Checkbox, Grid, GridItem, Stack } from "@chakra-ui/react";
-import {DARK} from '../../../utils/color'
+import { DARK } from "../../../utils/color";
 import React from "react";
 
 export const CheckboxGroup = ({ category, permissions, register }) => {
@@ -7,7 +7,8 @@ export const CheckboxGroup = ({ category, permissions, register }) => {
 
   const allChecked = selectedPermissionIds.length === permissions.length;
   const isIndeterminate =
-    selectedPermissionIds.length > 0 && selectedPermissionIds.length < permissions.length;
+    selectedPermissionIds.length > 0 &&
+    selectedPermissionIds.length < permissions.length;
 
   const handleParentCheckboxChange = (e) => {
     if (e.target.checked) {
@@ -27,7 +28,6 @@ export const CheckboxGroup = ({ category, permissions, register }) => {
     }
   };
 
-
   return (
     <div>
       <Checkbox
@@ -42,23 +42,23 @@ export const CheckboxGroup = ({ category, permissions, register }) => {
         {category} Checkbox
       </Checkbox>
       <Stack pl={6} mt={1} spacing={1}>
-        {permissions.map((permission, index) => (
+        {permissions.map((permission) => (
           <Checkbox
-          key={permission.id}
-          isChecked={selectedPermissionIds.includes(permission.id)}
-          colorScheme="brand"
-          color={DARK}
-          size="sm"
-          fontWeight="500"
-          {...register("permissions", { required: true })}
-          py={1}
-          value={permission.id}
-          onChange={(e) => {
-            handleChildCheckboxChange(permission.id, e.target.checked);
-          }}
-        >
-          {permission.name}
-        </Checkbox>
+            key={permission.id}
+            isChecked={selectedPermissionIds.includes(permission.id)}
+            colorScheme="brand"
+            color={DARK}
+            size="sm"
+            fontWeight="500"
+            {...register("permissions", { required: true })}
+            py={1}
+            value={permission.id}
+            onChange={(e) => {
+              handleChildCheckboxChange(permission.id, e.target.checked);
+            }}
+          >
+            {permission.name}
+          </Checkbox>
         ))}
       </Stack>
     </div>

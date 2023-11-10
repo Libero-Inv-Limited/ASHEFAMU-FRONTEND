@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CREATE_ROLE_ENDPOINT, DELETE_ROLE_ENDPOINT, GET_ROLES_ENDPOINT } from "./index";
+import { CREATE_ROLE_ENDPOINT, DELETE_ROLE_ENDPOINT, GET_ONE_ROLE_ENDPOINT, GET_ROLES_ENDPOINT } from "./index";
 import { log } from "../utils/helpers";
 
 export const executeGetAllRoles = async (
@@ -20,6 +20,25 @@ export const executeGetAllRoles = async (
     return { message: error.message, status: "error" } as ResponseDataType;
   }
 };
+
+export const executeGetRoleDetails = async (id: number, token: string): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        "Accept": "application/json"
+      }
+    }
+    const request = await fetch(GET_ONE_ROLE_ENDPOINT(id), options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("DOCS [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}
 
 export const executeCreateRole = async (data: RolePayload, token: string): Promise<ResponseDataType> => {
   try {

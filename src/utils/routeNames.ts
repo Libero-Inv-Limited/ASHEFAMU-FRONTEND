@@ -9,6 +9,7 @@ const ROUTES = {
   
   EDIT_FACILITY_ROUTE:(name: string) => `/dashboard/facilities/${name}/edit-facility/`,
   EDIT_USER_ROUTE: (name: string) => `/dashboard/users/${name}/edit-user`,
+  EDIT_ROLE_ROUTE: (name: string) => `/dashboard/roles/${name}/edit-role`,
   VIEW_USER_FACILITIES_ROUTE: (name: string) => `/dashboard/users/${name.toLocaleLowerCase()}/facilities`,
   DASHBOARD_ROUTE: "/dashboard",
   CREATE_FACILITY_ROUTE: "/dashboard/facilities/register-facility",
