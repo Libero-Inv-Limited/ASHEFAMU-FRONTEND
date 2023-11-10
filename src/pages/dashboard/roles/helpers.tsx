@@ -1,8 +1,13 @@
-import { Text, HStack, IconButton, Icon, Checkbox, Switch } from "@chakra-ui/react";
+import { Text, HStack, IconButton, Icon, Switch } from "@chakra-ui/react";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { DARK, RED, YELLOW } from "./../../../utils/color";
 
-export const columns = (navigate) => [
+export const columns = (
+  navigate,
+  isLoading,
+  deletingRole,
+  setDeletingRole
+) => [
   {
     name: "Name",
     cell: (data: RoleData) => {
@@ -49,6 +54,8 @@ export const columns = (navigate) => [
             rounded={"full"}
             colorScheme="red"
             aria-label="delete"
+            isLoading={item.id === deletingRole && isLoading}
+            onClick={() => setDeletingRole(item.id! as number)}
             icon={<Icon fontSize={"xl"} as={BiTrash} color={RED} />}
           />
         </HStack>

@@ -1,17 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  Box,
-  Text,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Text, useDisclosure, useToast } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { RED, YELLOW } from "../../../utils/color";
 import CustomTable from "../../../components/tables/CustomTable";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
 import usePaginatedTableData from "../../../hooks/usePaginatedTableData";
 import { useAppSelector } from "../../../store/hook";
-import { executeCreateUser, executeGetAllUsers, executeGetUserProfile } from "../../../apis/user";
+import {
+  executeCreateUser,
+  executeGetAllUsers,
+  executeGetUserProfile,
+} from "../../../apis/user";
 import { IconButton } from "@chakra-ui/react";
 import { HStack } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
@@ -22,15 +21,15 @@ import AddUserModal from "../../../components/modals/AddUserModal";
 import { useForm } from "react-hook-form";
 import CustomButton from "./../../../components/common/CustomButton";
 import useGetAllRoles from "../../../hooks/useGetAllRoles";
-import ROUTES from './../../../utils/routeNames';
-import { useNavigate } from 'react-router-dom';
+import ROUTES from "./../../../utils/routeNames";
+import { useNavigate } from "react-router-dom";
 import { getSlug } from "../../../utils/helpers";
 
 interface UserProps {}
 const User: React.FC<UserProps> = () => {
   const { FilterComponent } = useFilterComponent();
   const [userValues, setUserValues] = useState<UserPayload | null>(null);
-  const [editId, setEditId] = useState<number>()
+  const [editId, setEditId] = useState<number>();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
   const { control, trigger, getValues, reset, watch } =
     useForm<ProffessionalStaffData>({
@@ -42,7 +41,11 @@ const User: React.FC<UserProps> = () => {
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen: isEditing, onOpen: openEditing, onClose: closeEditing } = useDisclosure()
+  const {
+    isOpen: isEditing,
+    onOpen: openEditing,
+    onClose: closeEditing,
+  } = useDisclosure();
 
   const { data: rolesData } = useGetAllRoles();
   const {
@@ -50,7 +53,8 @@ const User: React.FC<UserProps> = () => {
     totalRows,
     handlePageChange,
     handlePerRowsChange,
-    loadingData, handleReloadData
+    loadingData,
+    handleReloadData,
   } = usePaginatedTableData((page, perPage) =>
     executeGetAllUsers(token, page, perPage)
   );
@@ -66,30 +70,30 @@ const User: React.FC<UserProps> = () => {
     isClosable: true,
     variant: "subtle",
   });
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleEdit = async (id: number) => {
     try {
-      openEditing()
-      const response = await executeGetUserProfile(id, token!)
-      if (response.status === "error") throw new Error(response.message)
+      openEditing();
+      const response = await executeGetUserProfile(id, token!);
+      if (response.status === "error") throw new Error(response.message);
 
-      const firstname = response.data.user.firstname
-      navigate(ROUTES.EDIT_USER_ROUTE(getSlug(firstname)), {state: response?.data?.user})
+      const firstname = response.data.user.firstname;
+      navigate(ROUTES.EDIT_USER_ROUTE(getSlug(firstname)), {
+        state: response?.data?.user,
+      });
+    } catch (e: any) {
+      console.log("Error:", e.meesage);
+    } finally {
+      closeEditing();
+      setEditId(undefined);
     }
-    catch (e: any) {
-      console.log("Error:", e.meesage)
-    }
-    finally {
-      closeEditing()
-      setEditId(undefined)
-    }
-  }
+  };
 
   useEffect(() => {
-    if (!editId) return
-    handleEdit(editId)
-  }, [editId])
+    if (!editId) return;
+    handleEdit(editId);
+  }, [editId]);
 
   const columns = [
     {
@@ -134,7 +138,7 @@ const User: React.FC<UserProps> = () => {
               rounded={"full"}
               bg={"#FFEBC9"}
               aria-label="edit"
-              isLoading={isEditing && (item.id === editId)}
+              isLoading={isEditing && item.id === editId}
               onClick={() => setEditId(item.id)}
               icon={<Icon fontSize={"xl"} as={BiEdit} color={YELLOW} />}
             />
@@ -144,8 +148,6 @@ const User: React.FC<UserProps> = () => {
               rounded={"full"}
               colorScheme="red"
               aria-label="delete"
-              // isLoading={(item.id === deletingFacility) && isLoading}
-              // onClick={() => setDeletingFacility(item.id! as number)}
               icon={<Icon fontSize={"xl"} as={BiTrash} color={RED} />}
             />
           </HStack>
@@ -187,39 +189,36 @@ const User: React.FC<UserProps> = () => {
   // HANDLE CREATE USER
 
   const handleCreateUser = async () => {
-    if (!await trigger()) return
+    if (!(await trigger())) return;
     try {
-      openLoading()
+      openLoading();
       const payload: UserData = {
         ...getValues(),
         role: (getValues("role") as any).value,
-      }
-      delete (payload as any)['confirm']
+      };
+      delete (payload as any)["confirm"];
 
-      const response = await executeCreateUser(payload, token!)
-      if (response.status === "error") throw new Error(response.message)
+      const response = await executeCreateUser(payload, token!);
+      if (response.status === "error") throw new Error(response.message);
 
       toast({
         status: "success",
         title: response.message,
-      })
+      });
 
-      reset()
-      onClose()
-      handleReloadData()
-    }
-    catch (error: any) {
-      console.log("ERROR: ", error.message)
+      reset();
+      onClose();
+      handleReloadData();
+    } catch (error: any) {
+      console.log("ERROR: ", error.message);
       toast({
         status: "error",
         title: error.message,
-      })
+      });
+    } finally {
+      closeLoading();
     }
-    finally {
-      closeLoading()
-    }
-  }
-
+  };
 
   return (
     <DashboardLayout>
