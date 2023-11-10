@@ -7,7 +7,8 @@ import ROUTES from "./../../../utils/routeNames";
 import { columns } from "./helpers";
 import { useNavigate } from "react-router-dom";
 import useFetchHook from "./useFetchHook";
-import { executeDeleteRole, executeGetRoleDetails } from "./../../../apis/role";
+import { executeGetRoleDetails } from "./../../../apis/role";
+import {executeDeletePermission} from "./../../../apis/permission"
 import { useAppSelector } from "../../../store/hook";
 import ActionModal from "./../../../components/modals/ActionModal";
 import { getSlug } from "../../../utils/helpers";
@@ -50,7 +51,7 @@ const Role: React.FC<RoleProps> = () => {
     mode: "onSubmit",
   });
 
-  const [deletingRole, setDeletingRole] = React.useState<number | null>(null);
+  const [deletingPermission, setDeletingPermission] = React.useState<number | null>(null);
   const { FilterComponent } = useFilterComponent();
   const [editId, setEditId] = React.useState<number>();
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
@@ -110,13 +111,13 @@ const Role: React.FC<RoleProps> = () => {
   const handleDelete = async () => {
     try {
       openDeleting();
-      const result = await executeDeleteRole([deletingRole!], token!);
+      const result = await executeDeletePermission([deletingPermission!], token!);
       if (result.status === "error") throw new Error(result.message);
       toast({
-        title: "Role deleted!",
+        title: "Permission deleted!",
         status: "success",
       });
-      setDeletingRole(null);
+      setDeletingPermission(null);
     } catch (e: any) {
       console.log("ERROR:", e.message);
       toast({
@@ -159,8 +160,8 @@ const Role: React.FC<RoleProps> = () => {
           columns={
             columns(
               isDeleting,
-              deletingRole,
-              setDeletingRole,
+              deletingPermission,
+              setDeletingPermission,
               isEditing,
               editId,
               setEditId
@@ -178,13 +179,13 @@ const Role: React.FC<RoleProps> = () => {
         />
       </Box>
       <ActionModal
-        title="Are you sure you want to delete this role?"
+        title="Are you sure you want to delete this permission?"
         text="This action cannot be undone"
         status="danger"
         isLoading={isDeleting}
         handleAction={handleDelete}
-        isOpen={Boolean(deletingRole)}
-        onClose={() => setDeletingRole(null)}
+        isOpen={Boolean(deletingPermission)}
+        onClose={() => setDeletingPermission(null)}
         actionBtnText="Confirm"
       />
       <ModalComponent onClose={onClose} isOpen={isOpen} size="md" title="Create Permission">

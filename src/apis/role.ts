@@ -64,7 +64,7 @@ export const executeCreateRole = async (data: RolePayload, token: string): Promi
 export const executeDeleteRole = async (ids: number[], token: string): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
-      method: "POST",
+      method: "DELETE",
       body: JSON.stringify({ ids }),
       headers: {
         "Content-Type": "application/json",

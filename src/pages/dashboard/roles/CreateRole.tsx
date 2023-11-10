@@ -39,7 +39,6 @@ const CreateRole: React.FC<BasicFormProps> = () => {
         status: "success",
         title: response.message,
       });
-
       reset();
       onClose();
     } catch (error: any) {

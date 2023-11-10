@@ -24,11 +24,15 @@ const useGetAllPermissions = () => {
     }
   };
 
+  const handleReloadData = () => {
+    fetchData()
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
 
-  return { data, loadingData };
+  return { data, loadingData, handleReloadData };
 };
 
 export default useGetAllPermissions;

@@ -5,8 +5,8 @@ import { RED, YELLOW } from "./../../../utils/color";
 
 export const columns = (
   isLoading: boolean,
-  deletingRole: number | null,
-  setDeletingRole: Dispatch<SetStateAction<number>>,
+  deletingPermission: number | null,
+  setDeletingPermission: Dispatch<SetStateAction<number>>,
   isEditing: boolean,
   editId: number | null,
   setEditId: Dispatch<SetStateAction<number>>
@@ -47,8 +47,8 @@ export const columns = (
             rounded={"full"}
             colorScheme="red"
             aria-label="delete"
-            isLoading={item.id === deletingRole && isLoading}
-            onClick={() => setDeletingRole(item.id! as number)}
+            isLoading={item.id === deletingPermission && isLoading}
+            onClick={() => setDeletingPermission(item.id! as number)}
             icon={<Icon fontSize={"xl"} as={BiTrash} color={RED} />}
           />
         </HStack>

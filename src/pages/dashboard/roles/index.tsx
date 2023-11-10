@@ -73,6 +73,7 @@ const Role: React.FC<RoleProps> = () => {
         status: "success",
       });
       setDeletingRole(null);
+      handleReloadData;
     } catch (e: any) {
       console.log("ERROR:", e.message);
       toast({
@@ -81,7 +82,6 @@ const Role: React.FC<RoleProps> = () => {
       });
     } finally {
       closeDeleting();
-      handleReloadData;
     }
   };
 

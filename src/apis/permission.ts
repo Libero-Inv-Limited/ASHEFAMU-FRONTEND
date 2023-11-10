@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { log } from "../utils/helpers";
-import { CREATE_PERMISSION_ENDPOINT, GET_PERMISSIONS_ENDPOINT } from "./index";
+import { CREATE_PERMISSION_ENDPOINT, DELETE_PERMISSION_ENDPOINT, GET_PERMISSIONS_ENDPOINT } from "./index";
 
 export const executeGetAllPermissions = async (
   token: string
@@ -33,6 +33,27 @@ export const executeCreatePermission = async (data: PermissionData, token: strin
       }
     }
     const request = await fetch(CREATE_PERMISSION_ENDPOINT, options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("DOCS [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}
+
+export const executeDeletePermission = async (ids: number[], token: string): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify({ ids }),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        "Accept": "application/json"
+      }
+    }
+    const request = await fetch(DELETE_PERMISSION_ENDPOINT, options)
     const response = await request.json() satisfies ResponseDataType
     return response
   }
