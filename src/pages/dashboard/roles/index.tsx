@@ -44,16 +44,6 @@ const Role: React.FC<RoleProps> = () => {
         setFilterText("");
       }
     };
-
-    // const handleChange = (item: { label: string; value: string }) => {
-    //   const val = item.value;
-    //   if (!val || val === "*") return setUsers(data);
-    //   const filtered = (data as InvoiceDataType[]).filter(
-    //     (elem) => elem.status.toLowerCase() === val.toLowerCase()
-    //   );
-    //   // setInvoices(filtered);
-    // };
-
     return (
       <FilterComponentTwo
         onFilter={(e: React.FormEvent) => setFilterText(e)}
