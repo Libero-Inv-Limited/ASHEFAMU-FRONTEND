@@ -1,26 +1,57 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Grid, GridItem, Stack } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Grid, GridItem, Stack, useDisclosure } from "@chakra-ui/react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import AuthInput from "../../../components/common/AuthInput";
-import { useLocation } from "react-router-dom";
 import { Heading } from "@chakra-ui/react";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
 import { formInputs } from "./helpers";
 import useGetAllPermissions from "./../../../hooks/useGetAllPermissions";
 import { PermissionList } from "./Form";
+import CustomButton from "../../../components/common/CustomButton";
+import { executeCreateRole } from "../../../apis/role";
+import { useToast } from "@chakra-ui/react";
+import { useAppSelector } from "../../../store/hook";
 
 interface BasicFormProps {}
 
 const CreateRole: React.FC<BasicFormProps> = () => {
-  const location = useLocation();
   const { data } = useGetAllPermissions();
-  const [user, setUser] = useState(location.state);
-  const { control, watch, setValue, trigger, getValues } = useForm({
-    mode: "onSubmit",
-  });
-  const prevDatas = watch();
-  console.log("PREV DATA:", prevDatas);
+  const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
+  const toast = useToast();
+  const { onClose, onOpen } = useDisclosure();
+
+  const { register, control, trigger, getValues, reset } = useForm<RolePayload>(
+    { mode: "onChange" }
+  );
+
+  const handleSubmit = async () => {
+    if (!(await trigger())) return;
+    try {
+      onOpen();
+      const payload: RolePayload = {
+        ...getValues(),
+      };
+      const response = await executeCreateRole(payload, token!);
+      if (response.status === "error") throw new Error(response.message);
+
+      toast({
+        status: "success",
+        title: response.message,
+      });
+
+      reset();
+      onClose();
+    } catch (error: any) {
+      console.log("ERROR: ", error.message);
+      toast({
+        status: "error",
+        title: error.message,
+      });
+    } finally {
+      onClose();
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -30,14 +61,13 @@ const CreateRole: React.FC<BasicFormProps> = () => {
             CREATE ROLE
           </Heading>
           <Grid templateColumns="repeat(6, 1fr)" gap={4}>
-            {formInputs(user).map((item) => (
-              <GridItem colSpan={[6, 6, 6]}>
+            {formInputs().map((item, idx) => (
+              <GridItem colSpan={[6, 6, 6]} key={idx}>
                 <AuthInput
                   control={control}
                   fontSize={"sm"}
                   label={item.label}
                   name={item.name}
-                  value={item.value}
                   rules={{
                     required: item.rules,
                   }}
@@ -48,7 +78,14 @@ const CreateRole: React.FC<BasicFormProps> = () => {
           <Heading fontFamily={"rubik"} fontWeight={"600"} fontSize={"md"}>
             LIST OF PERMISSIONS
           </Heading>
-          <PermissionList groupedPermissions={data} />
+          <PermissionList groupedPermissions={data} register={register} />
+          <CustomButton
+            onClick={handleSubmit}
+            alignSelf={["unset", "flex-end", "flex-end"]}
+            size="md"
+          >
+            Create Role
+          </CustomButton>
         </Stack>
       </Stack>
     </DashboardLayout>

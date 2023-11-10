@@ -193,7 +193,14 @@ type RoleData = {
   id: number;
   description: string;
   name: string;
+  status: boolean;
   permissions: any[];
+}
+
+type RolePayload = {
+  description: string;
+  name: string;
+  permissions: string[];
 }
 
 type UserData = {

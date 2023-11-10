@@ -1,14 +1,29 @@
-import { Text, HStack, IconButton,  Icon} from '@chakra-ui/react';
-import { BiEdit, BiTrash } from 'react-icons/bi';
-import { RED, YELLOW } from './../../../utils/color';
+import { Text, HStack, IconButton, Icon, Checkbox, Switch } from "@chakra-ui/react";
+import { BiEdit, BiTrash } from "react-icons/bi";
+import { DARK, RED, YELLOW } from "./../../../utils/color";
 
-
-export  const columns = (navigate) =>  [
+export const columns = (navigate) => [
   {
     name: "Name",
     cell: (data: RoleData) => {
+      return <Text>{data.name.toLocaleString()}</Text>;
+    },
+    sortable: true,
+  },
+  {
+    name: "Inactive/Active",
+    cell: (data: RoleData) => {
       return (
-        <Text>{(data.name).toLocaleString()}</Text>
+        <Switch
+          isChecked={data.status}
+          colorScheme="brand"
+          color={DARK}
+          size="md"
+          fontWeight="500"
+          py={1}
+        >
+          {data.status}
+        </Switch>
       );
     },
     sortable: true,
@@ -42,23 +57,20 @@ export  const columns = (navigate) =>  [
   },
 ];
 
-export const formInputs = (values) => {
+export const formInputs = () => {
   return [
     {
       label: "Role Name",
       name: "name",
       rules: "Role name is required",
-      value: values?.name,
     },
     {
       label: "Description",
       name: "description",
       rules: "Description is required",
-      value: values?.description,
     },
   ];
 };
-
 
 export const getUniqueCategoryNames = (permissions: Permission[]): string[] => {
   const uniqueCategories: Set<string> = new Set();
@@ -68,9 +80,11 @@ export const getUniqueCategoryNames = (permissions: Permission[]): string[] => {
   });
 
   return Array.from(uniqueCategories);
-}
+};
 
-export const groupPermissionsByCategory = (permissions: Permission[]): { [key: string]: Permission[] }  =>{
+export const groupPermissionsByCategory = (
+  permissions: Permission[]
+): { [key: string]: Permission[] } => {
   const groupedPermissions: { [key: string]: Permission[] } = {};
 
   permissions.forEach((permission) => {
@@ -84,4 +98,4 @@ export const groupPermissionsByCategory = (permissions: Permission[]): { [key: s
   });
 
   return groupedPermissions;
-} 
+};

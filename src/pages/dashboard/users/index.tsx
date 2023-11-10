@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Box,
-  Button,
-  Stack,
   Text,
   useDisclosure,
   useToast,
@@ -11,13 +9,9 @@ import React, { useEffect, useState } from "react";
 import { RED, YELLOW } from "../../../utils/color";
 import CustomTable from "../../../components/tables/CustomTable";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
-import InvoiceModal from "../../../components/modals/InvoiceModal";
 import usePaginatedTableData from "../../../hooks/usePaginatedTableData";
-import { useAppContext } from "../../../contexts/AppContext";
 import { useAppSelector } from "../../../store/hook";
-import CustomSelect from "../../../components/common/CustomSelect";
-import { executeCreateUser, executeGetAllUsers, executeGetUserProfile, executePayInvoice } from "../../../apis/user";
-// import { data } from "./data";
+import { executeCreateUser, executeGetAllUsers, executeGetUserProfile } from "../../../apis/user";
 import { IconButton } from "@chakra-ui/react";
 import { HStack } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
@@ -81,14 +75,6 @@ const User: React.FC<UserProps> = () => {
       if (response.status === "error") throw new Error(response.message)
 
       const firstname = response.data.user.firstname
-
-      // const responseData = response.data as OneFacilityDataType
-      // console.log("Response:", response)
-
-      // // // SET THE FACILITY UPDATE STATE
-      // // setCurrentFacility(responseData)
-
-      // NAVIGATE TO EDIT SCREEN
       navigate(ROUTES.EDIT_USER_ROUTE(getSlug(firstname)), {state: response?.data?.user})
     }
     catch (e: any) {

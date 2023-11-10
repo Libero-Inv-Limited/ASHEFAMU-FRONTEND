@@ -1,18 +1,32 @@
 import { Checkbox, Grid, GridItem, Stack } from "@chakra-ui/react";
+import {DARK} from '../../../utils/color'
 import React from "react";
 
-export const CheckboxGroup = ({ category, permissions }) => {
-  const [checkedItems, setCheckedItems] = React.useState(
-    permissions.map((permission) => !permission)
-  );
+export const CheckboxGroup = ({ category, permissions, register }) => {
+  const [selectedPermissionIds, setSelectedPermissionIds] = React.useState([]);
 
-  const allChecked = checkedItems.every((isChecked) => isChecked);
+  const allChecked = selectedPermissionIds.length === permissions.length;
   const isIndeterminate =
-    checkedItems.some((isChecked) => isChecked) && !allChecked;
+    selectedPermissionIds.length > 0 && selectedPermissionIds.length < permissions.length;
 
   const handleParentCheckboxChange = (e) => {
-    setCheckedItems(checkedItems.map(() => e.target.checked));
+    if (e.target.checked) {
+      setSelectedPermissionIds(permissions.map((permission) => permission.id));
+    } else {
+      setSelectedPermissionIds([]);
+    }
   };
+
+  const handleChildCheckboxChange = (permissionId, isChecked) => {
+    if (isChecked) {
+      setSelectedPermissionIds([...selectedPermissionIds, permissionId]);
+    } else {
+      setSelectedPermissionIds(
+        selectedPermissionIds.filter((id) => id !== permissionId)
+      );
+    }
+  };
+
 
   return (
     <div>
@@ -20,39 +34,46 @@ export const CheckboxGroup = ({ category, permissions }) => {
         isChecked={allChecked}
         isIndeterminate={isIndeterminate}
         onChange={handleParentCheckboxChange}
+        colorScheme="brand"
+        color={DARK}
+        size="sm"
+        fontWeight="500"
       >
         {category} Checkbox
       </Checkbox>
       <Stack pl={6} mt={1} spacing={1}>
         {permissions.map((permission, index) => (
           <Checkbox
-            key={permission.id}
-            isChecked={checkedItems[index]}
-            onChange={(e) => {
-              setCheckedItems([
-                ...checkedItems.slice(0, index),
-                e.target.checked,
-                ...checkedItems.slice(index + 1),
-              ]);
-            }}
-          >
-            {" "}
-            {permission.name}
-          </Checkbox>
+          key={permission.id}
+          isChecked={selectedPermissionIds.includes(permission.id)}
+          colorScheme="brand"
+          color={DARK}
+          size="sm"
+          fontWeight="500"
+          {...register("permissions", { required: true })}
+          py={1}
+          value={permission.id}
+          onChange={(e) => {
+            handleChildCheckboxChange(permission.id, e.target.checked);
+          }}
+        >
+          {permission.name}
+        </Checkbox>
         ))}
       </Stack>
     </div>
   );
 };
 
-export const PermissionList = ({ groupedPermissions }) => {
+export const PermissionList = ({ groupedPermissions, register }) => {
   return (
     <Grid templateColumns="repeat(6, 1fr)" gap={4}>
       {Object.keys(groupedPermissions).map((category) => (
-        <GridItem colSpan={2} key={category}>
+        <GridItem colSpan={[6, 3, 2]} key={category}>
           <CheckboxGroup
             category={category}
             permissions={groupedPermissions[category]}
+            register={register}
           />
         </GridItem>
       ))}
