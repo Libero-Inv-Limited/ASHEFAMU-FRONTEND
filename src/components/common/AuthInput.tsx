@@ -24,7 +24,7 @@ import Select from "react-select";
 import CustomSelect from "./CustomSelect";
 
 interface AuthInputProps extends InputProps {
-  label: string;
+  label?: string;
   control: any;
   Icon?: any;
   isIconComponent?: boolean;
@@ -71,16 +71,18 @@ const AuthInput: React.FC<AuthInputProps> = ({
   if (isSelect)
     return (
       <FormControl isInvalid={Boolean(error)}>
-        <FormLabel
-          color={TEXT_DARK}
-          fontSize={"14px"}
-          mb={1}
-          fontWeight={"500"}
-          fontFamily={"body"}
-          {...labelStyles}
-        >
-          {label}
-        </FormLabel>
+        {label && (
+          <FormLabel
+            color={TEXT_DARK}
+            fontSize={"14px"}
+            mb={1}
+            fontWeight={"500"}
+            fontFamily={"body"}
+            {...labelStyles}
+          >
+            {label}
+          </FormLabel>
+        )}
         <CustomSelect
           classNamePrefix={"custom"}
           className="custom-select"
@@ -99,16 +101,18 @@ const AuthInput: React.FC<AuthInputProps> = ({
 
   return (
     <FormControl isInvalid={Boolean(error)}>
-      <FormLabel
-        color={TEXT_DARK}
-        fontSize={"14px"}
-        mb={1}
-        fontWeight={"500"}
-        fontFamily={"body"}
-        {...labelStyles}
-      >
-        {label}
-      </FormLabel>
+      {label && (
+        <FormLabel
+          color={TEXT_DARK}
+          fontSize={"14px"}
+          mb={1}
+          fontWeight={"500"}
+          fontFamily={"body"}
+          {...labelStyles}
+        >
+          {label}
+        </FormLabel>
+      )}
       <InputGroup alignItems={"center"}>
         {Icon && (
           <InputLeftElement

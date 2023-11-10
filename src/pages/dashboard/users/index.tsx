@@ -28,11 +28,10 @@ import { getSlug } from "../../../utils/helpers";
 interface UserProps {}
 const User: React.FC<UserProps> = () => {
   const { FilterComponent } = useFilterComponent();
-  const [userValues, setUserValues] = useState<UserPayload | null>(null);
   const [editId, setEditId] = useState<number>();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
   const { control, trigger, getValues, reset, watch } =
-    useForm<ProffessionalStaffData>({
+    useForm<UserData>({
       mode: "onSubmit",
     });
 
@@ -239,7 +238,6 @@ const User: React.FC<UserProps> = () => {
 
       <AddUserModal
         control={control}
-        values={userValues}
         roles={extractIdAndName(rolesData)}
         watch={watch}
         modalFooterButton={

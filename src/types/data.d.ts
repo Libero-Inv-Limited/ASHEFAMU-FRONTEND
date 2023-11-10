@@ -326,6 +326,11 @@ type ProffessionalStaffData = {
   created_at: string;
 };
 
+type PermissionData = {
+  name: string;
+  description: string;
+}
+
 type NonProfessionalStaffData = {
   id: number;
   complement: string;

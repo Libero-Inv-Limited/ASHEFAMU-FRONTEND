@@ -17,6 +17,7 @@ import paypal from "../assets/paypal.png"
 import paystack from "../assets/paystack.png"
 import interswitch from "../assets/interswitch.png"
 import { ChartIcon, DashIcon, FileIcon, MemberIcon, NotificationIcon, UserIcon } from "../components/icons";
+import { FaPersonBooth } from "react-icons/fa";
 
 // PAYMENT METHODS
 export const paymentMethods = [
@@ -130,6 +131,12 @@ export const sidebarContents = [
     link: "/dashboard/roles",
     icon: BsPersonVcard,
     activeIcon: BsPersonVcardFill,
+  },
+  {
+    name: "permissions",
+    link: "/dashboard/permissions",
+    icon: FaPersonBooth,
+    activeIcon: FaPersonBooth,
   },
 ];
 

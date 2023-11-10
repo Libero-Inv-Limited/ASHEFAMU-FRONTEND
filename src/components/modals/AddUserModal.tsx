@@ -15,7 +15,6 @@ import { MdOutlineLock } from "react-icons/md";
 import CustomSelect from "./../common/CustomSelect";
 
 interface AddUserModalProps {
-  values?: ProffessionalStaffData | null;
   control: any;
   watch: () => void;
   onClose: () => void;

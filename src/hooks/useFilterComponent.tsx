@@ -10,25 +10,31 @@ import {
   Center,
   Heading,
 } from "@chakra-ui/react";
-import CustomButton from "./../../../components/common/CustomButton";
+import CustomButton from "./../components/common/CustomButton";
 import { AiOutlineSearch } from "react-icons/ai";
-import { TEXT_GRAY } from "./../../../utils/color";
+import { TEXT_GRAY } from "../utils/color";
 
 const useFilterComponent = () => {
   interface FilterComponentProp {
-    onFilter: (e: any) => void;
+    onFilter: (e: React.FormEvent) => void;
     onClear: () => void;
     filterText: string;
-    isUserFacilitiesTable?: boolean;
+    isFilterable?: boolean;
     user?: string;
+    onOpen: () => void;
+    title:string;
+    cta: string;
   }
   const FilterComponent: React.FC<FilterComponentProp> = ({
     onFilter,
     filterText,
     onOpen,
-    isUserFacilitiesTable,
+    isFilterable,
     user,
+    title,
+    cta,
   }) => {
+    console.log({ onFilter, user });
     return (
       <HStack
         flexWrap={"wrap"}
@@ -37,9 +43,9 @@ const useFilterComponent = () => {
         alignItems={["flex-start", "flex-start", "center"]}
         w={"full"}
       >
-        {isUserFacilitiesTable ? (
+        {!isFilterable ? (
           <Heading fontFamily={"rubik"} fontWeight={"600"} fontSize={"md"}>
-            {user.toUpperCase()}'S FACILITIES
+            {title}
           </Heading>
         ) : (
           <InputGroup flex={1} maxW={["full", "full", 435]}>
@@ -61,7 +67,7 @@ const useFilterComponent = () => {
           alignSelf={["flex-end", "flex-end", "unset"]}
           leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
         >
-          {isUserFacilitiesTable ? "Assign a facility" : "Create user"}
+          {cta}
         </CustomButton>
       </HStack>
     );
