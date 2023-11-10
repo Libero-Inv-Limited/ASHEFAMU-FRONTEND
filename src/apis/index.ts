@@ -70,6 +70,7 @@ export const GET_ONE_ROLE_ENDPOINT = (id: number) => BASE_URL + "/role-detail/" 
 export const GET_PERMISSIONS_ENDPOINT = BASE_URL + "/all-permissions"
 export const CREATE_PERMISSION_ENDPOINT = BASE_URL + "/create-permission"
 export const DELETE_PERMISSION_ENDPOINT = BASE_URL + "/delete-permissions"
+export const GET_ONE_PERMISSION_ENDPOINT = (id: number) => BASE_URL + "/permission-detail/" + id
 export const UPDATE_USER_PASSWORD_ENDPOINT = BASE_URL + "/update-user-password"
 export const UPDATE_DASHBOARD_CARD_ENDPOINT = BASE_URL + "/update-card-setting"
 export const READ_NOTIFICATIONS_ENDPOINT = (id: number) => BASE_URL + "/read-notification/" + id

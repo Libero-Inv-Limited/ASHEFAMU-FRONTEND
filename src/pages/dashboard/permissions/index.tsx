@@ -8,7 +8,7 @@ import { columns } from "./helpers";
 import { useNavigate } from "react-router-dom";
 import useFetchHook from "./useFetchHook";
 import { executeGetRoleDetails } from "./../../../apis/role";
-import {executeDeletePermission} from "./../../../apis/permission"
+import {executeDeletePermission, executeGetPermissionDetails} from "./../../../apis/permission"
 import { useAppSelector } from "../../../store/hook";
 import ActionModal from "./../../../components/modals/ActionModal";
 import { getSlug } from "../../../utils/helpers";
@@ -19,8 +19,8 @@ import useFilterComponent from "./../../../hooks/useFilterComponent";
 import AuthInput from "./../../../components/common/AuthInput";
 import { executeCreatePermission } from "../../../apis/permission";
 
-interface RoleProps {}
-const Role: React.FC<RoleProps> = () => {
+interface PermissionProps {}
+const Permission: React.FC<PermissionProps> = () => {
   const navigate = useNavigate();
   const {
     data,
@@ -133,7 +133,7 @@ const Role: React.FC<RoleProps> = () => {
   const handleEdit = async (id: number) => {
     try {
       openEditing();
-      const response = await executeGetRoleDetails(id, token!);
+      const response = await executeGetPermissionDetails(id, token!);
       if (response.status === "error") throw new Error(response.message);
 
       const name = response.data.role.name;
@@ -205,8 +205,25 @@ const Role: React.FC<RoleProps> = () => {
           Add Permission
         </CustomButton>
       </ModalComponent>
+      <ModalComponent onClose={closeEditing} isOpen={isEditing} size="md" title="Create Permission">
+        <AuthInput
+          name="name"
+          control={control}
+          rules={{ required: "Permission Name is required" }}
+          placeholder="Enter permission name"
+        />
+        <AuthInput
+          name="description"
+          control={control}
+          rules={{ required: "Description is required" }}
+          placeholder="Enter Description"
+        />
+        <CustomButton isLoading={isLoading} onClick={handleCreatePermission}>
+          Add Permission
+        </CustomButton>
+      </ModalComponent>
     </DashboardLayout>
   );
 };
 
-export default Role;
+export default Permission;

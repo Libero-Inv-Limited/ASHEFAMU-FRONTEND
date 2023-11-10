@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { log } from "../utils/helpers";
-import { CREATE_PERMISSION_ENDPOINT, DELETE_PERMISSION_ENDPOINT, GET_PERMISSIONS_ENDPOINT } from "./index";
+import {
+  CREATE_PERMISSION_ENDPOINT,
+  DELETE_PERMISSION_ENDPOINT,
+  GET_ONE_PERMISSION_ENDPOINT,
+  GET_PERMISSIONS_ENDPOINT,
+} from "./index";
 
 export const executeGetAllPermissions = async (
   token: string
@@ -21,44 +26,69 @@ export const executeGetAllPermissions = async (
   }
 };
 
-export const executeCreatePermission = async (data: PermissionData, token: string): Promise<ResponseDataType> => {
+export const executeCreatePermission = async (
+  data: PermissionData,
+  token: string
+): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-        "Accept": "application/json"
-      }
-    }
-    const request = await fetch(CREATE_PERMISSION_ENDPOINT, options)
-    const response = await request.json() satisfies ResponseDataType
-    return response
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    };
+    const request = await fetch(CREATE_PERMISSION_ENDPOINT, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("DOCS [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
   }
-  catch(error: any) {
-    log("DOCS [ERROR]:", error.message)
-    return { message: error.message, status: "error" } as ResponseDataType
-  }
-}
+};
 
-export const executeDeletePermission = async (ids: number[], token: string): Promise<ResponseDataType> => {
+export const executeDeletePermission = async (
+  ids: number[],
+  token: string
+): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
       method: "POST",
       body: JSON.stringify({ ids }),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-        "Accept": "application/json"
-      }
-    }
-    const request = await fetch(DELETE_PERMISSION_ENDPOINT, options)
-    const response = await request.json() satisfies ResponseDataType
-    return response
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    };
+    const request = await fetch(DELETE_PERMISSION_ENDPOINT, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("DOCS [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
   }
-  catch(error: any) {
-    log("DOCS [ERROR]:", error.message)
-    return { message: error.message, status: "error" } as ResponseDataType
+};
+
+export const executeGetPermissionDetails = async (
+  id: number,
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    };
+    const request = await fetch(GET_ONE_PERMISSION_ENDPOINT(id), options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("DOCS [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
   }
-}
+};

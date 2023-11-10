@@ -9,7 +9,7 @@ export const columns = (
   setDeletingRole: Dispatch<SetStateAction<number>>,
   isEditing: boolean,
   editId: number | null,
-  setEditId: Dispatch<SetStateAction<number>>,
+  setEditId: Dispatch<SetStateAction<number>>
 ) => [
   {
     name: "Name",
@@ -79,6 +79,23 @@ export const formInputs = () => {
       label: "Description",
       name: "description",
       rules: "Description is required",
+    },
+  ];
+};
+
+export const formInputsForEdit = (role: RoleData) => {
+  return [
+    {
+      label: "Role Name",
+      name: "name",
+      rules: "Role name is required",
+      value: role?.name
+    },
+    {
+      label: "Description",
+      name: "description",
+      rules: "Description is required",
+      value: role?.description
     },
   ];
 };

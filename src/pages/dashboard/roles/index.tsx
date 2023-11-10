@@ -90,13 +90,12 @@ const Role: React.FC<RoleProps> = () => {
       openEditing();
       const response = await executeGetRoleDetails(id, token!);
       if (response.status === "error") throw new Error(response.message);
-
-      const name = response.data.role.name;
-      navigate(ROUTES.EDIT_ROLE_ROUTE(getSlug(name)), {
-        state: response?.data?.user,
+      const name = response.data[0].name;
+      navigate(ROUTES.EDIT_ROLE_ROUTE(name), {
+        state: response?.data[0],
       });
     } catch (e: any) {
-      console.log("Error:", e.meesage);
+      console.log("Error:", e.message);
     } finally {
       closeEditing();
       setEditId(undefined);
