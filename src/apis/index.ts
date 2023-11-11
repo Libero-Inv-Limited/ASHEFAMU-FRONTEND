@@ -67,6 +67,7 @@ export const DELETE_ROLE_ENDPOINT = BASE_URL + "/delete-role"
 export const GET_USER_PROFILE_ENDPOINT = (id:number) =>BASE_URL + `/user-profile/${id}` 
 export const GET_ROLES_ENDPOINT = BASE_URL + "/all-roles"
 export const GET_ONE_ROLE_ENDPOINT = (id: number) => BASE_URL + "/role-detail/" + id
+export const TOGGLE_ROLE_ENDPOINT = (id: number, status: boolean) => BASE_URL + `/toggle-status/${id}/${status}`
 export const GET_PERMISSIONS_ENDPOINT = BASE_URL + "/all-permissions"
 export const CREATE_PERMISSION_ENDPOINT = BASE_URL + "/create-permission"
 export const DELETE_PERMISSION_ENDPOINT = BASE_URL + "/delete-permissions"

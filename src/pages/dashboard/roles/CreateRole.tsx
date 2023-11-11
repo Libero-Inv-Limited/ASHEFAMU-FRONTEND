@@ -17,13 +17,18 @@ interface BasicFormProps {}
 
 const CreateRole: React.FC<BasicFormProps> = () => {
   const { data } = useGetAllPermissions();
+  const [permissions, setPermissions] = React.useState<string[]>([]);
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
   const toast = useToast();
   const { onClose, onOpen } = useDisclosure();
 
-  const { register, control, trigger, getValues, reset } = useForm<RolePayload>(
-    { mode: "onChange" }
-  );
+  const { control, trigger, getValues, reset } = useForm<RolePayload>({
+    mode: "onChange",
+  });
+
+  const handleAddPermissions = (arr: string[]) => {
+    setPermissions(arr);
+  };
 
   const handleSubmit = async () => {
     if (!(await trigger())) return;
@@ -31,6 +36,7 @@ const CreateRole: React.FC<BasicFormProps> = () => {
       onOpen();
       const payload: RolePayload = {
         ...getValues(),
+        permissions,
       };
       const response = await executeCreateRole(payload, token!);
       if (response.status === "error") throw new Error(response.message);
@@ -77,7 +83,10 @@ const CreateRole: React.FC<BasicFormProps> = () => {
           <Heading fontFamily={"rubik"} fontWeight={"600"} fontSize={"md"}>
             LIST OF PERMISSIONS
           </Heading>
-          <PermissionList groupedPermissions={data} register={register} />
+          <PermissionList
+            groupedPermissions={data}
+            handleAddPermissions={handleAddPermissions}
+          />
           <CustomButton
             onClick={handleSubmit}
             alignSelf={["unset", "flex-end", "flex-end"]}

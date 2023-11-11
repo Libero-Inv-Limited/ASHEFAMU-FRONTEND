@@ -9,7 +9,8 @@ export const columns = (
   setDeletingRole: Dispatch<SetStateAction<number>>,
   isEditing: boolean,
   editId: number | null,
-  setEditId: Dispatch<SetStateAction<number>>
+  setEditId: Dispatch<SetStateAction<number>>,
+  handleToggle: (id: number, status: boolean) => void
 ) => [
   {
     name: "Name",
@@ -25,6 +26,7 @@ export const columns = (
         <Switch
           isChecked={data.status}
           colorScheme="brand"
+          onChange={() => handleToggle(data.id, !data.status)}
           color={DARK}
           size="md"
           fontWeight="500"
@@ -89,13 +91,13 @@ export const formInputsForEdit = (role: RoleData) => {
       label: "Role Name",
       name: "name",
       rules: "Role name is required",
-      value: role?.name
+      value: role?.name,
     },
     {
       label: "Description",
       name: "description",
       rules: "Description is required",
-      value: role?.description
+      value: role?.description,
     },
   ];
 };

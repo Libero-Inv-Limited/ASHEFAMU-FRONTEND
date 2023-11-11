@@ -8,10 +8,13 @@ import { FilterComponentTwo } from "./../../../components/common/FilterComponent
 import { columns } from "./helpers";
 import { useNavigate } from "react-router-dom";
 import useFetchHook from "./useFetchHook";
-import { executeDeleteRole, executeGetRoleDetails } from "./../../../apis/role";
+import {
+  executeDeleteRole,
+  executeGetRoleDetails,
+  executeToggleRoleStatus,
+} from "./../../../apis/role";
 import { useAppSelector } from "../../../store/hook";
 import ActionModal from "./../../../components/modals/ActionModal";
-import { getSlug } from "../../../utils/helpers";
 
 interface RoleProps {}
 const Role: React.FC<RoleProps> = () => {
@@ -73,7 +76,7 @@ const Role: React.FC<RoleProps> = () => {
         status: "success",
       });
       setDeletingRole(null);
-      handleReloadData;
+      handleReloadData();
     } catch (e: any) {
       console.log("ERROR:", e.message);
       toast({
@@ -102,6 +105,21 @@ const Role: React.FC<RoleProps> = () => {
     }
   };
 
+  const handleToggleStatus = async (id: number, status: boolean) => {
+    try {
+      openEditing();
+      const response = await executeToggleRoleStatus(id, status, token!);
+      if (response.status === "error") throw new Error(response.message);
+      toast({
+        title: response.message,
+        status: response.status,
+      });
+      handleReloadData();
+    } catch (e: any) {
+      console.log("Error:", e.message);
+    }
+  };
+
   React.useEffect(() => {
     if (!editId) return;
     handleEdit(editId);
@@ -118,7 +136,8 @@ const Role: React.FC<RoleProps> = () => {
               setDeletingRole,
               isEditing,
               editId,
-              setEditId
+              setEditId,
+              handleToggleStatus
             ) as any
           }
           data={data}

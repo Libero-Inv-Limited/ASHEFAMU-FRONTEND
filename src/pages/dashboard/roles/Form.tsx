@@ -1,38 +1,55 @@
 import { Checkbox, Grid, GridItem, Stack } from "@chakra-ui/react";
 import { DARK } from "../../../utils/color";
 import React from "react";
+import { useForm } from "react-hook-form";
 
-export const CheckboxGroup = ({ category, permissions, register }) => {
+export const CheckboxGroup = ({
+  category,
+  permissions,
+  register,
+  setValue,
+  getAllPermissionIds,
+}) => {
   const [selectedPermissionIds, setSelectedPermissionIds] = React.useState([]);
-
-  const allChecked = selectedPermissionIds.length === permissions.length;
-  const isIndeterminate =
-    selectedPermissionIds.length > 0 &&
-    selectedPermissionIds.length < permissions.length;
 
   const handleParentCheckboxChange = (e) => {
     if (e.target.checked) {
-      setSelectedPermissionIds(permissions.map((permission) => permission.id));
+      const newSelectedIds = permissions.map((permission) => permission.id);
+      setSelectedPermissionIds(newSelectedIds);
+      setValue("permissions", newSelectedIds);
+      getAllPermissionIds(newSelectedIds, true);
     } else {
+      const uncheckedIds = permissions.map((permission) => permission.id);
       setSelectedPermissionIds([]);
+      setValue("permissions", uncheckedIds);
+      getAllPermissionIds(uncheckedIds, false);
     }
   };
 
   const handleChildCheckboxChange = (permissionId, isChecked) => {
-    if (isChecked) {
-      setSelectedPermissionIds([...selectedPermissionIds, permissionId]);
-    } else {
-      setSelectedPermissionIds(
-        selectedPermissionIds.filter((id) => id !== permissionId)
-      );
-    }
+    const childCheckboxId = permissionId;
+    const newSelectedIds = isChecked
+      ? [...selectedPermissionIds, childCheckboxId]
+      : selectedPermissionIds.filter((id) => id !== childCheckboxId);
+
+    setSelectedPermissionIds(newSelectedIds);
+    setValue("permissions", newSelectedIds);
+
+    // Call the function with the array of selected IDs and the checked state
+    getAllPermissionIds(
+      isChecked ? [childCheckboxId] : [childCheckboxId],
+      isChecked
+    );
   };
 
   return (
     <div>
       <Checkbox
-        isChecked={allChecked}
-        isIndeterminate={isIndeterminate}
+        isChecked={selectedPermissionIds.length === permissions.length}
+        isIndeterminate={
+          selectedPermissionIds.length > 0 &&
+          selectedPermissionIds.length < permissions.length
+        }
         onChange={handleParentCheckboxChange}
         colorScheme="brand"
         color={DARK}
@@ -65,7 +82,43 @@ export const CheckboxGroup = ({ category, permissions, register }) => {
   );
 };
 
-export const PermissionList = ({ groupedPermissions, register }) => {
+interface PermissionProps {
+  groupedPermissions: { [key: string]: Permission[] };
+  handleAddPermissions: (arr: string[]) => void;
+}
+export const PermissionList: React.FC<PermissionProps> = ({
+  groupedPermissions,
+  handleAddPermissions,
+}) => {
+  const { register, setValue } = useForm();
+  const [selectedPermissions, setSelectedPermissions] = React.useState<
+    string[]
+  >([]);
+
+  React.useEffect(() => {
+    handleAddPermissions(selectedPermissions);
+  }, [selectedPermissions]);
+
+  const getAllPermissionIds = (arr: string[], isChecked: boolean) => {
+    if (isChecked) {
+      if (selectedPermissions.length > 0) {
+        // If selectedPermissions is not empty, merge the arrays
+        const newSelectedPermissions = Array.from(
+          new Set([...selectedPermissions, ...arr])
+        );
+        setSelectedPermissions(newSelectedPermissions);
+      } else {
+        // If selectedPermissions is empty, set it to the current array
+        setSelectedPermissions(arr);
+      }
+    } else {
+      const updatedSelectedPermissions = selectedPermissions.filter(
+        (id) => !arr.includes(id)
+      );
+      setSelectedPermissions(updatedSelectedPermissions);
+    }
+  };
+
   return (
     <Grid templateColumns="repeat(6, 1fr)" gap={4}>
       {Object.keys(groupedPermissions).map((category) => (
@@ -74,6 +127,8 @@ export const PermissionList = ({ groupedPermissions, register }) => {
             category={category}
             permissions={groupedPermissions[category]}
             register={register}
+            setValue={setValue}
+            getAllPermissionIds={getAllPermissionIds}
           />
         </GridItem>
       ))}
