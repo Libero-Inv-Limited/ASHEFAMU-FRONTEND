@@ -5,6 +5,7 @@ import {
   GET_ONE_ROLE_ENDPOINT,
   GET_ROLES_ENDPOINT,
   TOGGLE_ROLE_ENDPOINT,
+  UPDATE_ROLE_ENDPOINT,
 } from "./index";
 import { log } from "../utils/helpers";
 
@@ -85,6 +86,29 @@ export const executeCreateRole = async (
       },
     };
     const request = await fetch(CREATE_ROLE_ENDPOINT, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("DOCS [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+export const executeUpdateRole = async (
+  data: RolePayload,
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    };
+    const request = await fetch(UPDATE_ROLE_ENDPOINT, options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {

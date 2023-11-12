@@ -23,10 +23,10 @@ import Landing from "./pages/home/Landing";
 import ProfilePage from "./pages/dashboard/ProfilePage";
 import Users from "./pages/dashboard/users";
 import Roles from "./pages/dashboard/roles";
-import Permissions from "./pages/dashboard/permissions"
+import Permissions from "./pages/dashboard/permissions";
 import UserFacilities from "./pages/dashboard/users/UserFacilities";
 import UserFormEdit from "./pages/dashboard/users/edit";
-import RoleFormEdit from "./pages/dashboard/roles/Edit";
+import RoleFormEdit from "./pages/dashboard/roles/EditRole";
 import FacilityFormEdit from "./pages/facility-registration/FacilityFormEdit";
 import CreateRole from "./pages/dashboard/roles/CreateRole";
 import CreatePermission from "./pages/dashboard/permissions/CreatePermission";

@@ -63,6 +63,7 @@ export const GET_USERS_ENDPOINT = BASE_URL + "/all-users"
 export const GET_USER_FACILITIES_ENDPOINT = (id: number) => BASE_URL + `/user-facilities/${id}`
 export const CREATE_USER_ENDPOINT = BASE_URL + "/create-user"
 export const CREATE_ROLE_ENDPOINT = BASE_URL + "/create-role"
+export const UPDATE_ROLE_ENDPOINT = BASE_URL + "/update-role"
 export const DELETE_ROLE_ENDPOINT = BASE_URL + "/delete-role"
 export const GET_USER_PROFILE_ENDPOINT = (id:number) =>BASE_URL + `/user-profile/${id}` 
 export const GET_ROLES_ENDPOINT = BASE_URL + "/all-roles"
