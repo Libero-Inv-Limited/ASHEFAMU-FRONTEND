@@ -97,6 +97,7 @@ export const PermissionList: React.FC<PermissionProps> = ({
 
   React.useEffect(() => {
     handleAddPermissions(selectedPermissions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPermissions]);
 
   const getAllPermissionIds = (arr: string[], isChecked: boolean) => {

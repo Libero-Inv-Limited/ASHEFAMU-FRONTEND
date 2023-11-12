@@ -14,13 +14,13 @@ export const CheckboxGroup = ({
   const [selectedPermissionIds, setSelectedPermissionIds] = React.useState([]);
 
   React.useEffect(() => {
-    // Set the initial state based on rolePermissions
     const initialSelectedIds = rolePermissions.map(
       (permission) => permission.permission
     );
     setSelectedPermissionIds(initialSelectedIds);
     setValue("permissions", initialSelectedIds);
     getAllPermissionIds(initialSelectedIds, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rolePermissions]);
 
   const handleParentCheckboxChange = (e) => {
@@ -112,6 +112,7 @@ export const PermissionList: React.FC<PermissionProps> = ({
 
   React.useEffect(() => {
     handleAddPermissions(selectedPermissions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPermissions]);
 
   const getAllPermissionIds = (arr: string[], isChecked: boolean) => {
