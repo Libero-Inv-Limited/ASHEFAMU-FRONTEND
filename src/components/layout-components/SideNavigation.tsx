@@ -25,7 +25,6 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ onClose }) => {
   const param = useParams();
   const { pathname } = useLocation();
   const secondPath = pathname.split("/").filter((p) => p)[1];
-  console.log({ secondPath });
   const isFacility = !!param.name;
 
   // GET THE CURRENT FACILITY
@@ -64,7 +63,7 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ onClose }) => {
         onClose={onClose}
       />
       {secondPath === "facilities" ? (
-        !isFacility ? (
+        isFacility ? (
           <SecondarySidebar onToggle={onToggle} isOpen={isOpen} />
         ) : (
           <FacilityLists onToggle={onToggle} isOpen={isOpen} />

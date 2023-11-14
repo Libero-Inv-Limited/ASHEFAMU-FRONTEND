@@ -3,7 +3,7 @@ import {
   BiSolidBarChartSquare,
   BiBarChartSquare,
 } from "react-icons/bi";
-import { BsHospital, BsHospitalFill, BsPersonBadge, BsPersonVcard, BsPersonVcardFill } from "react-icons/bs";
+import { BsHospital, BsHospitalFill, BsPersonVcard, BsPersonVcardFill } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { IoCardOutline, IoCard, IoPerson } from "react-icons/io5";
 import { IoMdNotifications, IoMdNotificationsOutline } from "react-icons/io";
