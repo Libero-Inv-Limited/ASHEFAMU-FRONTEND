@@ -1,55 +1,51 @@
-import {
-  Chart as ChartJS,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
+import React from "react";
+import { Doughnut } from "react-chartjs-2";
+import { ChartOptions, DoughnutControllerChartOptions } from "chart.js";
 
-ChartJS.register(BarElement, LinearScale, CategoryScale);
-const Revenue = () => {
+type RevenueProps = {
+  // Your component props if any
+};
+
+const Revenue: React.FC<RevenueProps> = () => {
   const data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [{
-      label: 'My First Dataset',
-      data: [65, 59, 80, 81, 56, 55, 40],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 205, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(201, 203, 207, 0.2)'
-      ],
-      borderColor: [
-        'rgb(255, 99, 132)',
-        'rgb(255, 159, 64)',
-        'rgb(255, 205, 86)',
-        'rgb(75, 192, 192)',
-        'rgb(54, 162, 235)',
-        'rgb(153, 102, 255)',
-        'rgb(201, 203, 207)'
-      ],
-      borderWidth: 1
-    }]
+    labels: ["Registration fees", "Penalties", "Renewal Fees", "Other fees"],
+    datasets: [
+      {
+        label: "Facility Status",
+        data: [40, 40, 20],
+        fill: false,
+        backgroundColor: ["#62C28D", "#F59E0B", "#EF4444"],
+        hoverOffset: 4,
+        tension: 0.1,
+      },
+    ],
   };
 
-  const options = {
+  const options: Partial<
+    ChartOptions<"doughnut"> & DoughnutControllerChartOptions
+  > = {
     maintainAspectRatio: false,
     scales: {
       y: {
-        beginAtZero: true,
+        display: false, // Hide the y-axis
       },
     },
-    legend: {
-      labels: {
-        fontSize: 26,
+    plugins: {
+      legend: {
+        display: true,
+        position: "right",
+        labels: {
+          boxWidth: 20,
+          boxHeight: 20,
+          boxPadding: 10,
+          color: "black",
+          borderRadius: 5,
+        },
       },
     },
   };
 
-  return <Bar data={data} height={400} options={options} />;
+  return <Doughnut data={data} height={400} options={options} />;
 };
 
 export default Revenue;

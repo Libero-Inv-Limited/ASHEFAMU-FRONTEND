@@ -8,7 +8,7 @@ const Analytics: React.FC<AnalyticsProps> = () => {
   return (
     <DashboardLayout>
       {data.map((section) => (
-        <Grid gridTemplateColumns={"repeat(12, 1fr)"} columnGap={8}>
+        <Grid gridTemplateColumns={"repeat(12, 1fr)"} columnGap={8} mb={10}>
           {section.components.map((item) => (
             <GridItem colSpan={item.size} bg="white" p={6}>
               <Heading
