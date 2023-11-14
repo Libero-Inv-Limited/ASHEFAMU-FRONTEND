@@ -6,10 +6,10 @@ import CustomButton from "./../../../../components/common/CustomButton";
 
 export const Lists = ({ name, amount }) => {
   const dashedLineStyle = {
-    borderTop: "1px dashed #ccc", // Adjust color and thickness as needed
-    width: "50%", // Adjust the width of the line
+    borderTop: "1px dashed #ccc",
+    width: "50%",
     margin: "0 auto",
-    backgroundColor: "#C9CFD8", // Center the line
+    backgroundColor: "#C9CFD8",
   };
   return (
     <HStack justifyContent="space-between" mb={6}>
@@ -40,6 +40,7 @@ const TopRevenueGeneratingFacilities = () => {
         border="1px solid"
         borderColor="#C9CFD8"
         _hover={{ bg: "none" }}
+    
       >
         See More
       </CustomButton>

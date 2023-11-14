@@ -71,7 +71,6 @@ export const data = [
     name: "Compliance and Inspection",
     components: [
       {
-        title: "Inspection",
         component: <Inspection />,
         size: 6,
       },
@@ -107,8 +106,61 @@ export const topRevenueGeneratingFacilities = [
     name: "Dummy Facility",
     amount: 721,
   },
+];
+
+export const userRoles = [
   {
-    name: "Dummy Facility",
-    amount: 721,
+    name: "Super Admin",
+    amount: 2,
+    percentage: 1,
+  },
+  {
+    name: "SInspection Officer",
+    amount: 8,
+    percentage: 3,
+  },
+  {
+    name: "Default User",
+    amount: 60,
+    percentage: 84,
+  },
+];
+
+export const inspectionStats = [
+  {
+    name: "Gotham Clinic",
+    status: true,
+    date: "17/11/2023"
+  },
+  {
+    name: "Central City Hospital",
+    status: false,
+    date: "17/11/2023"
+  },
+  {
+    name: "Gotham Clinic",
+    status: false,
+    date: "16/11/2023"
+  },
+];
+
+export const complianceBreakdown = [
+  {
+    name: "Passed",
+    amount: 55,
+    percentage: 70,
+    color: "#31B099",
+  },
+  {
+    name: "Failed",
+    amount: 17,
+    percentage: 20,
+    color: "#EF4444",
+  },
+  {
+    name: "Pending",
+    amount: 8,
+    percentage: 10,
+    color: "#F59E0B"
   },
 ];

@@ -10,16 +10,22 @@ const Analytics: React.FC<AnalyticsProps> = () => {
       {data.map((section) => (
         <Grid gridTemplateColumns={"repeat(12, 1fr)"} columnGap={8}>
           {section.components.map((item) => (
-            <GridItem colSpan={item.size} bg="white" p={6} mb={10}>
-              <Heading
+            <GridItem
+              colSpan={item.size}
+              bg="white"
+              p={6}
+              mb={10}
+              position="relative"
+            >
+              {item.title && <Heading
                 color="#1A1C1E"
                 fontSize={18}
                 fontFamily="rubik"
                 fontWeight={600}
-                mb="50px"
+                mb={6}
               >
                 {item.title}
-              </Heading>
+              </Heading>}
               <Box>{item.component}</Box>
             </GridItem>
           ))}
