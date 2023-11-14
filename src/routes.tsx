@@ -14,7 +14,7 @@ import FacilityProfile from "./pages/dashboard/FacilityProfile";
 import FacilityAnalytics from "./pages/dashboard/FacilityAnalytics";
 import FacilityNotification from "./pages/dashboard/FacilityNotification";
 import Payments from "./pages/dashboard/Payments";
-import Analytics from "./pages/dashboard/Analytics";
+import Analytics from "./pages/dashboard/analytics";
 import Notifications from "./pages/dashboard/Notifications";
 import CreateFacility from "./pages/facility-registration/CreateFacility";
 import CreateIntent from "./pages/facility-registration/CreateIntent";
