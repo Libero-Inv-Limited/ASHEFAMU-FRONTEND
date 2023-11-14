@@ -2067,6 +2067,11 @@
   resolved "https://registry.npmjs.org/@fontsource-variable/rubik/-/rubik-5.0.16.tgz"
   integrity sha512-a4OAVowKlBQZTYLOVBB8AzqeZTsZ0sYv3rY+nlExOtX7eSmJUn7sxjaK6H2MnoBNXTgaWo+y1S7o6nmDp59jlA==
 
+"@fontsource/manrope@^5.0.17":
+  version "5.0.17"
+  resolved "https://registry.npmjs.org/@fontsource/manrope/-/manrope-5.0.17.tgz"
+  integrity sha512-c53GfQw+lsP7grblDfkXduECBdPtOHZ4AJWUT7x/WdP73sRWkLpGoCMCqH+2XielLXfGO3MEXoaN7tvq11eEtw==
+
 "@hookform/resolvers@^3.3.1":
   version "3.3.1"
   resolved "https://registry.npmjs.org/@hookform/resolvers/-/resolvers-3.3.1.tgz"

@@ -25,6 +25,8 @@ const FacilityStatus = () => {
     ],
   };
 
+  // const total = data.datasets[0].data.reduce((acc, value) => acc + value, 0);
+
   const options: Partial<
     ChartOptions<"doughnut"> & DoughnutControllerChartOptions
   > = {
@@ -47,6 +49,7 @@ const FacilityStatus = () => {
         },
       },
     },
+    
   };
 
   return <Doughnut data={data} height={400} options={options} />;

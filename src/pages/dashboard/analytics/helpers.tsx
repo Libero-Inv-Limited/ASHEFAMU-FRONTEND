@@ -8,7 +8,7 @@ import TopPerformingFacilities from "./components/TopPerformingFacilities";
 import TopRevenueGeneratingFacilities from "./components/TopRevenueGeneratingFacilities";
 import UserRegistration from "./components/UserRegistration";
 import UserRolesDist from "./components/UserRolesDist";
-import Inspection from './components/Inspection';
+import Inspection from "./components/Inspection";
 import Compliance from "./components/Compliance";
 import SystemPerformance from "./components/SystemPerformance";
 
@@ -87,5 +87,28 @@ export const data = [
         size: 3,
       },
     ],
+  },
+];
+
+export const topRevenueGeneratingFacilities = [
+  {
+    name: "Gotham Clinic",
+    amount: 988,
+  },
+  {
+    name: "Gotham Clinic",
+    amount: 988,
+  },
+  {
+    name: "Central City Hospital",
+    amount: 749,
+  },
+  {
+    name: "Dummy Facility",
+    amount: 721,
+  },
+  {
+    name: "Dummy Facility",
+    amount: 721,
   },
 ];
