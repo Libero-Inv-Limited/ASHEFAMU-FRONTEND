@@ -1,4 +1,3 @@
-import React from "react";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { useAppSelector } from "../store/hook";
 
@@ -11,14 +10,13 @@ const AuthGuard = ({ authRoles }: AuthGuardProps) => {
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
   const location = useLocation();
 
-  console.log({ authRoles });
-  console.log(authRoles.includes(user.user.userRole.roleDetails.name.toLowerCase()))
+  const rolesArray = authRoles.split(',').map(role => role.trim().toLowerCase());
 
   if (!token) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (authRoles.includes(user.user.userRole.roleDetails.name.toLowerCase())) {
+  if (rolesArray.includes(user.user.userRole.roleDetails.name.toLowerCase())) {
     return <Outlet />;
   }
 
