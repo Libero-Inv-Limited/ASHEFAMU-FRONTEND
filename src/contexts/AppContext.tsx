@@ -3,7 +3,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import { useAppDispatch, useAppSelector } from "../store/hook";
 import { clearAccount, populateUser } from "../store/slice/accountSlice";
 import { executeGetFacilities } from "../apis/facility";
-import { populateFacilities, populateUsers } from "../store/slice/dataSlice";
+import { populateFacilities } from "../store/slice/dataSlice";
 import { useDisclosure, useToast } from "@chakra-ui/react";
 import { executeGetProfile } from "../apis/auth";
 import { useLocation, useNavigate } from "react-router-dom";

@@ -26,7 +26,7 @@ export const executeGetUserNotification = async (token: string, page: number = 1
   }
 }
 
-export const executeGetAllUsers = async (token: string, page: number = 1, perPage: number = 9): Promise<ResponseDataType> => {
+export const executeGetAllUsers = async (token: string): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
       // body: JSON.stringify({ page, perPage, source: "user" } as NotificationRequest),
@@ -45,7 +45,7 @@ export const executeGetAllUsers = async (token: string, page: number = 1, perPag
   }
 }
 
-export const executeGetUserFacilities = async (token: string, id: number, page: number = 1, perPage: number = 9): Promise<ResponseDataType> => {
+export const executeGetUserFacilities = async (token: string, id: number): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
       // body: JSON.stringify({ page, perPage, source: "user" } as NotificationRequest),

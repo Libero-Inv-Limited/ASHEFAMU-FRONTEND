@@ -57,6 +57,9 @@ export const GET_PROTECTIVE_ITEM = BASE_URL + "/protective-items"
 export const WASTE_DISPOSAL_ENDPOINTS = BASE_URL + "/waste-disposal-methods"
 export const NON_COMP_LIST_ENDPOINT = BASE_URL + "/non-prof-staff-complements"
 
+// STATISTICS ENDPOINT
+export const GET_FACILITY_REGISTRATION = BASE_URL + "/facility-registration"
+
 // OTHERS
 export const GET_NOTIFICATIONS_ENDPOINT = BASE_URL + "/get-notifications"
 export const GET_USERS_ENDPOINT = BASE_URL + "/all-users"

@@ -4,6 +4,11 @@ type RegUserType = {
   phone: string;
 }
 
+type FacilitiesRegStats = {
+  labels: string[]
+  values: string[]
+}
+
 type FacilityData = {
   id: number;
   cac_number: string | null;
