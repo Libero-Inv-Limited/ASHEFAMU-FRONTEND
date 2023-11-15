@@ -11,11 +11,17 @@ import UserRolesDist from "./components/UserRolesDist";
 import Inspection from "./components/Inspection";
 import Compliance from "./components/Compliance";
 import SystemPerformance from "./components/SystemPerformance";
+import SystemAnalytics from "./components/SystemAnalytics";
+import SystemInfo from "./components/SystemInfo";
 
 export const data = [
   {
     name: "Overview",
     components: [
+      //SystemAnalytics
+      { title: "Generated Invoice", component: <GeneratedInvoice />, size: 2 },
+      {  component: <SystemAnalytics />, size: 5 },
+      { title: "Generated Invoice", component: <SystemInfo />, size: 5 },
       { title: "Generated Invoice", component: <GeneratedInvoice />, size: 6 },
       {
         title: "Paid vs Pending Invoices",
@@ -130,17 +136,35 @@ export const inspectionStats = [
   {
     name: "Gotham Clinic",
     status: true,
-    date: "17/11/2023"
+    date: "17/11/2023",
   },
   {
     name: "Central City Hospital",
     status: false,
-    date: "17/11/2023"
+    date: "17/11/2023",
   },
   {
     name: "Gotham Clinic",
     status: false,
-    date: "16/11/2023"
+    date: "16/11/2023",
+  },
+];
+
+export const systemStats = [
+  {
+    type: "User Activity",
+    description: "Successful login from IP 192.168.1.50",
+    date: "17/11/23",
+  },
+  {
+    type: "System",
+    description: "System software updated to version 2.5.1.",
+    date: "17/11/23",
+  },
+  {
+    type: "System",
+    description: "System software updated to version 2.5.1.",
+    date: "17/11/23",
   },
 ];
 
@@ -161,6 +185,6 @@ export const complianceBreakdown = [
     name: "Pending",
     amount: 8,
     percentage: 10,
-    color: "#F59E0B"
+    color: "#F59E0B",
   },
 ];

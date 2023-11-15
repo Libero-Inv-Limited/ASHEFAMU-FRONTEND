@@ -27,7 +27,7 @@ const SystemPerformance: React.FC<SystemPerformanceProps> = () => {
     maintainAspectRatio: false,
     scales: {
       y: {
-        display: false, // Hide the y-axis
+        display: false,
       },
     },
     plugins: {
