@@ -19,10 +19,10 @@ const CustomOverlay = () => {
       }}
     >
       <g filter="url(#filter0_d_837_27382)">
-        <circle cx="74" cy="74" r="50" fill="white" />
+        <circle cx="74" cy="98" r="50" fill="white" />
         <text
-          x="50%"
-          y="50%"
+          x="52%"
+          y="65%"
           textAnchor="middle"
           alignmentBaseline="middle"
           fill="black"
@@ -107,6 +107,8 @@ const ErrorRate = () => {
       <Box zIndex={1}>
         <ReactSpeedometer
           {...speedometerOptions}
+          forceRender={true}
+          needleTransitionDuration={4000}
           customSegmentLabels={customSegmentLabels}
         />
       </Box>

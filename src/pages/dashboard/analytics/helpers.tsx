@@ -13,14 +13,28 @@ import Compliance from "./components/Compliance";
 import SystemPerformance from "./components/SystemPerformance";
 import SystemAnalytics from "./components/SystemAnalytics";
 import SystemInfo from "./components/SystemInfo";
+import GeneralStats from "./components/GeneralStats";
 
-export const data = [
+type Data = {
+  name: string;
+  components: {
+    title?: string;
+    component: React.ReactElement;
+    size: number;
+    color?: string;
+  }[];
+};
+export const data: Data[] = [
   {
     name: "Overview",
     components: [
       //SystemAnalytics
-      { title: "Generated Invoice", component: <GeneratedInvoice />, size: 2 },
-      {  component: <SystemAnalytics />, size: 5 },
+      {
+        component: <GeneralStats />,
+        size: 3,
+        color: "#F4F7F4",
+      },
+      { component: <SystemAnalytics />, size: 4 },
       { title: "Generated Invoice", component: <SystemInfo />, size: 5 },
       { title: "Generated Invoice", component: <GeneratedInvoice />, size: 6 },
       {
