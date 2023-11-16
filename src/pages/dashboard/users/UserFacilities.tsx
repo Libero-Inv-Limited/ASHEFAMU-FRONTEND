@@ -1,32 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Box,
-  Button,
-  Stack,
+  Icon,
+  HStack,
+  Input,
+  InputLeftElement,
+  Spacer,
   Text,
   useDisclosure,
-  useToast,
+  Center,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { DARK, RED, TEXT_GRAY, YELLOW } from "../../../utils/color";
+import { DARK, TEXT_GRAY } from "../../../utils/color";
 import CustomTable from "../../../components/tables/CustomTable";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
 import usePaginatedTableData from "../../../hooks/usePaginatedTableData";
 import { useAppSelector } from "../../../store/hook";
 import {
-  executeCreateUser,
   executeGetUserFacilities,
   executeGetUserProfile,
 } from "../../../apis/user";
-// import { data } from "./data";
-import { HStack } from "@chakra-ui/react";
-import { Icon } from "@chakra-ui/react";
 import ModalComponent from "../../../components/modals/CustomModal";
-import useFilterComponent from "./useFilterComponent";
-import AddUserModal from "../../../components/modals/AddUserModal";
 import { useForm } from "react-hook-form";
-import CustomButton from "./../../../components/common/CustomButton";
-import useGetAllRoles from "../../../hooks/useGetAllRoles";
 import ROUTES from "./../../../utils/routeNames";
 import { useNavigate } from "react-router-dom";
 import { getSlug } from "../../../utils/helpers";
@@ -36,13 +31,14 @@ import { SimpleGrid } from "@chakra-ui/react";
 import AuthInput from "../../../components/common/AuthInput";
 import { InputGroup } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
-import Select from "react-select";
+import { AiOutlineSearch } from "react-icons/ai";
+import CustomButton from "./../../../components/common/CustomButton";
+import { BsPlus } from "react-icons/bs";
 
 interface UserProps {}
 const Facilities: React.FC<UserProps> = () => {
-  const { FilterComponent } = useFilterComponent();
   const location = useLocation();
-  const { id, firstname } = location.state;
+  const { id } = location.state;
   const [editId, setEditId] = useState<number>();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
   const allFacilities = useAppSelector((state) => state.dataStore.facilities);
@@ -51,10 +47,7 @@ const Facilities: React.FC<UserProps> = () => {
   });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    onOpen: openEditing,
-    onClose: closeEditing,
-  } = useDisclosure();
+  const { onOpen: openEditing, onClose: closeEditing } = useDisclosure();
 
   const {
     data,
@@ -66,18 +59,7 @@ const Facilities: React.FC<UserProps> = () => {
   } = usePaginatedTableData((page, perPage) =>
     executeGetUserFacilities(token, id, page, perPage)
   );
-
-  const [users, setUsers] = useState<InvoiceDataType[]>(data);
-  // const {
-  //   isOpen: isLoading,
-  //   onClose: closeLoading,
-  //   onOpen: openLoading,
-  // } = useDisclosure();
-  // const toast = useToast({
-  //   position: "bottom",
-  //   isClosable: true,
-  //   variant: "subtle",
-  // });
+ 
   const navigate = useNavigate();
 
   const handleEdit = async (id: number) => {
@@ -87,14 +69,6 @@ const Facilities: React.FC<UserProps> = () => {
       if (response.status === "error") throw new Error(response.message);
 
       const firstname = response.data.user.firstname;
-
-      // const responseData = response.data as OneFacilityDataType
-      // console.log("Response:", response)
-
-      // // // SET THE FACILITY UPDATE STATE
-      // // setCurrentFacility(responseData)
-
-      // NAVIGATE TO EDIT SCREEN
       navigate(ROUTES.EDIT_USER_ROUTE(getSlug(firstname)), {
         state: response?.data?.user,
       });
@@ -114,7 +88,10 @@ const Facilities: React.FC<UserProps> = () => {
   const [filterText, setFilterText] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
-
+  const filteredItems = data.filter(
+    (item) =>
+      item.name && item.name.toLowerCase().includes(filterText.toLowerCase())
+  );
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
       if (filterText) {
@@ -123,22 +100,12 @@ const Facilities: React.FC<UserProps> = () => {
       }
     };
 
-    const handleChange = (item: { label: string; value: string }) => {
-      const val = item.value;
-      if (!val || val === "*") return setUsers(data);
-      const filtered = (data as InvoiceDataType[]).filter(
-        (elem) => elem.status.toLowerCase() === val.toLowerCase()
-      );
-      // setInvoices(filtered);
-    };
-
     return (
       <FilterComponent
+        onFilter={(e) => setFilterText(e.target.value)}
         onClear={handleClear}
-        filterText={handleChange}
+        filterText={filterText}
         onOpen={onOpen}
-        isUserFacilitiesTable={true}
-        user={firstname}
       />
     );
   }, [filterText, resetPaginationToggle]);
@@ -152,7 +119,7 @@ const Facilities: React.FC<UserProps> = () => {
       <Box p={4} bg={"white"} rounded={"md"}>
         <CustomTable
           columns={facilitiesColumns() as any}
-          data={data}
+          data={filteredItems}
           paginationResetDefaultPage={resetPaginationToggle}
           subHeaderComponent={subHeaderComponentMemo}
           progressPending={loadingData}
@@ -181,6 +148,7 @@ const Facilities: React.FC<UserProps> = () => {
               fontSize={"sm"}
               name="facilities"
               onChange={handleChange}
+              rules={{ required: "Facility is required" }}
             />
           </InputGroup>
           <Text fontSize="sm" fontWeight={500}>
@@ -189,6 +157,49 @@ const Facilities: React.FC<UserProps> = () => {
         </SimpleGrid>
       </ModalComponent>
     </DashboardLayout>
+  );
+};
+
+interface FilterComponentProp {
+  onFilter: (e: any) => void;
+  onClear: () => void;
+  filterText: string;
+  onOpen: () => void;
+}
+const FilterComponent: React.FC<FilterComponentProp> = ({
+  onFilter,
+  filterText,
+  onOpen
+}) => {
+  return (
+    <HStack
+      flexWrap={"wrap"}
+      flexDir={["column-reverse", "column-reverse", "row"]}
+      spacing={2}
+      alignItems={["flex-start", "flex-start", "center"]}
+      w={"full"}
+    >
+      <InputGroup flex={1} maxW={["full", "full", 435]}>
+        <InputLeftElement as={Center}>
+          <Icon as={AiOutlineSearch} fontSize={"24px"} color={TEXT_GRAY} />
+        </InputLeftElement>
+        <Input
+          fontSize={"sm"}
+          onChange={onFilter}
+          value={filterText}
+          placeholder="Search"
+        />
+      </InputGroup>
+
+      <Spacer />
+      <CustomButton
+        onClick={onOpen}
+        alignSelf={["flex-end", "flex-end", "unset"]}
+        leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
+      >
+        Assign a facility{" "}
+      </CustomButton>
+    </HStack>
   );
 };
 

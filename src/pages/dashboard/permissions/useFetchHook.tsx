@@ -1,4 +1,3 @@
-import { executeGetAllRoles } from "../../../apis/role";
 import { useAppSelector } from "../../../store/hook";
 import usePaginatedTableData from "./../../../hooks/usePaginatedTableData";
 import { executeGetAllPermissions } from './../../../apis/permission';

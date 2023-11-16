@@ -50,7 +50,7 @@ const FacilityRegistration = () => {
         fill: false,
         borderColor: "rgb(49, 176, 153)",
         borderWidth: 5,
-        tension: 0.1,
+        tension: 0.2,
       },
     ],
   };

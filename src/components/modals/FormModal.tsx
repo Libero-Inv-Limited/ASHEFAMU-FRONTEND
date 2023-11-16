@@ -10,7 +10,6 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
-import AuthInput from "../common/AuthInput";
 
 interface AddUserModalProps {
   values?: ProffessionalStaffData | null;

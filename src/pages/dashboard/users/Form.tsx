@@ -9,8 +9,6 @@ import {
   Switch,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import FormTitle from "../../../components/common/FormTitle";
 import { useForm } from "react-hook-form";
 import AuthInput from "../../../components/common/AuthInput";
 import CustomButton from "../../../components/common/CustomButton";
@@ -28,19 +26,15 @@ import ActionModal from "../../../components/modals/ActionModal";
 import ResetPasswordModal from "./../../../components/modals/ResetPassword";
 import { useToast } from "@chakra-ui/react";
 import ROUTES from "./../../../utils/routeNames";
-import { getSlug } from "../../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 
-interface BasicFormProps {
-  setActiveStep: (no: any) => void;
-  activeStep: number;
-}
 
-const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
+const BasicForm= () => {
   const location = useLocation();
   const { data: rolesData } = useGetAllRoles();
-  const [user, setUser] = useState(location.state);
-  const { control, watch, setValue, trigger, getValues } = useForm({
+
+  const user= location.state;
+  const { control, watch } = useForm<RegisterData>({
     mode: "onSubmit",
   });
   const prevDatas = watch();
@@ -59,7 +53,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
     variant: "subtle",
   });
 
-  const { isFetching, facilityCategory, sectorCategory, serviceScope } =
+  const { isFetching } =
     useFetchFacilityData();
 
   const {
@@ -137,7 +131,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
           ))}
         </Grid>
         {isEditing && (
-          <FormControl control={control} columns={{ base: 2, lg: 4 }}>
+          <FormControl>
             <FormLabel htmlFor="isChecked">Activate/Deactivate User</FormLabel>
             <Switch id="isChecked" isChecked mr={2} />
             Deactivated

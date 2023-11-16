@@ -120,7 +120,7 @@ export const facilitiesColumns = () => [
     name: "Actions",
     selector: "",
     sortable: false,
-    cell: (item: any) => {
+    cell: () => {
       return (
         <HStack>
           <IconButton

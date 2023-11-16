@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HStack, InputGroup, InputLeftElement, Icon, Input, Spacer, Center } from "@chakra-ui/react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { TEXT_GRAY } from "../../utils/color";
 import CustomButton from "./CustomButton";
-import ROUTES from './../../utils/routeNames';
 import { BsPlus } from "react-icons/bs";
 
 interface FilterComponentProp {
-  onFilter: (e: React.FormEvent) => void;
+  onFilter: (e: any) => void;
   onClear: () => void;
   filterText: string;
   buttonLabel: string;

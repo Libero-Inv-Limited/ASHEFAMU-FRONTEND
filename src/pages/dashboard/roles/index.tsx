@@ -57,7 +57,7 @@ const Role: React.FC<RoleProps> = () => {
     };
     return (
       <FilterComponentTwo
-        onFilter={(e: React.FormEvent) => setFilterText(e)}
+        onFilter={(e) => setFilterText(e.target.value)}
         onClear={handleClear}
         filterText={filterText}
         buttonLabel="Create Role"

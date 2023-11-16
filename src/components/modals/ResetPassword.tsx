@@ -3,30 +3,28 @@ import {
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalOverlay,
   SimpleGrid,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React, { ReactNode } from "react";
-import { Stack } from "@chakra-ui/react";
+import React from "react";
 import AuthInput from "./../common/AuthInput";
 import { MdOutlineLock } from "react-icons/md";
 import CustomButton from "./../common/CustomButton";
 import { Heading } from "@chakra-ui/react";
 import { DARK } from "./../../utils/color";
+import { UseFormWatch } from "react-hook-form/dist/types";
 
 interface ResetPasswordModalProps {
   control: any;
-  watch: () => void;
+  watch: UseFormWatch<RegisterData>;
   onClose: () => void;
   isOpen: boolean;
   handleResetPassword: () => void;
+  openConfirmation: () => void;
   title: string;
-  onOpen: () => void;
 }
 const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
-  modalFooterButton,
   isOpen,
   onClose,
   control,
@@ -88,7 +86,6 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
             <CustomButton onClick={handleResetPassword}>Reset</CustomButton>
           </SimpleGrid>
         </ModalBody>
-        <ModalFooter>{modalFooterButton}</ModalFooter>
       </ModalContent>
     </Modal>
   );

@@ -7,8 +7,10 @@ import ROUTES from "./../../../utils/routeNames";
 import { columns } from "./helpers";
 import { useNavigate } from "react-router-dom";
 import useFetchHook from "./useFetchHook";
-import { executeGetRoleDetails } from "./../../../apis/role";
-import {executeDeletePermission, executeGetPermissionDetails} from "./../../../apis/permission"
+import {
+  executeDeletePermission,
+  executeGetPermissionDetails,
+} from "./../../../apis/permission";
 import { useAppSelector } from "../../../store/hook";
 import ActionModal from "./../../../components/modals/ActionModal";
 import { getSlug } from "../../../utils/helpers";
@@ -32,7 +34,11 @@ const Permission: React.FC<PermissionProps> = () => {
   } = useFetchHook();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen: isLoading, onClose: closeLoading, onOpen: openLoading } = useDisclosure();
+  const {
+    isOpen: isLoading,
+    onClose: closeLoading,
+    onOpen: openLoading,
+  } = useDisclosure();
 
   const {
     isOpen: isDeleting,
@@ -51,7 +57,9 @@ const Permission: React.FC<PermissionProps> = () => {
     mode: "onSubmit",
   });
 
-  const [deletingPermission, setDeletingPermission] = React.useState<number | null>(null);
+  const [deletingPermission, setDeletingPermission] = React.useState<
+    number | null
+  >(null);
   const { FilterComponent } = useFilterComponent();
   const [editId, setEditId] = React.useState<number>();
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
@@ -68,7 +76,7 @@ const Permission: React.FC<PermissionProps> = () => {
     };
     return (
       <FilterComponent
-        onFilter={(e: React.FormEvent) => setFilterText(e)}
+        onFilter={(e) => setFilterText(e.target.value)}
         onClear={handleClear}
         filterText={filterText}
         cta="Create Permission"
@@ -111,7 +119,10 @@ const Permission: React.FC<PermissionProps> = () => {
   const handleDelete = async () => {
     try {
       openDeleting();
-      const result = await executeDeletePermission([deletingPermission!], token!);
+      const result = await executeDeletePermission(
+        [deletingPermission!],
+        token!
+      );
       if (result.status === "error") throw new Error(result.message);
       toast({
         title: "Permission deleted!",
@@ -188,7 +199,12 @@ const Permission: React.FC<PermissionProps> = () => {
         onClose={() => setDeletingPermission(null)}
         actionBtnText="Confirm"
       />
-      <ModalComponent onClose={onClose} isOpen={isOpen} size="md" title="Create Permission">
+      <ModalComponent
+        onClose={onClose}
+        isOpen={isOpen}
+        size="md"
+        title="Create Permission"
+      >
         <AuthInput
           name="name"
           control={control}
@@ -205,7 +221,12 @@ const Permission: React.FC<PermissionProps> = () => {
           Add Permission
         </CustomButton>
       </ModalComponent>
-      <ModalComponent onClose={closeEditing} isOpen={isEditing} size="md" title="Create Permission">
+      <ModalComponent
+        onClose={closeEditing}
+        isOpen={isEditing}
+        size="md"
+        title="Create Permission"
+      >
         <AuthInput
           name="name"
           control={control}

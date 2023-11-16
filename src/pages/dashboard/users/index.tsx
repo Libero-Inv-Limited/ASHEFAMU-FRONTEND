@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Text, useDisclosure, useToast } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
@@ -30,10 +31,9 @@ const User: React.FC<UserProps> = () => {
   const { FilterComponent } = useFilterComponent();
   const [editId, setEditId] = useState<number>();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
-  const { control, trigger, getValues, reset, watch } =
-    useForm<UserData>({
-      mode: "onSubmit",
-    });
+  const { control, trigger, getValues, reset, watch } = useForm<UserPayload>({
+    mode: "onSubmit",
+  });
 
   const extractIdAndName = (arr) => {
     return arr.map((item) => ({ value: item.id, label: item.name }));
@@ -58,7 +58,6 @@ const User: React.FC<UserProps> = () => {
     executeGetAllUsers(token, page, perPage)
   );
 
-  const [users, setUsers] = useState<InvoiceDataType[]>(data);
   const {
     isOpen: isLoading,
     onClose: closeLoading,
@@ -159,6 +158,14 @@ const User: React.FC<UserProps> = () => {
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
 
+  const filteredItems = data.filter(
+    (item) =>
+      (item.firstname &&
+        item.firstname.toLowerCase().includes(filterText.toLowerCase())) ||
+      (item.username &&
+        item.username.toLowerCase().includes(filterText.toLowerCase()))
+  );
+
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
       if (filterText) {
@@ -167,19 +174,11 @@ const User: React.FC<UserProps> = () => {
       }
     };
 
-    const handleChange = (item: { label: string; value: string }) => {
-      const val = item.value;
-      if (!val || val === "*") return setUsers(data);
-      const filtered = (data as InvoiceDataType[]).filter(
-        (elem) => elem.status.toLowerCase() === val.toLowerCase()
-      );
-      // setInvoices(filtered);
-    };
-
     return (
       <FilterComponent
+        onFilter={(e) => setFilterText(e.target.value)}
         onClear={handleClear}
-        filterText={handleChange}
+        filterText={filterText}
         onOpen={onOpen}
       />
     );
@@ -191,7 +190,7 @@ const User: React.FC<UserProps> = () => {
     if (!(await trigger())) return;
     try {
       openLoading();
-      const payload: UserData = {
+      const payload: UserPayload = {
         ...getValues(),
         role: (getValues("role") as any).value,
       };
@@ -224,7 +223,7 @@ const User: React.FC<UserProps> = () => {
       <Box p={4} bg={"white"} rounded={"md"}>
         <CustomTable
           columns={columns as any}
-          data={data}
+          data={filteredItems}
           paginationResetDefaultPage={resetPaginationToggle}
           subHeaderComponent={subHeaderComponentMemo}
           progressPending={loadingData}

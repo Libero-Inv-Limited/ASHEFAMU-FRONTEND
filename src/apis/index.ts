@@ -59,17 +59,18 @@ export const NON_COMP_LIST_ENDPOINT = BASE_URL + "/non-prof-staff-complements"
 
 // STATISTICS ENDPOINT
 export const GET_FACILITY_REGISTRATION = BASE_URL + "/facility-registration"
+export const GET_STATS_METRICS = BASE_URL + "/static-metric"
 
 // OTHERS
 export const GET_NOTIFICATIONS_ENDPOINT = BASE_URL + "/get-notifications"
-export const GET_USERS_ENDPOINT = BASE_URL + "/all-users"
-export const GET_USER_FACILITIES_ENDPOINT = (id: number) => BASE_URL + `/user-facilities/${id}`
+export const GET_USERS_ENDPOINT = (page: number, perPage: number) =>  BASE_URL + `/all-users/${page}/${perPage}`
+export const GET_USER_FACILITIES_ENDPOINT = (id: number, page:number, perPage:number) => BASE_URL + `/user-facilities/${id}/${page}/${perPage}`
 export const CREATE_USER_ENDPOINT = BASE_URL + "/create-user"
 export const CREATE_ROLE_ENDPOINT = BASE_URL + "/create-role"
 export const UPDATE_ROLE_ENDPOINT = BASE_URL + "/update-role"
 export const DELETE_ROLE_ENDPOINT = BASE_URL + "/delete-role"
 export const GET_USER_PROFILE_ENDPOINT = (id:number) =>BASE_URL + `/user-profile/${id}` 
-export const GET_ROLES_ENDPOINT = BASE_URL + "/all-roles"
+export const GET_ROLES_ENDPOINT =(page:number, perPage: number) =>  BASE_URL + `/all-roles/${page}/${perPage}`
 export const GET_ONE_ROLE_ENDPOINT = (id: number) => BASE_URL + "/role-detail/" + id
 export const TOGGLE_ROLE_ENDPOINT = (id: number, status: boolean) => BASE_URL + `/toggle-status/${id}/${status}`
 export const GET_PERMISSIONS_ENDPOINT = BASE_URL + "/all-permissions"

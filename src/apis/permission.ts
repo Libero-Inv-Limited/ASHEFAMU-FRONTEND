@@ -8,7 +8,9 @@ import {
 } from "./index";
 
 export const executeGetAllPermissions = async (
-  token: string
+  token: string,
+  page: number,
+  perPage: number
 ): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
@@ -17,6 +19,7 @@ export const executeGetAllPermissions = async (
         Authorization: `Bearer ${token}`,
       },
     };
+    console.log({page, perPage})
     const request = await fetch(GET_PERMISSIONS_ENDPOINT, options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;

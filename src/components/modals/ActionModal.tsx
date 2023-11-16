@@ -10,7 +10,7 @@ type StatusType = "error" | "success" | "warning" | "danger"
 interface ActionModalProps {
   isOpen: boolean;
   title: string;
-  text: string;
+  text?: string;
   isLoading?: boolean;
   actionBtnText: string;
   status: StatusType;
@@ -36,7 +36,7 @@ const ActionModal: React.FC<ActionModalProps> = ({ isOpen, isLoading, handleActi
           </Center>
           <Stack>
             <Heading size={"md"} lineHeight={"7"} color={DARK}>{title}</Heading>
-            <Text fontSize={"sm"} color={DARK}>{text}</Text>
+            {text && <Text fontSize={"sm"} color={DARK}>{text}</Text>}
           </Stack>
         </ModalBody>
         <ModalFooter as={HStack} spacing={3}>

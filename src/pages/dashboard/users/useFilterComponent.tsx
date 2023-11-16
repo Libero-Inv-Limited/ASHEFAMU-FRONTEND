@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { BsPlus } from "react-icons/bs";
 import {
@@ -18,6 +20,7 @@ const useFilterComponent = () => {
   interface FilterComponentProp {
     onFilter: (e: any) => void;
     onClear: () => void;
+    onOpen: () => void;
     filterText: string;
     isUserFacilitiesTable?: boolean;
     user?: string;
@@ -29,6 +32,7 @@ const useFilterComponent = () => {
     isUserFacilitiesTable,
     user,
   }) => {
+    console.log({ filterText });
     return (
       <HStack
         flexWrap={"wrap"}

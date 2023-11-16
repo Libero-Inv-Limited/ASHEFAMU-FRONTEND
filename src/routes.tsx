@@ -25,7 +25,7 @@ import Users from "./pages/dashboard/users";
 import Roles from "./pages/dashboard/roles";
 import Permissions from "./pages/dashboard/permissions";
 import UserFacilities from "./pages/dashboard/users/UserFacilities";
-import UserFormEdit from "./pages/dashboard/users/edit";
+import UserFormEdit from "./pages/dashboard/users/Edit";
 import RoleFormEdit from "./pages/dashboard/roles/EditRole";
 import FacilityFormEdit from "./pages/facility-registration/FacilityFormEdit";
 import CreateRole from "./pages/dashboard/roles/CreateRole";

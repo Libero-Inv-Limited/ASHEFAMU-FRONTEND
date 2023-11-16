@@ -2,13 +2,9 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
   ModalBody,
   ModalCloseButton,
-  ModalFooter,
-  Heading,
 } from "@chakra-ui/react";
-import { DARK } from "../../utils/color";
 
 type Props = {
   title?: string;

@@ -10,13 +10,12 @@ import {
 } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 import AuthInput from "../common/AuthInput";
-import { generateYear } from "../../utils/helpers";
 import { MdOutlineLock } from "react-icons/md";
-import CustomSelect from "./../common/CustomSelect";
+import { UseFormWatch } from "react-hook-form/dist/types";
 
 interface AddUserModalProps {
   control: any;
-  watch: () => void;
+  watch: UseFormWatch<UserPayload>; // Adjust the type based on your form data
   onClose: () => void;
   isOpen: boolean;
   modalFooterButton: ReactNode;

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { BsPlus } from "react-icons/bs";
 import {
@@ -16,7 +18,7 @@ import { TEXT_GRAY } from "../utils/color";
 
 const useFilterComponent = () => {
   interface FilterComponentProp {
-    onFilter: (e: React.FormEvent) => void;
+    onFilter: (e: any) => void;
     onClear: () => void;
     filterText: string;
     isFilterable?: boolean;
@@ -30,11 +32,9 @@ const useFilterComponent = () => {
     filterText,
     onOpen,
     isFilterable,
-    user,
     title,
     cta,
   }) => {
-    console.log({ onFilter, user });
     return (
       <HStack
         flexWrap={"wrap"}

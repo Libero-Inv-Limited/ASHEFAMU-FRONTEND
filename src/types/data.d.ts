@@ -9,6 +9,20 @@ type FacilitiesRegStats = {
   values: string[]
 }
 
+type metricsStats = {
+  registeredFacilities: string;
+  activeUsers: string;
+  facilityStatus: {
+    pending: string,
+    approved: string,
+    rejected: string;
+  }
+  roleDistribution: {
+    roles: {id: number, name: string}[]
+    roleCount: string[]
+  }
+}
+
 type FacilityData = {
   id: number;
   cac_number: string | null;

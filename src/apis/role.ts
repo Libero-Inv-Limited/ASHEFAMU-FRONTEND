@@ -10,7 +10,9 @@ import {
 import { log } from "../utils/helpers";
 
 export const executeGetAllRoles = async (
-  token: string
+  token: string,
+  page: number,
+  perPage: number,
 ): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
@@ -19,7 +21,7 @@ export const executeGetAllRoles = async (
         Authorization: `Bearer ${token}`,
       },
     };
-    const request = await fetch(GET_ROLES_ENDPOINT, options);
+    const request = await fetch(GET_ROLES_ENDPOINT(page, perPage), options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {

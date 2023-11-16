@@ -3,9 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 
 type InitialStateType = {
   facilitiesRegStats: FacilitiesRegStats,
+  statsMetrics: metricsStats | null
 }
 const initialState:InitialStateType = {
   facilitiesRegStats: {labels: [], values: []},
+  statsMetrics: null
 };
 
 
@@ -16,9 +18,12 @@ const dataSlice = createSlice({
     populateFacilitiesRegStats: (state, action) => {
       state.facilitiesRegStats = action.payload
     },
+    populateMetricStats: (state, action) => {
+      state.statsMetrics = action.payload
+    },
   }
 })
 
 
-export const { populateFacilitiesRegStats, } = dataSlice.actions;
+export const { populateFacilitiesRegStats, populateMetricStats} = dataSlice.actions;
 export default dataSlice.reducer;

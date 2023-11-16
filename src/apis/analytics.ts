@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { log } from "../utils/helpers";
-import { GET_FACILITY_REGISTRATION } from "./index";
+import { GET_FACILITY_REGISTRATION, GET_STATS_METRICS } from "./index";
 
 const generateDateRange = (year: string) => {
   const startDate = new Date(`${year}-01-01T00:00:00.000Z`);
@@ -36,3 +36,24 @@ export const executeGetFacilityRegStats = async (
     return { message: error.message, status: "error" } as ResponseDataType;
   }
 };
+
+export const executeGetStatsMetric = async (
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const request = await fetch(GET_STATS_METRICS, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("NOTIFICATION [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+// {{BASE_URL}}/static-metric
