@@ -35,7 +35,7 @@ export const data: Data[] = [
         color: "#F4F7F4",
       },
       { component: <SystemAnalytics />, size: 4 },
-      { title: "Generated Invoice", component: <SystemInfo />, size: 5 },
+      { title: "System Info", component: <SystemInfo />, size: 5 },
       { title: "Generated Invoice", component: <GeneratedInvoice />, size: 6 },
       {
         title: "Paid vs Pending Invoices",

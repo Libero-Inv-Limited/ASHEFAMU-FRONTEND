@@ -7,7 +7,7 @@ const GeneralStats = () => {
   return (
     <Grid templateColumns="repeat(12, 1fr)" rowGap={4}>
       <GridItem colSpan={12}>
-        <Box bgColor="white" p={4}>
+        <Box bgColor="white" p={4} minHeight="150px">
           <Text fontFamily="inter" fontSize={20} fontWeight={500}>
             No of Registered Facilities
           </Text>
@@ -22,7 +22,7 @@ const GeneralStats = () => {
         </Box>
       </GridItem>
       <GridItem colSpan={12}>
-        <Box bgColor="white" p={4}>
+        <Box bgColor="white" p={4} minHeight="150px">
           <Text fontFamily="inter" fontSize={20} fontWeight={500}>
             Total active users
           </Text>

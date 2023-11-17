@@ -11,8 +11,8 @@ import { log } from "../utils/helpers";
 
 export const executeGetAllRoles = async (
   token: string,
-  page: number,
-  perPage: number,
+  page?: number,
+  perPage?: number,
 ): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {

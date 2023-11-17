@@ -34,7 +34,7 @@ interface AuthInputProps extends InputProps {
   iconProp?: IconProps;
   isSelect?: boolean;
   labelStyles?: FormLabelProps;
-  data?: { label: string; value: number }[];
+  data?: { label: string; value: string | number}[];
   selectProps?: ComponentProps<Select> & { isCreatable?: boolean };
 }
 
