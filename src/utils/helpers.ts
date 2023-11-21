@@ -96,3 +96,9 @@ export const formatDate = (date: string) => {
   const formattedDate = new Date(date).toLocaleDateString('en-US', options);
   return formattedDate.replace(/(\d)(st|nd|rd|th)/, '$1');
 }
+
+export const formatNigerianPhoneNumber = (inputNumber:string) => {
+  const cleanedNumber = inputNumber.replace(/^0/, '');
+  const formattedNumber = `+234${cleanedNumber}`;
+  return formattedNumber;
+}

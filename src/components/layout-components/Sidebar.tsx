@@ -6,6 +6,7 @@ import {
   IconButton,
   Stack,
   Text,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react";
 import React from "react";
@@ -54,18 +55,20 @@ const Sidebar: React.FC<SidebarProps> = ({
       </Stack>
       {!isSecondaryBarOpen && isFacility && (
         <VStack mb={4}>
-          <IconButton
-            onClick={toggleSecondaryBar}
-            aria-label="toggle"
-            variant={"unstyled"}
-            p={0}
-            px={2}
-            width={"fit-content"}
-            shadow={"lg"}
-            size={"xs"}
-            rounded={"full"}
-            icon={<SidebarToggleIcon color={"primary.500"} />}
-          />
+          <Tooltip label="View Facilities">
+            <IconButton
+              onClick={toggleSecondaryBar}
+              aria-label="toggle"
+              variant={"unstyled"}
+              p={0}
+              px={2}
+              width={"fit-content"}
+              shadow={"lg"}
+              size={"xs"}
+              rounded={"full"}
+              icon={<SidebarToggleIcon color={"primary.500"} />}
+            />
+          </Tooltip>
         </VStack>
       )}
       <VStack as={Link} to={""} mb={10} spacing={"1"}>

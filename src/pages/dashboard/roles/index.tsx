@@ -123,6 +123,7 @@ const Role: React.FC<RoleProps> = () => {
   React.useEffect(() => {
     if (!editId) return;
     handleEdit(editId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editId]);
 
   return (

@@ -149,6 +149,7 @@ const Registration: React.FC<RegistrationProps> = () => {
           type="tel"
           Icon={MdOutlinePhoneEnabled}
           label="Phone no"
+          placeholder="0810000000"
           rules={{
             required: "Phone number is required",
             minLength: {

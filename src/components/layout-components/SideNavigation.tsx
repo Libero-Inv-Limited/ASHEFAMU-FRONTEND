@@ -14,7 +14,7 @@ interface SideNavigationProps {
   onClose?: () => void;
 }
 const SideNavigation: React.FC<SideNavigationProps> = ({ onClose }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const { setCurrentFacility, openLoadingData, closeLoadingData } =
     useAppContext();
   const navigate = useNavigate();
