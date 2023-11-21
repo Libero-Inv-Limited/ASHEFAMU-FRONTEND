@@ -82,7 +82,7 @@ export default [
     path: "/dashboard",
     element: <Dashboard />,
     name: "Dashboard",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
 
   // FACILITIES ROUTES
@@ -91,31 +91,31 @@ export default [
     exact: true,
     element: <Facilities />,
     name: "Facilities",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
   {
     path: "/dashboard/facilities/:name/",
     element: <FacilityDashboard />,
     name: "Facilities Dashboard",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
   {
     path: "/dashboard/facilities/:name/documents",
     element: <FacilityDocument />,
     name: "Facilities Document",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
   {
     path: "/dashboard/facilities/:name/members",
     element: <FacilityMember />,
     name: "Facilities Member",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
   {
     path: "/dashboard/facilities/:name/profile",
     element: <FacilityProfile />,
     name: "Facilities",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
   {
     path: "/dashboard/facilities/:name/analytics",
@@ -127,7 +127,7 @@ export default [
     path: "/dashboard/facilities/:name/notifications",
     element: <FacilityNotification />,
     name: "Facilities Notification",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
 
   // FACILITY FORMS
@@ -135,25 +135,25 @@ export default [
     path: "/dashboard/facilities/register-facility",
     element: <CreateFacility />,
     name: "Create Facility",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
   {
     path: "/dashboard/facilities/register-facility/intent",
     element: <CreateIntent />,
     name: "Submit Intent",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
   {
     path: "/dashboard/facilities/register-facility/fill-form",
     element: <FacilityForm />,
     name: "Facility Form",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
   {
     path: "/dashboard/facilities/:facility/edit-facility/",
     element: <FacilityFormEdit />,
     name: "Facility Edit Form",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
 
   // PAYMENT
@@ -161,7 +161,7 @@ export default [
     path: "/dashboard/payments",
     element: <Payments />,
     name: "Payments",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
 
   // ANALYTICS
@@ -177,7 +177,7 @@ export default [
     path: "/dashboard/notifications",
     element: <Notifications />,
     name: "Notifications",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
 
   // Profile
@@ -185,7 +185,7 @@ export default [
     path: "/dashboard/profile",
     element: <ProfilePage />,
     name: "Profile",
-    permissions: ["super admin, admin"]
+    permissions: ["super admin, admin, guest"]
   },
   {
     path: "*",
