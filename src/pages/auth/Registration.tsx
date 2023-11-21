@@ -1,82 +1,109 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect } from "react"
-import AuthLayout from "../../components/layouts/AuthLayout"
-import { HStack, Heading, Link, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react"
-import { Link as ReactLink, useNavigate } from "react-router-dom"
-import AuthInput from "../../components/common/AuthInput"
-import { useForm } from "react-hook-form"
-import { IoMailOutline } from "react-icons/io5"
-import { MdOutlinePhoneEnabled, MdOutlineLock } from "react-icons/md"
-import CustomButton from "../../components/common/CustomButton"
-import { TEXT_DARK } from "../../utils/color"
-import ROUTES from "../../utils/routeNames"
-import { executeRegistration } from "../../apis/auth"
-import useWaitingText from "../../hooks/useWaitingText"
-import { useAppContext } from "../../contexts/AppContext"
-import { UserIcon } from "../../components/icons"
+import React, { useEffect } from "react";
+import AuthLayout from "../../components/layouts/AuthLayout";
+import {
+  HStack,
+  Heading,
+  Link,
+  Stack,
+  Text,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+import AuthInput from "../../components/common/AuthInput";
+import { useForm } from "react-hook-form";
+import { IoMailOutline } from "react-icons/io5";
+import { MdOutlinePhoneEnabled, MdOutlineLock } from "react-icons/md";
+import CustomButton from "../../components/common/CustomButton";
+import { TEXT_DARK } from "../../utils/color";
+import ROUTES from "../../utils/routeNames";
+import { executeRegistration } from "../../apis/auth";
+import useWaitingText from "../../hooks/useWaitingText";
+import { useAppContext } from "../../contexts/AppContext";
+import { UserIcon } from "../../components/icons";
 
-interface RegistrationProps { }
+interface RegistrationProps {}
 const Registration: React.FC<RegistrationProps> = () => {
-  const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
-  const { checkIncompleteReg } = useAppContext()
-  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Validating", "Submitting", "Finalizing"])
+  const {
+    isOpen: isLoading,
+    onOpen: openLoading,
+    onClose: closeLoading,
+  } = useDisclosure();
+  const { checkIncompleteReg } = useAppContext();
+  const { loadingText, startLoadingText, stopLoadingText } = useWaitingText([
+    "Validating",
+    "Submitting",
+    "Finalizing",
+  ]);
   const { control, watch, trigger, getValues } = useForm<RegisterData>({
-    mode: "onSubmit"
-  })
-  const navigate = useNavigate()
-  const password = watch("password")
+    mode: "onSubmit",
+  });
+  const navigate = useNavigate();
+  const password = watch("password");
   const toast = useToast({
     position: "bottom",
     isClosable: true,
     variant: "subtle",
-  })
+  });
 
   const handleRegister = async () => {
     try {
-      if (! await trigger()) return
+      if (!(await trigger())) return;
       // MAKE REQUEST
-      openLoading()
-      startLoadingText()
+      openLoading();
+      startLoadingText();
       const payload: RegisterData = {
-        ...getValues()
-      }
-      delete (payload as any)['confirm']
+        ...getValues(),
+      };
+      delete (payload as any)["confirm"];
 
-      const result = await executeRegistration(payload)
-      if (result.status === "error") throw new Error(result.message)
+      const result = await executeRegistration(payload);
+      if (result.status === "error") throw new Error(result.message);
 
       // SHOW SUCCESS TOAST
       toast({
         status: "success",
-        title: result.message
-      })
+        title: result.message,
+      });
 
-      localStorage.setItem("REG_USER", JSON.stringify({
-        email: getValues("email"),
-        phone: getValues("mobile")
-      }))
-      navigate(ROUTES.VERIFY_CONTACT_ROUTE(getValues("email")))
-    }
-    catch (error: any) {
-      console.log("ERROR:", error.message)
+      localStorage.setItem(
+        "REG_USER",
+        JSON.stringify({
+          email: getValues("email"),
+          phone: getValues("mobile"),
+        })
+      );
+
+      result.code === 333
+        ? navigate(ROUTES.VERIFY_CONTACT_ROUTE(getValues("email")))
+        : navigate(ROUTES.VERIFY_EMAIL_ROUTE(getValues("email")));
+    } catch (error: any) {
+      console.log("ERROR:", error.message);
       toast({
         status: "error",
-        title: error.message
-      })
+        title: error.message,
+      });
+    } finally {
+      closeLoading();
+      stopLoadingText();
     }
-    finally {
-      closeLoading()
-      stopLoadingText()
-    }
-  }
+  };
 
   useEffect(() => {
-    checkIncompleteReg()
-  }, [])
+    checkIncompleteReg();
+  }, []);
 
   return (
     <AuthLayout>
-      <Heading fontSize={"1.8rem"} color={"gray.700"} fontWeight={"semibold"} fontFamily={"rubik"}>Create an account</Heading>
+      <Heading
+        fontSize={"1.8rem"}
+        color={"gray.700"}
+        fontWeight={"semibold"}
+        fontFamily={"rubik"}
+      >
+        Create an account
+      </Heading>
       <Stack mt={8} spacing={4} mb={16}>
         {/* FIRSTNAME */}
         <AuthInput
@@ -89,8 +116,8 @@ const Registration: React.FC<RegistrationProps> = () => {
             required: "First name is required",
             minLength: {
               value: 3,
-              message: "First name should be at least 3 characters "
-            }
+              message: "First name should be at least 3 characters ",
+            },
           }}
         />
 
@@ -105,8 +132,8 @@ const Registration: React.FC<RegistrationProps> = () => {
             required: "Last name is required",
             minLength: {
               value: 3,
-              message: "Last name should be at least 3 characters "
-            }
+              message: "Last name should be at least 3 characters ",
+            },
           }}
         />
 
@@ -121,8 +148,8 @@ const Registration: React.FC<RegistrationProps> = () => {
             required: "Username is required",
             minLength: {
               value: 3,
-              message: "Username should be at least 3 characters "
-            }
+              message: "Username should be at least 3 characters ",
+            },
           }}
         />
 
@@ -137,8 +164,8 @@ const Registration: React.FC<RegistrationProps> = () => {
             required: "Email is required",
             pattern: {
               value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-              message: "Please enter a valid email address"
-            }
+              message: "Please enter a valid email address",
+            },
           }}
         />
 
@@ -154,11 +181,11 @@ const Registration: React.FC<RegistrationProps> = () => {
             required: "Phone number is required",
             minLength: {
               value: 11,
-              message: "Please enter a valid phone number"
+              message: "Please enter a valid phone number",
             },
             maxLength: {
               value: 15,
-              message: "Please enter a valid phone number"
+              message: "Please enter a valid phone number",
             },
           }}
         />
@@ -175,8 +202,8 @@ const Registration: React.FC<RegistrationProps> = () => {
             required: "Password  is required",
             minLength: {
               value: 8,
-              message: "Password should be at least 8 characters."
-            }
+              message: "Password should be at least 8 characters.",
+            },
           }}
         />
 
@@ -190,18 +217,35 @@ const Registration: React.FC<RegistrationProps> = () => {
           label="Confirm Password"
           rules={{
             validate: (value: string) => {
-              return value !== password ? "Wrong password" : undefined
-            }
+              return value !== password ? "Wrong password" : undefined;
+            },
           }}
         />
-        <CustomButton isLoading={isLoading} loadingText={loadingText} colorScheme="brand" onClick={handleRegister}>Create account</CustomButton>
+        <CustomButton
+          isLoading={isLoading}
+          loadingText={loadingText}
+          colorScheme="brand"
+          onClick={handleRegister}
+        >
+          Create account
+        </CustomButton>
         <HStack alignItems={"center"} spacing={1}>
-          <Text fontSize={"sm"} color={TEXT_DARK}>Already have an account?</Text>
-          <Link fontSize={"sm"} as={ReactLink} to={ROUTES.LOGIN_ROUTE} fontWeight={"semibold"} color={"brand.500"}>Sign in</Link>
+          <Text fontSize={"sm"} color={TEXT_DARK}>
+            Already have an account?
+          </Text>
+          <Link
+            fontSize={"sm"}
+            as={ReactLink}
+            to={ROUTES.LOGIN_ROUTE}
+            fontWeight={"semibold"}
+            color={"brand.500"}
+          >
+            Sign in
+          </Link>
         </HStack>
       </Stack>
     </AuthLayout>
-  )
-}
+  );
+};
 
-export default Registration
+export default Registration;

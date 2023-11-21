@@ -20,6 +20,11 @@ type VerifyContactData = {
   mobileotp: string;
 };
 
+type VerifyEmailData = {
+  email: string;
+  emailotp: string;
+};
+
 type ChangePasswordData = {
   email: string;
   token: string;

@@ -64,7 +64,7 @@ export const executeChangePassword = async (data: ChangePasswordData): Promise<R
 }
 
 
-export const executeVerifyContact = async (data: VerifyContactData): Promise<ResponseDataType> => {
+export const executeVerifyContact = async (data: VerifyContactData | VerifyEmailData): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
       method: "POST",

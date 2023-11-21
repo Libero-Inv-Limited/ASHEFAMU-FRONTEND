@@ -5,6 +5,7 @@ import Login from "./pages/auth/Login";
 import Registration from "./pages/auth/Registration";
 import SuccessPage from "./pages/auth/SuccessPage";
 import VerifyEmailAndPhone from "./pages/auth/VerifyEmailAndPhone";
+import VerifyEmail from "./pages/auth/VerifyEmail"
 import Dashboard from "./pages/dashboard/Dashboard";
 import Facilities from "./pages/dashboard/Facilities";
 import FacilityDashboard from "./pages/dashboard/FacilityDashboard";
@@ -67,6 +68,14 @@ export default [
     element: <VerifyEmailAndPhone />,
     name: "VerifyEmailAndPhone",
   },
+
+  {
+    path: "/verify-email/:email",
+    element: <VerifyEmail />,
+    name: "VerifyEmailAndPhone",
+  },
+
+  //VERIFY_EMAIL_ROUTE
   {
     path: "/success/:type",
     element: <SuccessPage />,
