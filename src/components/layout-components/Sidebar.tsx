@@ -34,7 +34,9 @@ const Sidebar: React.FC<SidebarProps> = ({
   const filteredPaths = sidebarContents.filter((item) => {
     return (
       user.user.userRole.roleDetails.name === "Super Admin" ||
-      !["users", "roles", "permissions", "notifications", "analytics"].includes(item.name)
+      !["users", "roles", "permissions", "notifications", "analytics"].includes(
+        item.name
+      )
     );
   });
 
