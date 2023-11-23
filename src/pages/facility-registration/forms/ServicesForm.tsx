@@ -145,7 +145,7 @@ const ServicesForm: React.FC<ServicesFormProps> = ({ activeStep, setActiveStep }
             fontSize={"sm"}
             data={waterSources}
             isSelect
-            selectProps={{ isMulti: true, isCreatable: true }}
+            selectProps={{ isMulti: true}}
           />
         </GridItem>
         <GridItem colSpan={[12, 12, 5]}>
@@ -154,11 +154,11 @@ const ServicesForm: React.FC<ServicesFormProps> = ({ activeStep, setActiveStep }
             control={control}
             label="Power source"
             fontSize={"sm"}
-            data={powerSources}
+            data={powerSources.map(item => ({ label: item.label, value: item.value }))}
             name="powerSources"
             value={defaultValues?.['powerSources']}
             isSelect
-            selectProps={{ isMulti: true, isCreatable: true }}
+            selectProps={{ isMulti: true }}
           />
         </GridItem>
       </Grid>

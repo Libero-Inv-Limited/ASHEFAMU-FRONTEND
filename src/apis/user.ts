@@ -13,6 +13,7 @@ import { log } from "../utils/helpers";
 import { GET_USERS_ENDPOINT, GET_USER_PROFILE_ENDPOINT } from "./index";
 import { CREATE_USER_ENDPOINT } from "./index";
 import { GET_USER_FACILITIES_ENDPOINT } from "./index";
+import { DOWNLOAD_INVOICE_ENDPOINT } from './index';
 
 export const executeGetUserNotification = async (
   token: string,
@@ -192,6 +193,72 @@ export const executePayInvoice = async (
     return { message: error.message, status: "error" } as ResponseDataType;
   }
 };
+
+export const executeDownloadInvoice = async (
+  id: number,
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const request = await fetch(DOWNLOAD_INVOICE_ENDPOINT(id), options);
+
+    if (!request.ok) {
+      // Check for HTTP error status
+      throw new Error(`HTTP error! Status: ${request.status}`);
+    }
+
+    const filename = request.headers.get("Content-Disposition")?.split("filename=")[1];
+
+    // Handle different content types
+    const contentType = request.headers.get("Content-Type");
+
+    if (contentType && contentType.toLowerCase().includes("application/json")) {
+      // If the content type is JSON, parse it as JSON
+      const response = await request.json();
+      return response;
+    } else {
+      // If the content type is not JSON, handle it as a file download
+      const blob = await request.blob();
+
+      // Create a blob URL
+      const blobUrl = URL.createObjectURL(blob);
+
+      // Open the file in a new tab/window
+      const newWindow = window.open(blobUrl, "_blank");
+      if (filename) {
+        newWindow?.document.write(`<title>${filename}</title>`);
+      }
+    }
+  } catch (error: any) {
+    log("PAYMENT [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+// export const executeDownloadInvoice = async (
+//   id: number,
+//   token: string
+// ): Promise<ResponseDataType> => {
+//   try {
+//     const options: RequestInit = {
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//     };
+//     const request = await fetch(DOWNLOAD_INVOICE_ENDPOINT(id), options);
+//     const response = (await request.json()) satisfies ResponseDataType;
+//     return response;
+//   } catch (error: any) {
+//     log("PAYMENT [ERROR]:", error.message);
+//     return { message: error.message, status: "error" } as ResponseDataType;
+//   }
+// };
 
 export const executeGetSchedules = async (
   facilityId: number,

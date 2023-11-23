@@ -82,6 +82,7 @@ export const UPDATE_DASHBOARD_CARD_ENDPOINT = BASE_URL + "/update-card-setting"
 export const READ_NOTIFICATIONS_ENDPOINT = (id: number) => BASE_URL + "/read-notification/" + id
 export const GET_INVOICE_STAFF_ENDPOINT = (facilityID: number, page: number = 1, perPage: number = 15) => BASE_URL + `/invoices/${facilityID}/${page}/${perPage}`
 export const PAY_INVOICE_ENDPOINT = BASE_URL + "/pay-invoice"
+export const DOWNLOAD_INVOICE_ENDPOINT = (invoiceId: number) =>  BASE_URL + "/download-invoice/" + invoiceId
 export const GET_CONDUCTED_ENDPOINT = (facilityID: number, page: number = 1, perPage: number = 15) => BASE_URL + `/inspection-records/${facilityID}/${page}/${perPage}`
 export const GET_SCHEDULE_ENDPOINT = (facilityID: number, page: number = 1, perPage: number = 15) => BASE_URL + `/inspection-schedules/${facilityID}/${page}/${perPage}`
 export const DASHBOARD_CARD_ENDPOINT = BASE_URL + `/dashboard-cards`

@@ -138,6 +138,13 @@ export default [
     name: "Facilities Notification",
     permissions: ["super admin, admin, guest"]
   },
+   //     link: "/dashboard/facilities/:name/invoices",
+   {
+    path: "/dashboard/facilities/:name/invoices",
+    element: <Payments />,
+    name: "USER FACILITIES",
+    permissions: ["super admin, admin, guest"]
+  },
 
   // FACILITY FORMS
   {

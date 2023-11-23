@@ -16,7 +16,7 @@ import remita from "../assets/remita.png"
 import paypal from "../assets/paypal.png"
 import paystack from "../assets/paystack.png"
 import interswitch from "../assets/interswitch.png"
-import { ChartIcon, DashIcon, FileIcon, MemberIcon, NotificationIcon, UserIcon } from "../components/icons";
+import { CardIcon, ChartIcon, DashIcon, FileIcon, MemberIcon, NotificationIcon, UserIcon } from "../components/icons";
 import { FaPersonBooth } from "react-icons/fa";
 
 // PAYMENT METHODS
@@ -179,6 +179,12 @@ export const secondarySidebarContents = [
     name: "notifications",
     link: "/dashboard/facilities/:name/notifications",
     icon: <NotificationIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
+    isElementIcon: true
+  },
+  {
+    name: "invoice",
+    link: "/dashboard/facilities/:name/invoices",
+    icon: <CardIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
     isElementIcon: true
   },
 ];
