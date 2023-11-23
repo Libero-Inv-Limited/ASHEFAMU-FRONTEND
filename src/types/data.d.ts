@@ -248,7 +248,7 @@ type UserData = {
       };
     };
   };
-  permissions: [];
+  permissions: string[];
 };
 
 

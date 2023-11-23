@@ -488,8 +488,8 @@ export const executeGetFacilityDashboardCards = async (
 export const executeUpdateFacilityStatus = async (
   id: number,
   status: string,
-  token: string,
-): Promise<ResponseDataType> => {
+  token: string
+): Promise<any> => {
   const data = { facility_id: id, status };
   try {
     const options: RequestInit = {
@@ -501,8 +501,7 @@ export const executeUpdateFacilityStatus = async (
         Accept: "application/json",
       },
     };
-    const request = await fetch(UPDATE_FACILITY_STATUS_ENDPOINT, options);
-    const response = (await request.json()) satisfies ResponseDataType;
+    const response = await fetch(UPDATE_FACILITY_STATUS_ENDPOINT, options);
     return response;
   } catch (error: any) {
     log("DOCS [ERROR]:", error.message);

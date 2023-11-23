@@ -41,6 +41,9 @@ interface CustomRegTableProps {}
 
 const CustomRegTable: React.FC<CustomRegTableProps> = () => {
   const allFacilities = useAppSelector((state) => state.dataStore.facilities);
+  const permissions = useAppSelector(
+    (state) => state.accountStore.user.permissions
+  );
   const facilities = allFacilities.filter((item) => item?.enable_documentation);
   const [editId, setEditId] = useState<number>();
   const { isLoadingData, setCurrentFacility } = useAppContext();
@@ -53,12 +56,18 @@ const CustomRegTable: React.FC<CustomRegTableProps> = () => {
 
   const { facilityCategory } = useFetchFacilityData();
   const [deletingFacility, setDeletingFacility] = useState<number | null>(null);
+  const [isUpdatingFacility, setIsUpdatingFacility] = useState<number | null>(
+    null
+  );
+  const [status, setStatus] = useState<string>("");
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
   const {
     isOpen: isLoading,
     onClose: closeLoading,
     onOpen: openLoading,
   } = useDisclosure();
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   const {
     isOpen: isUpdating,
@@ -77,6 +86,11 @@ const CustomRegTable: React.FC<CustomRegTableProps> = () => {
     awaiting: "#62C28D",
     payment: "#146BD1",
   };
+
+  // Approve/Reject Facility
+  const canApproveOrRejectFacilty = permissions.includes(
+    "Approve/Reject Facility"
+  );
 
   const handleEdit = async (id: number) => {
     try {
@@ -100,19 +114,24 @@ const CustomRegTable: React.FC<CustomRegTableProps> = () => {
     }
   };
 
-  const handleFacilityUpdate = async (id: number, status: string) => {
+  const handleFacilityUpdate = async () => {
     try {
-      openUpdating();
-      const response = await executeUpdateFacilityStatus(id, status, token!);
+      onOpen();
+      const response = await executeUpdateFacilityStatus(
+        isUpdatingFacility,
+        status,
+        token!
+      );
       if (response.status === "error") throw new Error(response.message);
       toast({
-        title: response.message,
-        status: response.status,
+        title: "Facility status updated",
+        status: "success",
       });
     } catch (e: any) {
       console.log("Error:", e.message);
     } finally {
-      closeUpdating();
+      onClose();
+      setIsUpdatingFacility(null)
     }
   };
 
@@ -206,28 +225,34 @@ const CustomRegTable: React.FC<CustomRegTableProps> = () => {
           );
         },
       },
-      {
+      canApproveOrRejectFacilty && {
         name: "Approve/Reject",
         cell: (item: FacilityData) => {
           return (
             <HStack>
               <IconButton
-                _hover={{ bg: "#FFEBC9" }}
                 rounded={"full"}
+                _hover={{ bg: "#62C28D" }}
                 bg={"#62C28D"}
                 aria-label="edit"
                 isLoading={isUpdating}
-                onClick={() => handleFacilityUpdate(item.id, "approved")}
+                onClick={() => {
+                  setIsUpdatingFacility(item.id);
+                  setStatus("approved");
+                }}
                 icon={<Icon fontSize={"xl"} as={BiCheck} color="white" />}
               />
               <IconButton
                 bg={"#EF4444"}
-                _hover={{ bg: "#FEE2E2" }}
+                _hover={{ bg: "#EF4444" }}
                 rounded={"full"}
                 colorScheme="red"
                 aria-label="delete"
                 isLoading={isUpdating}
-                onClick={() => handleFacilityUpdate(item.id, "rejected")}
+                onClick={() => {
+                  setIsUpdatingFacility(item.id);
+                  setStatus("rejected");
+                }}
                 icon={
                   <Icon fontSize={"xl"} as={AiOutlineClose} color="white" />
                 }
@@ -310,6 +335,16 @@ const CustomRegTable: React.FC<CustomRegTableProps> = () => {
         handleAction={handleDelete}
         isOpen={Boolean(deletingFacility)}
         onClose={() => setDeletingFacility(null)}
+        actionBtnText="Confirm"
+      />
+      <ActionModal
+        title={`Are you sure you want to ${status} this facility?`}
+        text="This action cannot be undone"
+        status="danger"
+        isLoading={isOpen}
+        handleAction={handleFacilityUpdate}
+        isOpen={Boolean(isUpdatingFacility)}
+        onClose={() => setIsUpdatingFacility(null)}
         actionBtnText="Confirm"
       />
     </>
