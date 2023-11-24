@@ -34,6 +34,7 @@ interface AuthInputProps extends InputProps {
   iconProp?: IconProps;
   isSelect?: boolean;
   labelStyles?: FormLabelProps;
+  isDisabled?: boolean;
   data?: { label: string; value: string | number }[];
   selectProps?: ComponentProps<Select> & { isCreatable?: boolean };
 }
@@ -52,6 +53,7 @@ const AuthInput: React.FC<AuthInputProps> = ({
   isSelect,
   name,
   Icon,
+  isDisabled,
   onChange,
   ...rest
 }) => {
@@ -89,6 +91,7 @@ const AuthInput: React.FC<AuthInputProps> = ({
           isSearchable={true}
           options={data}
           onChange={onChange}
+          isDisabled={isDisabled}
           fontSize={fontSize as any}
           {...selectProps}
           {...field}

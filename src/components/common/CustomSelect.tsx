@@ -11,12 +11,12 @@ interface CustomSelectProps extends ComponentProps<Select> {
   isCreatable?: boolean;
 }
 
-
 const CustomSelect: React.FC<CustomSelectProps> = ({
   fontSize,
   isCreatable,
   styles,
   onChange,
+  isDisabled,
   ...rest
 }) => {
   const theme = useTheme();
@@ -84,6 +84,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     ...styles,
   };
 
+  console.log({ isDisabled });
   if (isCreatable)
     return (
       <CreatableSelect
@@ -100,6 +101,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
       styles={customSelect}
       className="custom-select"
       isSearchable={true}
+      isDisabled={isDisabled}
       onChange={onChange}
       {...rest}
     />
