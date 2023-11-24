@@ -137,7 +137,7 @@ const Permission: React.FC<PermissionProps> = () => {
       });
     } finally {
       closeDeleting();
-      handleReloadData;
+      handleReloadData();
     }
   };
 

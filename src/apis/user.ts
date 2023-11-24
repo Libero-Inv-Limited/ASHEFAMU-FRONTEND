@@ -14,6 +14,7 @@ import { GET_USERS_ENDPOINT, GET_USER_PROFILE_ENDPOINT } from "./index";
 import { CREATE_USER_ENDPOINT } from "./index";
 import { GET_USER_FACILITIES_ENDPOINT } from "./index";
 import { DOWNLOAD_INVOICE_ENDPOINT } from './index';
+import { DELETE_USER_ACCOUNT } from './index';
 
 export const executeGetUserNotification = async (
   token: string,
@@ -122,6 +123,28 @@ export const executeGetUserProfile = async (
       },
     };
     const request = await fetch(GET_USER_PROFILE_ENDPOINT(id), options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("DOCS [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+export const executeDeleteUserAccount = async (
+  id: number,
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    };
+    const request = await fetch(DELETE_USER_ACCOUNT(id), options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {

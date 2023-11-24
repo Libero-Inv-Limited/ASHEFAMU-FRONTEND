@@ -70,6 +70,7 @@ export const CREATE_ROLE_ENDPOINT = BASE_URL + "/create-role"
 export const UPDATE_ROLE_ENDPOINT = BASE_URL + "/update-role"
 export const DELETE_ROLE_ENDPOINT = BASE_URL + "/delete-role"
 export const GET_USER_PROFILE_ENDPOINT = (id:number) =>BASE_URL + `/user-profile/${id}` 
+export const DELETE_USER_ACCOUNT = (id: number) => BASE_URL + `/user/${id}`
 export const GET_ROLES_ENDPOINT =(page:number, perPage: number) =>  BASE_URL + `/all-roles/${page}/${perPage}`
 export const GET_ONE_ROLE_ENDPOINT = (id: number) => BASE_URL + "/role-detail/" + id
 export const TOGGLE_ROLE_ENDPOINT = (id: number, status: boolean) => BASE_URL + `/toggle-status/${id}/${status}`

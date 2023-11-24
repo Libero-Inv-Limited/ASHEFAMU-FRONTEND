@@ -9,6 +9,7 @@ import usePaginatedTableData from "../../../hooks/usePaginatedTableData";
 import { useAppSelector } from "../../../store/hook";
 import {
   executeCreateUser,
+  executeDeleteUserAccount,
   executeGetAllUsers,
   executeGetUserProfile,
 } from "../../../apis/user";
@@ -25,11 +26,13 @@ import useGetAllRoles from "../../../hooks/useGetAllRoles";
 import ROUTES from "./../../../utils/routeNames";
 import { useNavigate } from "react-router-dom";
 import { getSlug } from "../../../utils/helpers";
+import ActionModal from './../../../components/modals/ActionModal';
 
 interface UserProps {}
 const User: React.FC<UserProps> = () => {
   const { FilterComponent } = useFilterComponent();
   const [editId, setEditId] = useState<number>();
+  const [deleteId, setDeleteId] = useState<number | null>();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
   const { control, trigger, getValues, reset, watch } = useForm<UserPayload>({
     mode: "onSubmit",
@@ -44,6 +47,12 @@ const User: React.FC<UserProps> = () => {
     isOpen: isEditing,
     onOpen: openEditing,
     onClose: closeEditing,
+  } = useDisclosure();
+
+  const {
+    isOpen: isDeleting,
+    onOpen: openDeleting,
+    onClose: closeDeleting,
   } = useDisclosure();
 
   const { data: rolesData } = useGetAllRoles();
@@ -85,6 +94,24 @@ const User: React.FC<UserProps> = () => {
     } finally {
       closeEditing();
       setEditId(undefined);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      openDeleting();
+      const response = await executeDeleteUserAccount(deleteId, token!);
+      if (response.status === "error") throw new Error(response.message);
+      toast({
+        title: "User Account deleted!",
+        status: "success",
+      });
+      setDeleteId(undefined);
+    } catch (e: any) {
+      console.log("Error:", e.meesage);
+    } finally {
+      closeDeleting();
+      handleReloadData()
     }
   };
 
@@ -146,6 +173,7 @@ const User: React.FC<UserProps> = () => {
               rounded={"full"}
               colorScheme="red"
               aria-label="delete"
+              onClick={() => setDeleteId(item.id)}
               icon={<Icon fontSize={"xl"} as={BiTrash} color={RED} />}
             />
           </HStack>
@@ -255,6 +283,16 @@ const User: React.FC<UserProps> = () => {
         }
         onClose={onClose}
         isOpen={isOpen}
+      />
+      <ActionModal
+        title={`Are you sure you want to delete this user?`}
+        text="This action cannot be undone"
+        status="danger"
+        isLoading={isDeleting}
+        handleAction={handleDelete}
+        isOpen={Boolean(deleteId)}
+        onClose={() => setDeleteId(null)}
+        actionBtnText="Confirm"
       />
     </DashboardLayout>
   );
