@@ -15,7 +15,7 @@ const SuccessPage: React.FC<SuccessPageProps> = () => {
   useEffect(() => {
     setTimeout(() => {
       if(type === "register") return navigate(ROUTES.LOGIN_ROUTE)
-      if(type === "login") return navigate(ROUTES.DASHBOARD_ROUTE)
+      if(type === "login") return navigate(ROUTES.FACILITY_FORM_INTRO)
     }, 1000)
   }, [])
   return (

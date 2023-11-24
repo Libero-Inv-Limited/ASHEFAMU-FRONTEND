@@ -32,6 +32,7 @@ import FacilityFormEdit from "./pages/facility-registration/FacilityFormEdit";
 import CreateRole from "./pages/dashboard/roles/CreateRole";
 import CreatePermission from "./pages/dashboard/permissions/CreatePermission";
 import UnAuthorized from "./pages/auth/UnAuthorized";
+import CreateFacilityIntro from './pages/facility-registration/CreateFacilityIntro';
 
 export default [
   // HOME PAGE
@@ -100,6 +101,12 @@ export default [
     exact: true,
     element: <Facilities />,
     name: "Facilities",
+    permissions: ["super admin, admin, guest"]
+  },
+  {
+    path: "/dashboard/facilities/facility-faq",
+    element: <CreateFacilityIntro />,
+    name: "Create Facility",
     permissions: ["super admin, admin, guest"]
   },
   {
