@@ -167,6 +167,7 @@ const AuthInput: React.FC<AuthInputProps> = ({
           _focus={{ borderColor: "brand.500", boxShadow: "none" }}
           {...rest}
           type={isPassword ? (isOpen ? "text" : "password") : rest.type}
+          isDisabled={isDisabled}
           {...field}
         />
       </InputGroup>
