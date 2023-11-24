@@ -214,6 +214,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               fontSize={"sm"}
               label="Facility name"
               name="facility_name"
+              isDisabled={true}
               value={prevIntentData?.["facility_name"]}
               rules={{
                 required: "Facility name is required",
@@ -227,6 +228,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               placeholder="Public"
               control={control}
               fontSize={"sm"}
+              isDisabled={true}
               label="Facility sector category"
               name="facility_sector"
               value={prevIntentData?.["sector_category"]}
@@ -244,6 +246,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               placeholder="Clinic"
               control={control}
               fontSize={"sm"}
+              isDisabled={true}
               label="Facility category"
               name="facility_category"
               value={prevIntentData?.["facility_category"]}
