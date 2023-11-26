@@ -71,8 +71,8 @@ const CustomRegTable: React.FC<CustomRegTableProps> = () => {
 
   const {
     isOpen: isUpdating,
-    onOpen: openUpdating,
-    onClose: closeUpdating,
+    // onOpen: openUpdating,
+    // onClose: closeUpdating,
   } = useDisclosure();
   const dispatch = useAppDispatch();
   const toast = useToast({
