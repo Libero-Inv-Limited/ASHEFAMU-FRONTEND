@@ -2,26 +2,26 @@
 type RegUserType = {
   email: string;
   phone: string;
-}
+};
 
 type FacilitiesRegStats = {
-  labels: string[]
-  values: string[]
-}
+  labels: string[];
+  values: string[];
+};
 
 type metricsStats = {
   registeredFacilities: string;
   activeUsers: string;
   facilityStatus: {
-    pending: string,
-    approved: string,
+    pending: string;
+    approved: string;
     rejected: string;
-  }
+  };
   roleDistribution: {
-    roles: {id: number, name: string}[]
-    roleCount: string[]
-  }
-}
+    roles: { id: number; name: string }[];
+    roleCount: string[];
+  };
+};
 
 type FacilityData = {
   id: number;
@@ -63,7 +63,7 @@ type FacilityData = {
     category: {
       id: number;
       name: string;
-    }
+    };
   };
 };
 
@@ -214,13 +214,13 @@ type RoleData = {
   name: string;
   status: boolean;
   permissions: any[];
-}
+};
 
 type RolePayload = {
   description: string;
   name: string;
   permissions: string[];
-}
+};
 
 type UserData = {
   user: {
@@ -251,6 +251,13 @@ type UserData = {
   permissions: sauthtring[];
 };
 
+type SecondarySidebarItem = {
+  name: string;
+  link: string;
+  icon: JSX.Element;
+  hasStroke?: boolean;
+  isElementIcon: boolean;
+};
 
 type Permission = {
   id: number;
@@ -259,7 +266,7 @@ type Permission = {
   updated_at: string;
   created_at: string;
   category: string;
-}
+};
 
 type UserPayload = {
   firstname: string;
@@ -269,7 +276,7 @@ type UserPayload = {
   username: string;
   password: string;
   role: number;
-}
+};
 type RequireDocumentType = {
   id: number;
   name: string;
@@ -348,7 +355,7 @@ type ProffessionalStaffData = {
 type PermissionData = {
   name: string;
   description: string;
-}
+};
 
 type NonProfessionalStaffData = {
   id: number;

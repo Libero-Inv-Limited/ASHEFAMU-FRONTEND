@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../layout-components/Sidebar";
-import SecondarySidebar from "../layout-components/SecondarySidebar";
 import { Flex } from "@chakra-ui/react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FacilityLists from "./FacilityLists";
 import { useAppContext } from "../../contexts/AppContext";
 import { decodeSlug } from "../../utils/helpers";
 import { useAppSelector } from "../../store/hook";
 import ROUTES from "../../utils/routeNames";
 import { executeGetOneFacility } from "../../apis/facility";
+import SecSidebar from "./SecondarySidebar";
+import { useNavigation } from "../../contexts/NavContexts";
 
 interface SideNavigationProps {
   onClose?: () => void;
@@ -23,8 +24,7 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ onClose }) => {
   const facilities = useAppSelector((state) => state.dataStore.facilities);
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
   const param = useParams();
-  const { pathname } = useLocation();
-  const secondPath = pathname.split("/").filter((p) => p)[1];
+  const { selectedPrimaryLink } = useNavigation();
   const isFacility = !!param.name;
 
   // GET THE CURRENT FACILITY
@@ -62,13 +62,18 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ onClose }) => {
         toggleSecondaryBar={onToggle}
         onClose={onClose}
       />
-      {secondPath === "facilities" ? (
+      {selectedPrimaryLink === "facilities" ? (
+        <FacilityLists onToggle={onToggle} isOpen={isOpen} />
+      ) : (
+        <SecSidebar onToggle={onToggle} isOpen={isOpen} />
+      )}
+      {/* {secondPath === "facilities" ? (
         isFacility ? (
           <SecondarySidebar onToggle={onToggle} isOpen={isOpen} />
         ) : (
           <FacilityLists onToggle={onToggle} isOpen={isOpen} />
         )
-      ) : null}
+      ) : null} */}
     </Flex>
   );
 };

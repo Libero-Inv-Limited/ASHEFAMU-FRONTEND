@@ -16,7 +16,6 @@ import { PiBookOpenTextLight } from "react-icons/pi";
 import { LIGHT_GRAY, TEXT_DARK_GRAY, TEXT_GRAY } from "../../utils/color";
 import { Link } from "react-router-dom";
 import SidebarToggleIcon from "../common/SidebarToggleIcon";
-import useIsFacility from "../../hooks/useIsFacility";
 import { useAppSelector } from "../../store/hook";
 
 interface SidebarProps {
@@ -29,7 +28,6 @@ const Sidebar: React.FC<SidebarProps> = ({
   toggleSecondaryBar,
   isSecondaryBarOpen,
 }) => {
-  const { isFacility } = useIsFacility();
   const user = useAppSelector((state) => state.accountStore.user);
   const filteredPaths = sidebarContents.filter((item) => {
     return (
@@ -55,9 +53,9 @@ const Sidebar: React.FC<SidebarProps> = ({
           <SidebarItem key={`sidebar-${item.name}-${index}`} {...item} />
         ))}
       </Stack>
-      {!isSecondaryBarOpen && isFacility && (
+      {!isSecondaryBarOpen && (
         <VStack mb={4}>
-          <Tooltip label="View Facilities">
+          <Tooltip label="Open Secondary Nav">
             <IconButton
               onClick={toggleSecondaryBar}
               aria-label="toggle"

@@ -1,15 +1,19 @@
 import { HStack, Text } from "@chakra-ui/react";
+import { useNavigation } from "../../contexts/NavContexts";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { TEXT_DARK_GRAY } from "../../utils/color";
 import { getSlug } from "../../utils/helpers";
+import { ssecondarySidebarContents } from "../../utils/data";
 
 interface FacilityListItemProps extends FacilityData {}
 const FacilityListItem: React.FC<FacilityListItemProps> = ({ name }) => {
   const navigate = useNavigate();
+  const { updateNavigation } = useNavigation();
   const handleClick = (e) => {
     e.preventDefault();
     navigate(`/dashboard/facilities/${getSlug(name!)}`);
+    updateNavigation(getSlug(name!), ssecondarySidebarContents)
   };
   return (
     <HStack

@@ -1,27 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Collapse, Flex, IconButton, Stack, Tooltip, VStack } from "@chakra-ui/react";
+import {
+  Collapse,
+  Flex,
+  IconButton,
+  Stack,
+  Tooltip,
+  VStack,
+} from "@chakra-ui/react";
 import React from "react";
 import { DARK, LIGHT_GRAY } from "../../utils/color";
 import { secondarySidebarContents } from "../../utils/data";
 import SecondarySidebarItem from "./SecondarySidebarItem";
-import useIsFacility from "../../hooks/useIsFacility";
 import { useParams } from "react-router-dom";
 import { decodeSlug } from "../../utils/helpers";
 import SidebarToggleIcon from "../common/SidebarToggleIcon";
+import { useNavigation } from "../../contexts/NavContexts";
 
 interface SecondarySidebarProps {
   isOpen?: boolean;
   onToggle?: () => void;
 }
-const SecondarySidebar: React.FC<SecondarySidebarProps> = ({
-  isOpen,
-  onToggle,
-}) => {
-  const { isFacility } = useIsFacility();
+const SecSidebar: React.FC<SecondarySidebarProps> = ({ isOpen, onToggle }) => {
   const param = useParams();
+  const { secondaryLinks } = useNavigation();
 
   return (
-    <Collapse in={isFacility && isOpen}>
+    //    <Collapse in={isFacility && isOpen}>
+    <Collapse in={secondaryLinks.length && isOpen}>
       <Stack
         h={"full"}
         w={"250px"}
@@ -43,12 +48,14 @@ const SecondarySidebar: React.FC<SecondarySidebarProps> = ({
           {decodeSlug((param as any).name!)}
         </Flex>
         <Stack mt={2}>
-          {secondarySidebarContents.map((sidebarContents, index) => (
-            <SecondarySidebarItem
-              key={`secondary-sidebar-${sidebarContents.name}-${index}`}
-              {...sidebarContents}
-            />
-          ))}
+          {secondarySidebarContents(secondaryLinks).map(
+            (sidebarContents, index) => (
+              <SecondarySidebarItem
+                key={`secondary-sidebar-${sidebarContents.name}-${index}`}
+                {...sidebarContents}
+              />
+            )
+          )}
         </Stack>
 
         {isOpen && (
@@ -76,4 +83,4 @@ const SecondarySidebar: React.FC<SecondarySidebarProps> = ({
   );
 };
 
-export default SecondarySidebar;
+export default SecSidebar;
