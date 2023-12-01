@@ -69,6 +69,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
   useEffect(() => {
     checkTokenExpiration()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
@@ -108,6 +109,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
   useEffect(() => {
     handleGetFacilities()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenStore])
 
   return (
@@ -118,5 +120,5 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 }
 
 export default AppContextProvider
-
+  // eslint-disable-next-line
 export const useAppContext = () => useContext(AppContext)

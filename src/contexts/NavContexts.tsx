@@ -29,7 +29,7 @@ export const NavigationProvider = ({ children }) => {
     </NavigationContext.Provider>
   );
 };
-
+//eslint-disable-next-line
 export const useNavigation = () => {
   const context = useContext(NavigationContext);
   if (!context) {
