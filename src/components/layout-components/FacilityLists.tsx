@@ -49,6 +49,7 @@ const FacilityLists: React.FC<FacilityListsProps> = ({ isOpen, onToggle }) => {
   useEffect(() => {
     if (!search.trim().length) return setChangingFacilities(facilities);
     handleSearch();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   return (

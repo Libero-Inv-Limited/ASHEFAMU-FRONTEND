@@ -28,7 +28,6 @@ import paystack from "../assets/paystack.png";
 import interswitch from "../assets/interswitch.png";
 import { FaPersonBooth } from "react-icons/fa";
 import { CardIcon, ChartIcon, DashIcon, FileIcon, MemberIcon, NotificationIcon, UserIcon } from "../components/icons";
-import FacilityLists from "components/layout-components/FacilityLists";
 
 
 // PAYMENT METHODS
