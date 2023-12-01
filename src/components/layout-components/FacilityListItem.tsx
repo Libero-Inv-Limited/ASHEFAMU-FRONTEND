@@ -4,7 +4,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { TEXT_DARK_GRAY } from "../../utils/color";
 import { getSlug } from "../../utils/helpers";
-import { ssecondarySidebarContents } from "../../utils/data";
+import { facilityNavContents } from "../../utils/data";
 
 interface FacilityListItemProps extends FacilityData {}
 const FacilityListItem: React.FC<FacilityListItemProps> = ({ name }) => {
@@ -13,7 +13,7 @@ const FacilityListItem: React.FC<FacilityListItemProps> = ({ name }) => {
   const handleClick = (e) => {
     e.preventDefault();
     navigate(`/dashboard/facilities/${getSlug(name!)}`);
-    updateNavigation(getSlug(name!), ssecondarySidebarContents)
+    updateNavigation(getSlug(name!), facilityNavContents)
   };
   return (
     <HStack

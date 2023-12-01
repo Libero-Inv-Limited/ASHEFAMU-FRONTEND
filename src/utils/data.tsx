@@ -193,7 +193,7 @@ export const secondarySidebarContents = (contents) =>
     isElementIcon: content.isElementIcon,
   }));
 
-  export const ssecondarySidebarContents = [
+  export const facilityNavContents = [
     {
       name: "dashboard",
       link: "/dashboard/facilities/:name",
