@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Icon, IconButton, Text } from "@chakra-ui/react";
+import { Button, HStack, Icon, IconButton, InputGroup, InputLeftElement, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import CustomTable from "./CustomTable";
 import usePaginatedTableData from "../../hooks/usePaginatedTableData";
@@ -9,12 +9,20 @@ import { useAppSelector } from "../../store/hook";
 import { executeGetConduted } from "../../apis/user";
 import InspectionResultModal from "../modals/InspectionResultModal";
 import { LuFileBarChart2 } from "react-icons/lu";
+import { AiOutlineSearch } from 'react-icons/ai';
+import { TEXT_GRAY } from "../../utils/color";
+import { Center } from '@chakra-ui/react';
+import { Input } from '@chakra-ui/react';
 
 interface ConductedTableProps {}
 
 const ConductedTable: React.FC<ConductedTableProps> = () => {
   const { currentFacility } = useAppContext();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
+  const [filterText, setFilterText] = React.useState("");
+  const [resetPaginationToggle, setResetPaginationToggle] =
+    React.useState(false);
+
   const {
     data,
     totalRows,
@@ -43,6 +51,15 @@ const ConductedTable: React.FC<ConductedTableProps> = () => {
       created_at: "2023-10-02T15:53:33.000+01:00",
     },
   ];
+
+  const filteredItems = fakeData.filter((item) => {
+    const facilityName = facilities?.find((fac) => fac.id === item.facility_id)?.name;
+    const matchesFacilityName = facilityName && facilityName.toLowerCase().includes(filterText.toLowerCase());
+    const matchesFacilityId = item.facility_id.toString().includes(filterText.toLowerCase());
+    
+    return matchesFacilityName || matchesFacilityId;
+  });
+  
 
   const columns = [
     {
@@ -129,12 +146,31 @@ const ConductedTable: React.FC<ConductedTableProps> = () => {
     },
   ];
 
+
+  const subHeaderComponentMemo = React.useMemo(() => {
+    const handleClear = () => {
+      if (filterText) {
+        setResetPaginationToggle(!resetPaginationToggle);
+        setFilterText("");
+      }
+    };
+
+    return (
+      <FilterComponent
+        onFilter={(e) => setFilterText(e.target.value)}
+        onClear={handleClear}
+        filterText={filterText}
+      />
+    );
+  }, [filterText, resetPaginationToggle]);
+
   return (
     <>
       <CustomTable
         columns={columns as any}
-        data={fakeData}
+        data={filteredItems}
         progressPending={loadingData}
+        subHeaderComponent={subHeaderComponentMemo}
         pagination
         paginationServer
         paginationTotalRows={totalRows}
@@ -148,6 +184,39 @@ const ConductedTable: React.FC<ConductedTableProps> = () => {
         result={selectedData!}
       />
     </>
+  );
+};
+
+// TABLE HEADER
+interface FilterComponentProp {
+  onFilter: (e: any) => void;
+  onClear: () => void;
+  filterText: string;
+}
+const FilterComponent: React.FC<FilterComponentProp> = ({
+  onFilter,
+  filterText,
+}) => {
+  return (
+    <HStack
+      flexWrap={"wrap"}
+      flexDir={["column-reverse", "column-reverse", "row"]}
+      spacing={2}
+      alignItems={["flex-start", "flex-start", "center"]}
+      w={"full"}
+    >
+      <InputGroup flex={1} maxW={["full", "full", 435]}>
+        <InputLeftElement as={Center}>
+          <Icon as={AiOutlineSearch} fontSize={"24px"} color={TEXT_GRAY} />
+        </InputLeftElement>
+        <Input
+          fontSize={"sm"}
+          onChange={onFilter}
+          value={filterText}
+          placeholder="Search"
+        />
+      </InputGroup>
+    </HStack>
   );
 };
 export default ConductedTable;
