@@ -357,6 +357,12 @@ type PermissionData = {
   description: string;
 };
 
+type InspectionPayload = {
+  facility_id: number;
+  inspection_date: string;
+  inspector_name: string;
+}
+
 type NonProfessionalStaffData = {
   id: number;
   complement: string;

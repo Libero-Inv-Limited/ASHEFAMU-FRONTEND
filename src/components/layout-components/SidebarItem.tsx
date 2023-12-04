@@ -26,13 +26,11 @@ const SidebarItem: React.FC<SidebarItemProps> = (item) => {
   const navigate = useNavigate();
   const { updateNavigation, clearNavigation } = useNavigation();
 
-  console.log({ name: item.name });
-
   const handleNavigation = (link: string): void => {
     navigate(link);
     item.secondaryLinks
-      ? updateNavigation(item.name, item.secondaryLinks)
-      : clearNavigation(item.name);
+      ? updateNavigation(item.link, item.secondaryLinks)
+      : clearNavigation(item.link);
   };
   const isActive = param?.name
     ? pathname

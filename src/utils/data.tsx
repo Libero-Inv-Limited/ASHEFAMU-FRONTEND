@@ -146,34 +146,34 @@ export const sidebarContents = [
     activeIcon: FaPersonBooth,
   },
   {
-    name: "audits and performance",
-    link: "/dashboard/permissions",
+    name: "audits and compliance",
+    link: "/dashboard/audit-compliance",
     icon: BsPersonVcard,
     activeIcon: BsPersonVcard,
     secondaryLinks: [
         {
           name: "inspection",
-          link: "/dashboard/facilities/:name",
+          link: "/dashboard/audit-compliance",
           icon: <DashIcon w={"25px"} h={"25px"} fill={"none"} stroke={"inherit"} />,
           hasStroke: true,
           isElementIcon: true
         },
         {
-          name: "compliance",
-          link: "/dashboard/facilities/:name/documents",
+          name: "comply",
+          link: "/dashboard/audit-compliance/compliance",
           icon: <FileIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} stroke={"inherit"} />,
           hasStroke: true,
           isElementIcon: true
         },
         {
           name: "log viewer",
-          link: "/dashboard/facilities/:name/members",
+          link: "/dashboard/audit-compliance/log-viewer",
           icon: <MemberIcon w={"23px"} h={"15px"} color={"inherit"} fill={"inherit"} />,
           isElementIcon: true
         },
         {
           name: "user activities",
-          link: "/dashboard/facilities/:name/profile",
+          link: "/dashboard/audit-compliance/user-activities",
           icon: <UserIcon w={"26px"} h={"26px"} color={"inherit"} fill={"inherit"} />,
           isElementIcon: true
           

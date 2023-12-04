@@ -33,6 +33,7 @@ import CreateRole from "./pages/dashboard/roles/CreateRole";
 import CreatePermission from "./pages/dashboard/permissions/CreatePermission";
 import UnAuthorized from "./pages/auth/UnAuthorized";
 import CreateFacilityIntro from './pages/facility-registration/CreateFacilityIntro';
+import AuditAndCompliance from './pages/dashboard/audit-compliance/index';
 
 export default [
   // HOME PAGE
@@ -272,4 +273,17 @@ export default [
   },
 
   //AUDIT AND COMPLIANCE
+
+  {
+    path: "/dashboard/audit-compliance",
+    element: <AuditAndCompliance />,
+    name: "Permissions",
+    permissions: ["super admin"]
+  },
+  {
+    path: "/dashboard/permissions/create-permission",
+    element: <CreatePermission />,
+    name: "Create Permission",
+    permissions: ["super admin"]
+  },
 ];

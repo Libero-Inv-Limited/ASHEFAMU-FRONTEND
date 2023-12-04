@@ -13,6 +13,7 @@ type Props = {
   onClose: () => void;
   button?: JSX.Element;
   size?: string;
+  closeButton?: boolean;
 };
 function ModalComponent(props: Props) {
   return (
@@ -23,7 +24,7 @@ function ModalComponent(props: Props) {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalCloseButton />
+        {props.closeButton && <ModalCloseButton />}
 
         <ModalBody maxH="70vh" overflow="auto" py={5}>
           {props.children}
