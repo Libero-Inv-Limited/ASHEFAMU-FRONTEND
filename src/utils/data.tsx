@@ -159,7 +159,7 @@ export const sidebarContents = [
           isElementIcon: true
         },
         {
-          name: "comply",
+          name: "compliance",
           link: "/dashboard/audit-compliance/compliance",
           icon: <FileIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} stroke={"inherit"} />,
           hasStroke: true,

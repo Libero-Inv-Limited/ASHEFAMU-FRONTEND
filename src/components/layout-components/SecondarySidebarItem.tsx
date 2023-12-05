@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HStack, Icon, Text } from "@chakra-ui/react";
-import { useNavigation } from "../../contexts/NavContexts";
 import React from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { LIGHT_BLUE, TEXT_DARK_GRAY } from "../../utils/color";
@@ -19,16 +18,16 @@ const SecondarySidebarItem: React.FC<SecondarySidebarItemProps> = ({
 }) => {
   const { pathname } = useLocation();
   const param = useParams();
-  const { selectedPrimaryLink } = useNavigation();
-  console.log({name: prop.link, selectedPrimaryLink})
+
+ const isActive =
+  (prop.name.toLowerCase() === "dashboard" &&
+    pathname.endsWith(param.name!)) ||
+  prop.link.toLowerCase() === pathname.toLowerCase() ||
+  (prop.name.toLowerCase() !== "dashboard" &&
+    pathname.toLowerCase().endsWith(prop.link.toLowerCase()));
 
 
-  const isActive =
-    (prop.name.toLowerCase() === "dashboard" &&
-      pathname.endsWith(param.name!)) ||
-    prop.link.toLowerCase() === selectedPrimaryLink.toLowerCase() ||
-    (prop.name.toLowerCase() !== "dashboard" &&
-      pathname.toLowerCase().includes(prop.name.toLowerCase()));
+
   return (
     <HStack
       bg={isActive ? LIGHT_BLUE : ""}

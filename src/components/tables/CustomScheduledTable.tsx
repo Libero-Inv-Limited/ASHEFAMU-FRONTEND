@@ -15,8 +15,8 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import React, {  useState } from "react";
-import {  AiOutlineSearch } from "react-icons/ai";
+import React, { useState } from "react";
+import { AiOutlineSearch } from "react-icons/ai";
 import { RED, TEXT_GRAY, YELLOW } from "../../utils/color";
 import CustomButton from "../common/CustomButton";
 import { BsPlus } from "react-icons/bs";
@@ -26,22 +26,22 @@ import { useNavigate } from "react-router-dom";
 import useFetchFacilityData from "../../hooks/useFetchFacilityData";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import ActionModal from "../modals/ActionModal";
-import {
-  executeDeleteFacility,
-} from "../../apis/facility";
+import { executeDeleteFacility } from "../../apis/facility";
 import { populateFacilities } from "../../store/slice/dataSlice";
 import { Link as ReactLink } from "react-router-dom";
 import { getSlug } from "../../utils/helpers";
 import { useAppContext } from "../../contexts/AppContext";
 import ScheduleInspectionModal from "../../pages/dashboard/audit-compliance/ScheduleInspectionModal";
 import { useForm } from "react-hook-form";
-import { executeScheduleInspection } from './../../apis/inspection';
+import { executeScheduleInspection } from "../../apis/audit";
 
 interface CustomRegTableProps {
   handleReloadData: () => void;
 }
 
-const CustomScheduledTable: React.FC<CustomRegTableProps> = ({handleReloadData}) => {
+const CustomScheduledTable: React.FC<CustomRegTableProps> = ({
+  handleReloadData,
+}) => {
   const allFacilities = useAppSelector((state) => state.dataStore.facilities);
   const { control, trigger, getValues, reset } = useForm<InspectionPayload>({
     mode: "onSubmit",

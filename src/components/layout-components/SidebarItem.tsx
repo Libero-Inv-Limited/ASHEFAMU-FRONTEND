@@ -32,7 +32,7 @@ const SidebarItem: React.FC<SidebarItemProps> = (item) => {
       ? updateNavigation(item.link, item.secondaryLinks)
       : clearNavigation(item.link);
   };
-  const isActive = param?.name
+  const isActive = param.name
     ? pathname
         .split(param.name)[0]
         .trim()

@@ -23,6 +23,14 @@ type metricsStats = {
   };
 };
 
+type LogData = {
+  id: number;
+  user_id: number | null;
+  timestamp: null | string;
+  description: string;
+  log_type: string; 
+}
+
 type FacilityData = {
   id: number;
   cac_number: string | null;

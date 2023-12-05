@@ -34,6 +34,9 @@ import CreatePermission from "./pages/dashboard/permissions/CreatePermission";
 import UnAuthorized from "./pages/auth/UnAuthorized";
 import CreateFacilityIntro from './pages/facility-registration/CreateFacilityIntro';
 import AuditAndCompliance from './pages/dashboard/audit-compliance/index';
+import Compliance from './pages/dashboard/audit-compliance/compliance';
+import Log from './pages/dashboard/audit-compliance/log';
+import UserActivities from './pages/dashboard/audit-compliance/UserActivities';
 
 export default [
   // HOME PAGE
@@ -277,9 +280,28 @@ export default [
   {
     path: "/dashboard/audit-compliance",
     element: <AuditAndCompliance />,
-    name: "Permissions",
+    name: "Inspections",
     permissions: ["super admin"]
   },
+  {
+    path: "/dashboard/audit-compliance/compliance",
+    element: <Compliance />,
+    name: "Compliance",
+    permissions: ["super admin"]
+  },
+  {
+    path: "/dashboard/audit-compliance/log-viewer",
+    element: <Log />,
+    name: "Log Viewer",
+    permissions: ["super admin"]
+  },
+  {
+    path: "/dashboard/audit-compliance/user-activities",
+    element: <UserActivities />,
+    name: "User Activities",
+    permissions: ["super admin"]
+  },
+  
   {
     path: "/dashboard/permissions/create-permission",
     element: <CreatePermission />,
