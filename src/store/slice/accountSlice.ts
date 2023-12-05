@@ -1,34 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice } from '@reduxjs/toolkit';
-
+import { createSlice } from "@reduxjs/toolkit";
 
 type InitialStateType = {
-  user: UserData | null,
-  tokenStore: TokenData | null
-}
-const initialState:InitialStateType = {
+  user: UserData | null;
+  tokenStore: TokenData | null;
+  isAuthenticated: boolean;
+};
+const initialState: InitialStateType = {
   user: null,
-  tokenStore: null
+  tokenStore: null,
+  isAuthenticated: false,
 };
 
-
 const accountSlice = createSlice({
-  name: 'account',
+  name: "account",
   initialState,
-  reducers:{
+  reducers: {
     clearAccount: (state) => {
-      state.tokenStore = null
-      state.user = null
+      state.tokenStore = null;
+      state.user = null;
+      state.isAuthenticated = false;
     },
     populateUser: (state, action) => {
-      state.user = action.payload
+      state.user = action.payload;
+      state.isAuthenticated = true;
     },
     populateToken: (state, action) => {
-      state.tokenStore = action.payload
-    }
-  }
-})
+      state.tokenStore = action.payload;
+    },
+  },
+});
 
-
-export const { populateUser, populateToken, clearAccount } = accountSlice.actions;
+export const { populateUser, populateToken, clearAccount } =
+  accountSlice.actions;
 export default accountSlice.reducer;

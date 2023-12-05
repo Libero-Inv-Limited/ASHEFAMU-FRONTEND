@@ -11,7 +11,7 @@ import { TEXT_DARK } from "../../utils/color"
 import ROUTES from "../../utils/routeNames"
 import useWaitingText from "../../hooks/useWaitingText"
 import { executeLogin } from "../../apis/auth"
-import { useAppDispatch } from "../../store/hook"
+import { useAppDispatch, useAppSelector } from "../../store/hook"
 import { populateToken } from "../../store/slice/accountSlice"
 import { useAppContext } from "../../contexts/AppContext"
 import { UserIcon } from "../../components/icons"
@@ -24,6 +24,7 @@ const Login: React.FC<LoginProps> = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { getUsersProfile, checkIncompleteReg } = useAppContext()
+  const isAuthenticated = useAppSelector((state) => state.accountStore.isAuthenticated);
   const { isOpen: isLoading, onOpen: openLoading, onClose: closeLoading } = useDisclosure()
   const { loadingText, startLoadingText, stopLoadingText } = useWaitingText(["Submitting", "Searching user", "Matching credentials"])
   const toast = useToast({
@@ -59,8 +60,6 @@ const Login: React.FC<LoginProps> = () => {
         status: "success",
         title: result.message
       })
-
-      navigate(ROUTES.SUCCESS_ROUTE("login"))
     }
     catch(error: any) {
       console.log("ERROR:", error.message)
@@ -74,6 +73,12 @@ const Login: React.FC<LoginProps> = () => {
       stopLoadingText()
     }
   }
+
+  useEffect(() => {
+    if(isAuthenticated){
+      navigate(ROUTES.SUCCESS_ROUTE("login"))
+    }
+  },[isAuthenticated])
 
   useEffect(() => {
     checkIncompleteReg()

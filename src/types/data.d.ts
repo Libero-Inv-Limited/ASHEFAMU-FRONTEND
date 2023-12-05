@@ -240,6 +240,7 @@ type UserData = {
     username: string;
     role: number;
     last_login: string;
+    login_count: number;
     verifiedContacts: {
       id: number;
       email_verification_status: string;
