@@ -9,18 +9,23 @@ import {
   Input,
   InputLeftElement,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import useFetchLogs from "./hooks/useFetchLogs";
 import CustomTable from "./../../../components/tables/CustomTable";
 import { InputGroup } from "@chakra-ui/react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { TEXT_GRAY } from "../../../utils/color";
+import ModalComponent from "../../../components/modals/CustomModal";
+import { SimpleGrid } from '@chakra-ui/react';
 
 interface FacilitiesProps {}
 const Log: React.FC<FacilitiesProps> = () => {
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
   const [filterText, setFilterText] = React.useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [log, setLog] = React.useState(null);
 
   const {
     data,
@@ -28,10 +33,28 @@ const Log: React.FC<FacilitiesProps> = () => {
     handlePageChange,
     handlePerRowsChange,
     loadingData,
-    // handleReloadData,
   } = useFetchLogs();
 
-  console.log({ data });
+  const filteredItems = data.filter(
+    (item) =>
+      item.log_type &&
+      item.log_type.toLowerCase().includes(filterText.toLowerCase())
+  );
+
+  const handleOpenModal = (data) => {
+    setLog(data);
+    onOpen();
+  };
+
+  const options: {
+    year: "numeric" | "2-digit";
+    month: "numeric" | "2-digit" | "short" | "long";
+    day: "numeric" | "2-digit";
+  } = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
 
   const columns = [
     {
@@ -39,7 +62,11 @@ const Log: React.FC<FacilitiesProps> = () => {
       selector: "log_type",
       sortable: false,
       cell: (data: LogData) => {
-        return <Text>{data.log_type}</Text>;
+        return (
+          <Text onClick={() => handleOpenModal(data)} cursor="pointer">
+            {data.log_type}
+          </Text>
+        );
       },
     },
     {
@@ -47,16 +74,6 @@ const Log: React.FC<FacilitiesProps> = () => {
       selector: "timestamp",
       cell: (data: any) => {
         const date = new Date(data.timestamp);
-        const options: {
-          year: "numeric" | "2-digit";
-          month: "numeric" | "2-digit" | "short" | "long";
-          day: "numeric" | "2-digit";
-        } = {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        };
-
         return <Text>{date.toLocaleDateString("en-US", options)}</Text>;
       },
       sortable: true,
@@ -92,8 +109,8 @@ const Log: React.FC<FacilitiesProps> = () => {
     <DashboardLayout>
       <Box p={4} bg={"white"} rounded={"md"}>
         <CustomTable
-          columns={columns}
-          data={data}
+          columns={columns as any}
+          data={filteredItems}
           paginationResetDefaultPage={resetPaginationToggle}
           subHeaderComponent={subHeaderComponentMemo}
           progressPending={loadingData}
@@ -103,6 +120,21 @@ const Log: React.FC<FacilitiesProps> = () => {
           onChangeRowsPerPage={handlePerRowsChange}
           onChangePage={handlePageChange}
         />
+        <ModalComponent isOpen={isOpen} onClose={onClose}>
+          <SimpleGrid  gap={4}>
+            <Text
+              fontSize={"20px"}
+              textTransform="uppercase"
+              fontWeight={"600"}
+            >
+              {log?.log_type}
+            </Text>
+            <Text fontSize="14px">
+              {new Date(log?.timestamp).toLocaleDateString("en-US", options)}
+            </Text>
+            <Text fontSize="14px">{log?.description}</Text>
+          </SimpleGrid>
+        </ModalComponent>
       </Box>
     </DashboardLayout>
   );

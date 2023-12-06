@@ -53,7 +53,7 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ onClose }) => {
   useEffect(() => {
     if (!isFacility) return;
     handleGetCurrentFacility();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param]);
 
   return (
@@ -63,7 +63,7 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ onClose }) => {
         toggleSecondaryBar={onToggle}
         onClose={onClose}
       />
-      {selectedPrimaryLink === "facilities" ? (
+      {selectedPrimaryLink === "/dashboard/facilities" ? (
         <FacilityLists onToggle={onToggle} isOpen={isOpen} />
       ) : (
         <SecSidebar onToggle={onToggle} isOpen={isOpen} />

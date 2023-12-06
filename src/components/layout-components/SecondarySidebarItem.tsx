@@ -19,14 +19,12 @@ const SecondarySidebarItem: React.FC<SecondarySidebarItemProps> = ({
   const { pathname } = useLocation();
   const param = useParams();
 
- const isActive =
-  (prop.name.toLowerCase() === "dashboard" &&
-    pathname.endsWith(param.name!)) ||
-  prop.link.toLowerCase() === pathname.toLowerCase() ||
-  (prop.name.toLowerCase() !== "dashboard" &&
-    pathname.toLowerCase().endsWith(prop.link.toLowerCase()));
-
-
+  const isActive =
+    (prop.name.toLowerCase() === "dashboard" &&
+      pathname.endsWith(param.name!)) ||
+    prop.link.toLowerCase() === pathname.toLowerCase() ||
+    (prop.name.toLowerCase() !== "dashboard" &&
+      pathname.toLowerCase().endsWith(prop.link.toLowerCase()));
 
   return (
     <HStack
