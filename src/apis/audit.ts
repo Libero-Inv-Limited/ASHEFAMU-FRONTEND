@@ -9,6 +9,7 @@ import {
 
 export const executeGetAllScheduledInspections = async (
   token: string,
+  status: string,
   page?: number,
   perPage?: number
 ): Promise<ResponseDataType> => {
@@ -21,7 +22,7 @@ export const executeGetAllScheduledInspections = async (
     };
     console.log({ page, perPage });
     const request = await fetch(
-      GET_ALL_SCHEDULED_INSPECTIONS(page, perPage),
+      GET_ALL_SCHEDULED_INSPECTIONS(page, perPage, status),
       options
     );
     const response = (await request.json()) satisfies ResponseDataType;
@@ -50,6 +51,29 @@ export const executeGetAllLogs = async (
     return response;
   } catch (error: any) {
     log("NOTIFICATION [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+export const executeDocumentInspection = async (
+  data: InspectionReportPayload,
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    };
+    const request = await fetch(SCHEDULE_INSPECTION_ENDPOINT, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("DOCS [ERROR]:", error.message);
     return { message: error.message, status: "error" } as ResponseDataType;
   }
 };

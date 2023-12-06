@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Box,
   Center,
   HStack,
   Icon,
@@ -9,51 +8,50 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Link,
   Spacer,
   Text,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineFileText, AiOutlineSearch } from "react-icons/ai";
 import { RED, TEXT_GRAY, YELLOW } from "../../utils/color";
 import CustomButton from "../common/CustomButton";
 import { BsPlus } from "react-icons/bs";
 import CustomTable from "./CustomTable";
 import { BiTrash } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
-import useFetchFacilityData from "../../hooks/useFetchFacilityData";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import ActionModal from "../modals/ActionModal";
 import { executeDeleteFacility } from "../../apis/facility";
 import { populateFacilities } from "../../store/slice/dataSlice";
-import { Link as ReactLink } from "react-router-dom";
-import { getSlug } from "../../utils/helpers";
-import { useAppContext } from "../../contexts/AppContext";
 import ScheduleInspectionModal from "../../pages/dashboard/audit-compliance/ScheduleInspectionModal";
 import { useForm } from "react-hook-form";
-import { executeScheduleInspection } from "../../apis/audit";
+import {
+  executeDocumentInspection,
+  executeScheduleInspection,
+} from "../../apis/audit";
+import useFetchHook from "./../../pages/dashboard/audit-compliance/hooks/useFetchHook";
+import SubmitInspectionModal from "./../../pages/dashboard/audit-compliance/SubmitInspectionModal";
 
-interface CustomRegTableProps {
-  handleReloadData: () => void;
-}
-
-const CustomScheduledTable: React.FC<CustomRegTableProps> = ({
-  handleReloadData,
-}) => {
-  const allFacilities = useAppSelector((state) => state.dataStore.facilities);
+const CustomScheduledTable = () => {
+  const facilities = useAppSelector((state) => state.dataStore.facilities);
+  const status = "upcoming";
+  const { data, loadingData, handleReloadData } = useFetchHook(status);
+  const [inspectionId, setInspectionId] = React.useState(null);
   const { control, trigger, getValues, reset } = useForm<InspectionPayload>({
     mode: "onSubmit",
   });
-  const facilities = allFacilities.filter((item) => item?.enable_documentation);
-  const { isLoadingData, setCurrentFacility } = useAppContext();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    control: xcontrol,
+    trigger: xtrigger,
+    getValues: xgetValues,
+    reset: xreset,
+  } = useForm<InspectionReportPayload>({
+    mode: "onSubmit",
+  });
 
-  const navigate = useNavigate();
-
-  const { facilityCategory } = useFetchFacilityData();
   const [deletingFacility, setDeletingFacility] = useState<number | null>(null);
 
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
@@ -70,61 +68,50 @@ const CustomScheduledTable: React.FC<CustomRegTableProps> = ({
     variant: "subtle",
   });
 
-  const colorMap = {
-    pending: "#FCBB4D",
-    awaiting: "#62C28D",
-    payment: "#146BD1",
-  };
-
-  // Approve/Reject Facility
-
   const registrationData = {
-    data: facilities.map((item) => ({
-      id: item.id,
-      name: item.name,
-      date: item.created_at,
-      category: item.categorySelection,
-      status: item.status,
-    })),
+    data,
     columns: [
       {
         name: "Facility",
         selector: "name",
         sortable: false,
-        cell: (data: FacilityData) => {
-          return (
-            <Link
-              as={ReactLink}
-              to={`/dashboard/facilities/${getSlug(data.name!)}`}
-            >
-              {data.name}
-            </Link>
-          );
+        cell: (data: InspectionData) => {
+          console.log(data);
+          return <Text>{data.facility_name}</Text>;
         },
       },
       {
         name: "Inspector",
         selector: "created_at",
         cell: (data: any) => {
-          const date = new Date(data.date);
-          return <Text>{date.toLocaleString().split(", ")[0]}</Text>;
+          return <Text>{data.inspector_names}</Text>;
         },
         sortable: true,
       },
       {
         name: "Scheduled Date",
-        selector: "category",
-        cell: (data: any) => {
-          const category = facilityCategory.find(
-            (item) => item.id === data.category.facility_category_id
-          );
-          return <Text>{category?.name || ""}</Text>;
+        selector: "schedule_date",
+        cell: (data: InspectionData) => {
+          const date = new Date(data.schedule_date);
+          const readableDate = date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+          const readableTime = date.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric",
+          });
+          const formattedDateTime = `${readableDate} ${readableTime}`;
+
+          return <Text>{formattedDateTime}</Text>;
         },
         sortable: false,
       },
       {
         name: "Action",
-        cell: (item: FacilityData) => {
+        cell: (item: InspectionData) => {
           return (
             <HStack justifyContent="center">
               <IconButton
@@ -137,6 +124,22 @@ const CustomScheduledTable: React.FC<CustomRegTableProps> = ({
                 onClick={() => setDeletingFacility(item.id! as number)}
                 icon={<Icon fontSize={"xl"} as={BiTrash} color={RED} />}
               />
+              <IconButton
+                _hover={{ bg: "#FFEBC9" }}
+                rounded={"full"}
+                bg={"#FFEBC9"}
+                colorScheme="red"
+                aria-label="submit"
+                isLoading={item.id === deletingFacility && isLoading}
+                onClick={() => setInspectionId(item.id! as number)}
+                icon={
+                  <Icon
+                    fontSize={"xl"}
+                    as={AiOutlineFileText}
+                    color={YELLOW}
+                  />
+                }
+              />
             </HStack>
           );
         },
@@ -144,13 +147,14 @@ const CustomScheduledTable: React.FC<CustomRegTableProps> = ({
     ],
   };
 
-  const { data, columns } = registrationData;
+  const { columns } = registrationData;
   const [filterText, setFilterText] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
   const filteredItems = data.filter(
     (item) =>
-      item.name && item.name.toLowerCase().includes(filterText.toLowerCase())
+      item.facility_name &&
+      item.facility_name.toLowerCase().includes(filterText.toLowerCase())
   );
 
   const handleScheduleInspection = async () => {
@@ -230,6 +234,36 @@ const CustomScheduledTable: React.FC<CustomRegTableProps> = ({
     }
   };
 
+  const handleSubmitInspection = async () => {
+    if (!(await xtrigger())) return;
+    try {
+      openLoading();
+      const payload: InspectionReportPayload = {
+        ...xgetValues(),
+        inspection_id: inspectionId,
+      };
+      const response = await executeDocumentInspection(payload, token!);
+      if (response.status === "error") throw new Error(response.message);
+
+      toast({
+        status: "success",
+        title: response.message,
+      });
+
+      xreset();
+      setInspectionId(null);
+      handleReloadData();
+    } catch (error: any) {
+      console.log("ERROR: ", error.message);
+      toast({
+        status: "error",
+        title: error.message,
+      });
+    } finally {
+      closeLoading();
+    }
+  };
+
   return (
     <>
       <CustomTable
@@ -237,7 +271,7 @@ const CustomScheduledTable: React.FC<CustomRegTableProps> = ({
         data={filteredItems}
         paginationResetDefaultPage={resetPaginationToggle}
         subHeaderComponent={subHeaderComponentMemo}
-        progressPending={isLoadingData}
+        progressPending={loadingData}
       />
 
       <ActionModal
@@ -256,7 +290,14 @@ const CustomScheduledTable: React.FC<CustomRegTableProps> = ({
         onClose={onClose}
         control={control}
         handleScheduleInspection={handleScheduleInspection}
-        facilities={data}
+        facilities={facilities}
+      />
+      <SubmitInspectionModal
+        isOpen={Boolean(inspectionId)}
+        isLoading={isLoading}
+        onClose={() => setInspectionId(null)}
+        control={xcontrol}
+        handleScheduleInspection={handleSubmitInspection}
       />
     </>
   );

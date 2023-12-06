@@ -36,6 +36,7 @@ type LogData = {
   }
 }
 
+
 type FacilityData = {
   id: number;
   cac_number: string | null;
@@ -375,6 +376,22 @@ type InspectionPayload = {
   facility_id: number;
   inspection_date: string;
   inspector_name: string;
+}
+
+type InspectionReportPayload = {
+  inspection_id: number;
+  inspection_date: string;
+  inspector_name: string;
+  findings: string;
+  results: string;
+}
+
+type InspectionData = {
+  id: number;
+  facility_name: string;
+  inspector_names: string;
+  status: string;
+  schedule_date: string;
 }
 
 type NonProfessionalStaffData = {

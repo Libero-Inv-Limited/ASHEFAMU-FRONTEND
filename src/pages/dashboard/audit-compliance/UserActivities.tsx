@@ -1,15 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
-import {
-  Box,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Text, useDisclosure } from "@chakra-ui/react";
 import CustomTable from "./../../../components/tables/CustomTable";
 import ModalComponent from "../../../components/modals/CustomModal";
 import { SimpleGrid } from "@chakra-ui/react";
 import useFetchHistory from "./hooks/useFetchHistory";
+import { Heading } from "@chakra-ui/react";
 
 interface FacilitiesProps {}
 const UserActivities: React.FC<FacilitiesProps> = () => {
@@ -47,7 +44,7 @@ const UserActivities: React.FC<FacilitiesProps> = () => {
       cell: (data: LogData) => {
         return (
           <Text onClick={() => handleOpenModal(data)} cursor="pointer">
-            {`${data.refUser.firstname} ${data.refUser.lastname}` }
+            {`${data.refUser.firstname} ${data.refUser.lastname}`}
           </Text>
         );
       },
@@ -73,6 +70,14 @@ const UserActivities: React.FC<FacilitiesProps> = () => {
 
   return (
     <DashboardLayout>
+      <Heading
+        textTransform="uppercase"
+        fontWeight={"700"}
+        fontSize="20px"
+        mb="18px"
+      >
+        User Activities
+      </Heading>
       <Box p={4} bg={"white"} rounded={"md"}>
         <CustomTable
           columns={columns as any}

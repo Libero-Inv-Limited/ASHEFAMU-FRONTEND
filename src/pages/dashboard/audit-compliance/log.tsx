@@ -17,7 +17,8 @@ import { InputGroup } from "@chakra-ui/react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { TEXT_GRAY } from "../../../utils/color";
 import ModalComponent from "../../../components/modals/CustomModal";
-import { SimpleGrid } from '@chakra-ui/react';
+import { SimpleGrid } from "@chakra-ui/react";
+import { Heading } from '@chakra-ui/react';
 
 interface FacilitiesProps {}
 const Log: React.FC<FacilitiesProps> = () => {
@@ -107,6 +108,14 @@ const Log: React.FC<FacilitiesProps> = () => {
 
   return (
     <DashboardLayout>
+      <Heading
+        textTransform="uppercase"
+        fontWeight={"700"}
+        fontSize="20px"
+        mb="18px"
+      >
+        Log Viewer
+      </Heading>
       <Box p={4} bg={"white"} rounded={"md"}>
         <CustomTable
           columns={columns as any}
@@ -121,7 +130,7 @@ const Log: React.FC<FacilitiesProps> = () => {
           onChangePage={handlePageChange}
         />
         <ModalComponent isOpen={isOpen} onClose={onClose}>
-          <SimpleGrid  gap={4}>
+          <SimpleGrid gap={4}>
             <Text
               fontSize={"20px"}
               textTransform="uppercase"

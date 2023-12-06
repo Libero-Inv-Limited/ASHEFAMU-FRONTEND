@@ -22,11 +22,11 @@ function ModalComponent(props: Props) {
       isOpen={props.isOpen}
       onClose={props.onClose}
     >
-      <ModalOverlay />
-      <ModalContent>
+      <ModalOverlay/>
+      <ModalContent >
         {props.closeButton && <ModalCloseButton />}
 
-        <ModalBody maxH="70vh" overflow="auto" py={5}>
+        <ModalBody maxH="80vh" overflow="auto" py={5}>
           {props.children}
         </ModalBody>
       </ModalContent>

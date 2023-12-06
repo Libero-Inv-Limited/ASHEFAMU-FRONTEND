@@ -7,7 +7,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { DARK } from "../../../utils/color";
 import CustomScheduledTable from "./../../../components/tables/CustomScheduledTable";
 import ConductedTable from "./../../../components/tables/ConductedTable";
-import useFetchHook from "./hooks/useFetchHook";
+import { Heading } from '@chakra-ui/react';
 
 interface FacilitiesProps {}
 const Compliance: React.FC<FacilitiesProps> = () => {
@@ -15,16 +15,7 @@ const Compliance: React.FC<FacilitiesProps> = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const activeTab = search.get("tab");
-  const {
-    data,
-    // totalRows,
-    // handlePageChange,
-    // handlePerRowsChange,
-    // loadingData,
-    handleReloadData,
-  } = useFetchHook();
 
-  console.log({ data });
   useEffect(() => {
     if (activeTab) return;
     navigate(`${pathname}?tab=scheduled`);
@@ -37,6 +28,14 @@ const Compliance: React.FC<FacilitiesProps> = () => {
 
   return (
     <DashboardLayout>
+      <Heading
+        textTransform="uppercase"
+        fontWeight={"700"}
+        fontSize="20px"
+        mb="18px"
+      >
+        Compliance
+      </Heading>
       <Stack spacing={4}>
         <ButtonGroup
           w={"full"}
@@ -70,7 +69,7 @@ const Compliance: React.FC<FacilitiesProps> = () => {
 
         <Box p={2} px={3} bg={"white"} rounded={"md"}>
           {activeTab === "scheduled" ? (
-            <CustomScheduledTable handleReloadData={handleReloadData} />
+            <CustomScheduledTable/>
           ) : (
             <ConductedTable />
           )}
