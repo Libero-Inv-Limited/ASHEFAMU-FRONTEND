@@ -7,7 +7,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { DARK } from "../../../utils/color";
 import CustomScheduledTable from "./../../../components/tables/CustomScheduledTable";
 import ConductedTable from "./../../../components/tables/ConductedTable";
-import useFetchHook from "./useFetchHook";
+import useFetchHook from "./hooks/useFetchHook";
 
 interface FacilitiesProps {}
 const AuditAndCompliance: React.FC<FacilitiesProps> = () => {
@@ -70,7 +70,7 @@ const AuditAndCompliance: React.FC<FacilitiesProps> = () => {
 
         <Box p={2} px={3} bg={"white"} rounded={"md"}>
           {activeTab === "scheduled" ? (
-            <CustomScheduledTable handleReloadData={handleReloadData}/>
+            <CustomScheduledTable handleReloadData={handleReloadData} />
           ) : (
             <ConductedTable />
           )}

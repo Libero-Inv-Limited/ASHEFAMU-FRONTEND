@@ -4,6 +4,7 @@ import {
   GET_ALL_LOGS,
   GET_ALL_SCHEDULED_INSPECTIONS,
   SCHEDULE_INSPECTION_ENDPOINT,
+  GET_ALL_USER_ACTIVITIES,
 } from "./index";
 
 export const executeGetAllScheduledInspections = async (
@@ -18,8 +19,11 @@ export const executeGetAllScheduledInspections = async (
         Authorization: `Bearer ${token}`,
       },
     };
-    console.log({page, perPage})
-    const request = await fetch(GET_ALL_SCHEDULED_INSPECTIONS(page, perPage), options);
+    console.log({ page, perPage });
+    const request = await fetch(
+      GET_ALL_SCHEDULED_INSPECTIONS(page, perPage),
+      options
+    );
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {
@@ -40,7 +44,7 @@ export const executeGetAllLogs = async (
         Authorization: `Bearer ${token}`,
       },
     };
-    console.log({page, perPage})
+    console.log({ page, perPage });
     const request = await fetch(GET_ALL_LOGS(page, perPage), options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
@@ -50,6 +54,30 @@ export const executeGetAllLogs = async (
   }
 };
 
+export const executeGetAllUserActivities = async (
+  token: string,
+  page?: number,
+  perPage?: number
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    console.log({ page, perPage });
+    const request = await fetch(
+      GET_ALL_USER_ACTIVITIES(page, perPage),
+      options
+    );
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("NOTIFICATION [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
 
 export const executeScheduleInspection = async (
   data: InspectionPayload,

@@ -29,6 +29,11 @@ type LogData = {
   timestamp: null | string;
   description: string;
   log_type: string; 
+  refUser: {
+    firstname: string;
+    lastname: string;
+    id: number;
+  }
 }
 
 type FacilityData = {

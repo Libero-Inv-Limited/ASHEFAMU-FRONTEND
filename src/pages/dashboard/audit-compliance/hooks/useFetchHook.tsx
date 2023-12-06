@@ -1,6 +1,6 @@
-import { useAppSelector } from "../../../store/hook";
-import usePaginatedTableData from "./../../../hooks/usePaginatedTableData";
-import { executeGetAllScheduledInspections } from "../../../apis/audit";
+import { useAppSelector } from "../../../../store/hook";
+import usePaginatedTableData from "../../../../hooks/usePaginatedTableData";
+import { executeGetAllScheduledInspections } from "../../../../apis/audit";
 
 const useFetchHook = () => {
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);

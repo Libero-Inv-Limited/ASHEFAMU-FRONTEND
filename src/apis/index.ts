@@ -78,6 +78,7 @@ export const GET_PERMISSIONS_ENDPOINT = BASE_URL + "/all-permissions"
 export const CREATE_PERMISSION_ENDPOINT = BASE_URL + "/create-permission"
 export const DELETE_PERMISSION_ENDPOINT = BASE_URL + "/delete-permissions"
 export const SCHEDULE_INSPECTION_ENDPOINT = BASE_URL + "/schedule-inspection"
+export const GET_ALL_USER_ACTIVITIES = (page: number =1, perPage: number=15) => BASE_URL + `/history/${page}/${perPage}`
 export const GET_ALL_LOGS = (page: number =1, perPage: number=15) => BASE_URL + `/logs/${page}/${perPage}`
 export const GET_ALL_SCHEDULED_INSPECTIONS = (page: number =1, perPage: number=15) => BASE_URL + `/all-inspection-schedules/${page}/${perPage}`
 export const GET_ONE_PERMISSION_ENDPOINT = (id: number) => BASE_URL + "/permission-detail/" + id

@@ -2,28 +2,17 @@
 import React from "react";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
 import {
-  Icon,
   Box,
-  Center,
-  HStack,
-  Input,
-  InputLeftElement,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import CustomTable from "./../../../components/tables/CustomTable";
-import { InputGroup } from "@chakra-ui/react";
-import { AiOutlineSearch } from "react-icons/ai";
-import { TEXT_GRAY } from "../../../utils/color";
 import ModalComponent from "../../../components/modals/CustomModal";
-import { SimpleGrid } from '@chakra-ui/react';
+import { SimpleGrid } from "@chakra-ui/react";
 import useFetchHistory from "./hooks/useFetchHistory";
 
 interface FacilitiesProps {}
 const UserActivities: React.FC<FacilitiesProps> = () => {
-  const [resetPaginationToggle, setResetPaginationToggle] =
-    React.useState(false);
-  const [filterText, setFilterText] = React.useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [log, setLog] = React.useState(null);
 
@@ -34,12 +23,6 @@ const UserActivities: React.FC<FacilitiesProps> = () => {
     handlePerRowsChange,
     loadingData,
   } = useFetchHistory();
-
-  const filteredItems = data.filter(
-    (item) =>
-      item.log_type &&
-      item.log_type.toLowerCase().includes(filterText.toLowerCase())
-  );
 
   const handleOpenModal = (data) => {
     setLog(data);
@@ -58,61 +41,42 @@ const UserActivities: React.FC<FacilitiesProps> = () => {
 
   const columns = [
     {
-      name: "log type",
-      selector: "log_type",
+      name: "User",
+      selector: "refUser",
       sortable: false,
       cell: (data: LogData) => {
         return (
           <Text onClick={() => handleOpenModal(data)} cursor="pointer">
-            {data.log_type}
+            {`${data.refUser.firstname} ${data.refUser.lastname}` }
           </Text>
         );
       },
     },
     {
-      name: "Timestamp",
-      selector: "timestamp",
-      cell: (data: any) => {
-        const date = new Date(data.timestamp);
-        return <Text>{date.toLocaleDateString("en-US", options)}</Text>;
-      },
-      sortable: true,
-    },
-    {
-      name: "Description",
+      name: "Activity",
       selector: "description",
       cell: (data: any) => {
         return <Text>{data.description}</Text>;
       },
+      sortable: true,
+    },
+    {
+      name: "Time Stamp",
+      selector: "timestamp",
+      cell: (data: any) => {
+        const date = new Date(parseInt(data.timestamp));
+        return <Text>{date.toLocaleDateString("en-US", options)}</Text>;
+      },
       sortable: false,
     },
   ] as const;
-
-  const subHeaderComponentMemo = React.useMemo(() => {
-    const handleClear = () => {
-      if (filterText) {
-        setResetPaginationToggle(!resetPaginationToggle);
-        setFilterText("");
-      }
-    };
-
-    return (
-      <FilterComponent
-        onFilter={(e) => setFilterText(e.target.value)}
-        onClear={handleClear}
-        filterText={filterText}
-      />
-    );
-  }, [filterText, resetPaginationToggle]);
 
   return (
     <DashboardLayout>
       <Box p={4} bg={"white"} rounded={"md"}>
         <CustomTable
           columns={columns as any}
-          data={filteredItems}
-          paginationResetDefaultPage={resetPaginationToggle}
-          subHeaderComponent={subHeaderComponentMemo}
+          data={data}
           progressPending={loadingData}
           pagination
           paginationServer
@@ -121,7 +85,7 @@ const UserActivities: React.FC<FacilitiesProps> = () => {
           onChangePage={handlePageChange}
         />
         <ModalComponent isOpen={isOpen} onClose={onClose}>
-          <SimpleGrid  gap={4}>
+          <SimpleGrid gap={4}>
             <Text
               fontSize={"20px"}
               textTransform="uppercase"
@@ -137,38 +101,6 @@ const UserActivities: React.FC<FacilitiesProps> = () => {
         </ModalComponent>
       </Box>
     </DashboardLayout>
-  );
-};
-
-interface FilterComponentProp {
-  onFilter: (e: any) => void;
-  onClear: () => void;
-  filterText: string;
-}
-const FilterComponent: React.FC<FilterComponentProp> = ({
-  onFilter,
-  filterText,
-}) => {
-  return (
-    <HStack
-      flexWrap={"wrap"}
-      flexDir={["column-reverse", "column-reverse", "row"]}
-      spacing={2}
-      alignItems={["flex-start", "flex-start", "center"]}
-      w={"full"}
-    >
-      <InputGroup flex={1} maxW={["full", "full", 435]}>
-        <InputLeftElement as={Center}>
-          <Icon as={AiOutlineSearch} fontSize={"24px"} color={TEXT_GRAY} />
-        </InputLeftElement>
-        <Input
-          fontSize={"sm"}
-          onChange={onFilter}
-          value={filterText}
-          placeholder="Search"
-        />
-      </InputGroup>
-    </HStack>
   );
 };
 
