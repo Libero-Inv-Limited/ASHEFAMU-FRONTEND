@@ -111,9 +111,25 @@ export const sidebarContents = [
   },
   {
     name: "payments",
-    link: "/dashboard/payments",
+    link: "/dashboard/all-payments",
     icon: IoCardOutline,
     activeIcon: IoCard,
+    secondaryLinks: [
+      {
+        name: "payments",
+        link: "/dashboard/all-payments",
+        icon: <DashIcon w={"25px"} h={"25px"} fill={"none"} stroke={"inherit"} />,
+        hasStroke: true,
+        isElementIcon: true
+      },
+      {
+        name: "manage fees",
+        link: "/dashboard/all-fees",
+        icon: <FileIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} stroke={"inherit"} />,
+        hasStroke: true,
+        isElementIcon: true
+      }
+  ]
   },
   {
     name: "analytics",

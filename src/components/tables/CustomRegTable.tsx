@@ -138,6 +138,7 @@ const CustomRegTable: React.FC<CustomRegTableProps> = () => {
   useEffect(() => {
     if (!editId) return;
     handleEdit(editId);
+    // eslint-disable-next-line
   }, [editId]);
 
   const registrationData = {

@@ -4,7 +4,6 @@ import {
   Center,
   HStack,
   Icon,
-  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
@@ -15,43 +14,50 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import { RED, TEXT_GRAY, YELLOW } from "../../utils/color";
+import { TEXT_GRAY } from "../../utils/color";
 import CustomButton from "../common/CustomButton";
 import { BsPlus } from "react-icons/bs";
 import CustomTable from "./CustomTable";
-import { BiTrash } from "react-icons/bi";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import ActionModal from "../modals/ActionModal";
 import { executeDeleteFacility } from "../../apis/facility";
 import { populateFacilities } from "../../store/slice/dataSlice";
-import { getSlug } from "../../utils/helpers";
-import { useAppContext } from "../../contexts/AppContext";
-import ScheduleInspectionModal from "../../pages/dashboard/audit-compliance/ScheduleInspectionModal";
 import { useForm } from "react-hook-form";
-import { executeScheduleInspection } from "../../apis/audit";
+import {
+  executeDocumentInspection,
+  executeScheduleInspection,
+} from "../../apis/audit";
 import useFetchHook from "./../../pages/dashboard/audit-compliance/hooks/useFetchHook";
-import { Button } from "@chakra-ui/react";
-import { LuFileBarChart2 } from "react-icons/lu";
+import SubmitInspectionModal from "./../../pages/dashboard/audit-compliance/SubmitInspectionModal";
+import DrawerComponent from "../../components/common/Drawer";
+import FilterForm from "../../pages/dashboard/financial/FilterForm";
+import { executeGetAllInvoices } from "./../../apis/finances";
+import { registrationData } from "./../../pages/dashboard/financial/helpers";
+import GenerateInvoiceModal from "./../../pages/dashboard/financial/GenerateInvoiceModal";
 
-const ConductedTable = () => {
+const CustomInvoicesTable = () => {
   const facilities = useAppSelector((state) => state.dataStore.facilities);
-  const status = "conducted";
-  const {
-    data,
-    // totalRows,
-    // handlePageChange,
-    // handlePerRowsChange,
-    // loadingData,
-    handleReloadData,
-  } = useFetchHook(status);
+  const [invoices, setInvoices] = React.useState<InvoiceDataType[]>([]);
+  const status = "upcoming";
+  const { data, loadingData, handleReloadData } = useFetchHook(status);
   const { control, trigger, getValues, reset } = useForm<InspectionPayload>({
     mode: "onSubmit",
   });
-  const { isLoadingData, setCurrentFacility } = useAppContext();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const [selectedData, setSelectedData] = React.useState(null)
+  const {
+    isOpen: isDrawerOpen,
+    onOpen: openDrawer,
+    onClose: closeDrawer,
+  } = useDisclosure();
+  const {
+    control: xcontrol,
+    trigger: xtrigger,
+    getValues: xgetValues,
+    reset: xreset,
+  } = useForm<InvoiceFilters>({
+    mode: "onSubmit",
+  });
 
   const [deletingFacility, setDeletingFacility] = useState<number | null>(null);
 
@@ -69,118 +75,14 @@ const ConductedTable = () => {
     variant: "subtle",
   });
 
-  const registrationData = {
-    data,
-    columns: [
-      {
-        name: "Facility",
-        selector: "name",
-        sortable: false,
-        cell: (data: InspectionData) => {
-          console.log(data);
-          return <Text>{data.facility_name}</Text>;
-        },
-      },
-      {
-        name: "Inspector",
-        selector: "created_at",
-        cell: (data: any) => {
-          return <Text>{data.inspector_names}</Text>;
-        },
-        sortable: true,
-      },
-      {
-        name: "Date Conducted",
-        selector: "schedule_date",
-        cell: (data: InspectionData) => {
-          const date = new Date(data.schedule_date);
-          const readableDate = date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          });
-          const readableTime = date.toLocaleTimeString("en-US", {
-            hour: "numeric",
-            minute: "numeric",
-            second: "numeric",
-          });
-          const formattedDateTime = `${readableDate} ${readableTime}`;
-
-          return <Text>{formattedDateTime}</Text>;
-        },
-        sortable: false,
-      },
-      {
-        name: "Findings",
-        cell: (data: InspectionData) => {
-          return (
-            <>
-              <>
-                <Button
-                  bg="#DBE8FE"
-                  color="#3B82F6"
-                  borderRadius="50px"
-                  fontSize="14px"
-                  fontWeight="500"
-                  w={"86px"}
-                >
-                  View
-                </Button>
-              </>
-            </>
-          );
-        },
-      },
-      {
-        name: "Results",
-        cell: (data: InspectionData) => {
-          return (
-            <>
-              <Button
-                bg="#DBE8FE"
-                color="#3B82F6"
-                borderRadius="50px"
-                fontSize="14px"
-                fontWeight="500"
-                w={"86px"}
-                onClick={() => setSelectedData(data)}
-              >
-                View
-              </Button>
-            </>
-          );
-        },
-      },
-      {
-        name: "",
-        cell: (data: InspectionData) => {
-          return (
-            <IconButton
-              aria-label="result-btn"
-              icon={<Icon as={LuFileBarChart2} color={"primary.500"} />}
-              w={"40px"}
-              h={"40px"}
-              bg={"#DBE8FE"}
-              rounded={"full"}
-              onClick={() => {
-                console.log(data);
-              }}
-              _hover={{ bg: "#DBE8FE" }}
-            />
-          );
-        },
-      },
-    ],
-  };
-
-  const { columns } = registrationData;
+  const { columns } = registrationData(invoices);
   const [filterText, setFilterText] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
-  const filteredItems = data.filter(
+  const filteredItems = invoices.filter(
     (item) =>
-      item.facility_name &&
-      item.facility_name.toLowerCase().includes(filterText.toLowerCase())
+      item.facility.name &&
+      item.facility.name.toLowerCase().includes(filterText.toLowerCase())
   );
 
   const handleScheduleInspection = async () => {
@@ -198,7 +100,6 @@ const ConductedTable = () => {
         status: "success",
         title: response.message,
       });
-
       reset();
       onClose();
       handleReloadData();
@@ -227,8 +128,10 @@ const ConductedTable = () => {
         onClear={handleClear}
         filterText={filterText}
         handleScheduleInspection={onOpen}
+        handleFilter={openDrawer}
       />
     );
+    // eslint-disable-next-line
   }, [filterText, resetPaginationToggle]);
 
   // DELETE FACILITY
@@ -260,6 +163,38 @@ const ConductedTable = () => {
     }
   };
 
+  const handleFilters = async () => {
+    if (!(await xtrigger())) return;
+    try {
+      openLoading();
+      const payload: InvoiceFilters = {
+        ...xgetValues(),
+        status: (xgetValues("status") as any).value,
+        fee_category: (xgetValues("fee_category") as any).value,
+      };
+      const response = await executeGetAllInvoices(payload, token!);
+      if (response.status === "error") throw new Error(response.message);
+
+      toast({
+        status: "success",
+        title: response.message,
+      });
+
+      xreset();
+      setInvoices(response.data.data);
+      closeDrawer();
+      handleReloadData();
+    } catch (error: any) {
+      console.log("ERROR: ", error.message);
+      toast({
+        status: "error",
+        title: error.message,
+      });
+    } finally {
+      closeLoading();
+    }
+  };
+
   return (
     <>
       <CustomTable
@@ -267,7 +202,7 @@ const ConductedTable = () => {
         data={filteredItems}
         paginationResetDefaultPage={resetPaginationToggle}
         subHeaderComponent={subHeaderComponentMemo}
-        progressPending={isLoadingData}
+        progressPending={loadingData}
       />
 
       <ActionModal
@@ -280,7 +215,7 @@ const ConductedTable = () => {
         onClose={() => setDeletingFacility(null)}
         actionBtnText="Confirm"
       />
-      <ScheduleInspectionModal
+      <GenerateInvoiceModal
         isOpen={isOpen}
         isLoading={isLoading}
         onClose={onClose}
@@ -288,6 +223,9 @@ const ConductedTable = () => {
         handleScheduleInspection={handleScheduleInspection}
         facilities={facilities}
       />
+      <DrawerComponent isOpen={isDrawerOpen} onClose={closeDrawer}>
+        <FilterForm control={xcontrol} handleFilters={handleFilters} />
+      </DrawerComponent>
     </>
   );
 };
@@ -298,11 +236,13 @@ interface FilterComponentProp {
   onClear: () => void;
   filterText: string;
   handleScheduleInspection: () => void;
+  handleFilter: () => void;
 }
 const FilterComponent: React.FC<FilterComponentProp> = ({
   onFilter,
   filterText,
   handleScheduleInspection,
+  handleFilter,
 }) => {
   return (
     <HStack
@@ -326,14 +266,27 @@ const FilterComponent: React.FC<FilterComponentProp> = ({
 
       <Spacer />
       <CustomButton
+        onClick={handleFilter}
+        alignSelf={["flex-end", "flex-end", "unset"]}
+        sx={{
+          bg: "transparent",
+          color: "#363A43",
+          border: "1px solid #C9CFD8",
+        }}
+        borderRadius={4}
+        _hover={{ bg: "transparent" }}
+      >
+        Filter
+      </CustomButton>
+      <CustomButton
         onClick={handleScheduleInspection}
         alignSelf={["flex-end", "flex-end", "unset"]}
         leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
       >
-        Schedule Inspection
+        Generate Invoice
       </CustomButton>
     </HStack>
   );
 };
 
-export default ConductedTable;
+export default CustomInvoicesTable;

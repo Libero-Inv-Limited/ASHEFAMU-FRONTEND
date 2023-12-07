@@ -203,6 +203,7 @@ const CustomScheduledTable = () => {
         handleScheduleInspection={onOpen}
       />
     );
+    // eslint-disable-next-line
   }, [filterText, resetPaginationToggle]);
 
   // DELETE FACILITY

@@ -29,7 +29,7 @@ interface AuthInputProps extends InputProps {
   Icon?: any;
   isIconComponent?: boolean;
   name: string;
-  rules: any;
+  rules?: any;
   isPassword?: boolean;
   iconProp?: IconProps;
   isSelect?: boolean;

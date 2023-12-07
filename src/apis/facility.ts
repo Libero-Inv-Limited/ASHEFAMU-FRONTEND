@@ -439,6 +439,31 @@ export const executeGetFacilityInvoices = async (
   }
 };
 
+export const executeGetAllInvoices = async (
+  facilityId: number,
+  token: string,
+  page: number = 1,
+  perPage: number = 9
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const request = await fetch(
+      GET_INVOICE_STAFF_ENDPOINT(facilityId, page, perPage),
+      options
+    );
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("INVOICE [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
 export const executeFacilityUpgrade = async (
   data: UpgradeData,
   token: string

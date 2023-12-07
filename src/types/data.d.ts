@@ -28,14 +28,13 @@ type LogData = {
   user_id: number | null;
   timestamp: null | string;
   description: string;
-  log_type: string; 
+  log_type: string;
   refUser: {
     firstname: string;
     lastname: string;
     id: number;
-  }
-}
-
+  };
+};
 
 type FacilityData = {
   id: number;
@@ -376,6 +375,11 @@ type InspectionPayload = {
   facility_id: number;
   inspection_date: string;
   inspector_name: string;
+};
+
+type InvoiceFilters = {
+  status: string;
+  fee_category?: number;
 }
 
 type InspectionReportPayload = {
@@ -384,7 +388,7 @@ type InspectionReportPayload = {
   inspector_name: string;
   findings: string;
   results: string;
-}
+};
 
 type InspectionData = {
   id: number;
@@ -392,7 +396,15 @@ type InspectionData = {
   inspector_names: string;
   status: string;
   schedule_date: string;
-}
+};
+
+type ConductedData = {
+  id: number;
+  findings: string;
+  results: string;
+  status: string;
+  schedule_date: string;
+};
 
 type NonProfessionalStaffData = {
   id: number;
@@ -414,6 +426,17 @@ type NotificationDataType = {
   sender_id: number;
 };
 
+type FeeDataType = {
+  id: number;
+  category: string;
+  amount: string;
+  description: string;
+  status: string;
+  created_at: string;
+  updates_at: string;
+  duration: string;
+};
+
 type InvoiceDataType = {
   id: number;
   facility_id: number;
@@ -427,6 +450,10 @@ type InvoiceDataType = {
   fee: number;
   next_payment: string;
   duration: string;
+  facility: {
+    id: number;
+    name: string;
+  }
   invoiceHistory: {
     id: number;
     facility_id: number;

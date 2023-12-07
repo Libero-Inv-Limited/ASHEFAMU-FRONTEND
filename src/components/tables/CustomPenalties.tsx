@@ -14,7 +14,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineFileText, AiOutlineSearch } from "react-icons/ai";
 import { RED, TEXT_GRAY, YELLOW } from "../../utils/color";
 import CustomButton from "../common/CustomButton";
 import { BsPlus } from "react-icons/bs";
@@ -24,34 +24,33 @@ import { useAppDispatch, useAppSelector } from "../../store/hook";
 import ActionModal from "../modals/ActionModal";
 import { executeDeleteFacility } from "../../apis/facility";
 import { populateFacilities } from "../../store/slice/dataSlice";
-import { getSlug } from "../../utils/helpers";
-import { useAppContext } from "../../contexts/AppContext";
 import ScheduleInspectionModal from "../../pages/dashboard/audit-compliance/ScheduleInspectionModal";
 import { useForm } from "react-hook-form";
-import { executeScheduleInspection } from "../../apis/audit";
+import {
+  executeDocumentInspection,
+  executeScheduleInspection,
+} from "../../apis/audit";
 import useFetchHook from "./../../pages/dashboard/audit-compliance/hooks/useFetchHook";
-import { Button } from "@chakra-ui/react";
-import { LuFileBarChart2 } from "react-icons/lu";
+import SubmitInspectionModal from "./../../pages/dashboard/audit-compliance/SubmitInspectionModal";
 
-const ConductedTable = () => {
+const CustomPenaltiesTable = () => {
   const facilities = useAppSelector((state) => state.dataStore.facilities);
-  const status = "conducted";
-  const {
-    data,
-    // totalRows,
-    // handlePageChange,
-    // handlePerRowsChange,
-    // loadingData,
-    handleReloadData,
-  } = useFetchHook(status);
+  const status = "upcoming";
+  const { data, loadingData, handleReloadData } = useFetchHook(status);
+  const [inspectionId, setInspectionId] = React.useState(null);
   const { control, trigger, getValues, reset } = useForm<InspectionPayload>({
     mode: "onSubmit",
   });
-  const { isLoadingData, setCurrentFacility } = useAppContext();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const [selectedData, setSelectedData] = React.useState(null)
+  const {
+    control: xcontrol,
+    trigger: xtrigger,
+    getValues: xgetValues,
+    reset: xreset,
+  } = useForm<InspectionReportPayload>({
+    mode: "onSubmit",
+  });
 
   const [deletingFacility, setDeletingFacility] = useState<number | null>(null);
 
@@ -90,7 +89,7 @@ const ConductedTable = () => {
         sortable: true,
       },
       {
-        name: "Date Conducted",
+        name: "Scheduled Date",
         selector: "schedule_date",
         cell: (data: InspectionData) => {
           const date = new Date(data.schedule_date);
@@ -111,62 +110,37 @@ const ConductedTable = () => {
         sortable: false,
       },
       {
-        name: "Findings",
-        cell: (data: InspectionData) => {
+        name: "Action",
+        cell: (item: InspectionData) => {
           return (
-            <>
-              <>
-                <Button
-                  bg="#DBE8FE"
-                  color="#3B82F6"
-                  borderRadius="50px"
-                  fontSize="14px"
-                  fontWeight="500"
-                  w={"86px"}
-                >
-                  View
-                </Button>
-              </>
-            </>
-          );
-        },
-      },
-      {
-        name: "Results",
-        cell: (data: InspectionData) => {
-          return (
-            <>
-              <Button
-                bg="#DBE8FE"
-                color="#3B82F6"
-                borderRadius="50px"
-                fontSize="14px"
-                fontWeight="500"
-                w={"86px"}
-                onClick={() => setSelectedData(data)}
-              >
-                View
-              </Button>
-            </>
-          );
-        },
-      },
-      {
-        name: "",
-        cell: (data: InspectionData) => {
-          return (
-            <IconButton
-              aria-label="result-btn"
-              icon={<Icon as={LuFileBarChart2} color={"primary.500"} />}
-              w={"40px"}
-              h={"40px"}
-              bg={"#DBE8FE"}
-              rounded={"full"}
-              onClick={() => {
-                console.log(data);
-              }}
-              _hover={{ bg: "#DBE8FE" }}
-            />
+            <HStack justifyContent="center">
+              <IconButton
+                bg={"#FEE2E2"}
+                _hover={{ bg: "#FEE2E2" }}
+                rounded={"full"}
+                colorScheme="red"
+                aria-label="delete"
+                isLoading={item.id === deletingFacility && isLoading}
+                onClick={() => setDeletingFacility(item.id! as number)}
+                icon={<Icon fontSize={"xl"} as={BiTrash} color={RED} />}
+              />
+              <IconButton
+                _hover={{ bg: "#FFEBC9" }}
+                rounded={"full"}
+                bg={"#FFEBC9"}
+                colorScheme="red"
+                aria-label="submit"
+                isLoading={item.id === deletingFacility && isLoading}
+                onClick={() => setInspectionId(item.id! as number)}
+                icon={
+                  <Icon
+                    fontSize={"xl"}
+                    as={AiOutlineFileText}
+                    color={YELLOW}
+                  />
+                }
+              />
+            </HStack>
           );
         },
       },
@@ -229,6 +203,7 @@ const ConductedTable = () => {
         handleScheduleInspection={onOpen}
       />
     );
+    // eslint-disable-next-line
   }, [filterText, resetPaginationToggle]);
 
   // DELETE FACILITY
@@ -260,6 +235,36 @@ const ConductedTable = () => {
     }
   };
 
+  const handleSubmitInspection = async () => {
+    if (!(await xtrigger())) return;
+    try {
+      openLoading();
+      const payload: InspectionReportPayload = {
+        ...xgetValues(),
+        inspection_id: inspectionId,
+      };
+      const response = await executeDocumentInspection(payload, token!);
+      if (response.status === "error") throw new Error(response.message);
+
+      toast({
+        status: "success",
+        title: response.message,
+      });
+
+      xreset();
+      setInspectionId(null);
+      handleReloadData();
+    } catch (error: any) {
+      console.log("ERROR: ", error.message);
+      toast({
+        status: "error",
+        title: error.message,
+      });
+    } finally {
+      closeLoading();
+    }
+  };
+
   return (
     <>
       <CustomTable
@@ -267,7 +272,7 @@ const ConductedTable = () => {
         data={filteredItems}
         paginationResetDefaultPage={resetPaginationToggle}
         subHeaderComponent={subHeaderComponentMemo}
-        progressPending={isLoadingData}
+        progressPending={loadingData}
       />
 
       <ActionModal
@@ -287,6 +292,13 @@ const ConductedTable = () => {
         control={control}
         handleScheduleInspection={handleScheduleInspection}
         facilities={facilities}
+      />
+      <SubmitInspectionModal
+        isOpen={Boolean(inspectionId)}
+        isLoading={isLoading}
+        onClose={() => setInspectionId(null)}
+        control={xcontrol}
+        handleScheduleInspection={handleSubmitInspection}
       />
     </>
   );
@@ -336,4 +348,4 @@ const FilterComponent: React.FC<FilterComponentProp> = ({
   );
 };
 
-export default ConductedTable;
+export default CustomPenaltiesTable;
