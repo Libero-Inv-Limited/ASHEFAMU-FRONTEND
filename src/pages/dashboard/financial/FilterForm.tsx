@@ -40,6 +40,7 @@ const FilterForm: React.FC<FilterProps> = ({ control, handleFilters }) => {
 
   React.useEffect(() => {
     fetchFees();
+    //eslint-disable-next-line
   }, []);
   console.log({ fees });
   return (
