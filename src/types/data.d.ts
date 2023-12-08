@@ -437,6 +437,17 @@ type FeeDataType = {
   duration: string;
 };
 
+type InvoicePayload = {
+  fee_type: number;
+  specific_facilities: boolean;
+  all_facilities: boolean;
+  facility_id: number;
+  facilities?: number[];
+  facility_sector?: number;
+  facility_category?: number;
+  description?: string;
+}
+
 type InvoiceDataType = {
   id: number;
   facility_id: number;

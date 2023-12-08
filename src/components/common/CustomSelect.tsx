@@ -84,7 +84,6 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     ...styles,
   };
 
-  console.log({ isDisabled });
   if (isCreatable)
     return (
       <CreatableSelect

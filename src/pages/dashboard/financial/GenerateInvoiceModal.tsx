@@ -1,58 +1,73 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from "react";
 import ModalComponent from "./../../../components/modals/CustomModal";
-import AuthInput from "./../../../components/common/AuthInput";
 import CustomButton from "./../../../components/common/CustomButton";
-import { SimpleGrid, Heading } from "@chakra-ui/react";
+import { Box, ButtonGroup, HStack, Heading } from "@chakra-ui/react";
+import AllFacilitiesInvoiceForm from "./AllFacilitiesInvoiceForm";
+import SomeFacilitiesInvoiceForm from "./SomeFacilitiesInvoiceForm";
 
 const GenerateInvoiceModal = ({
-  control,
   onClose,
   isOpen,
-  isLoading,
-  handleScheduleInspection,
-  facilities,
 }) => {
+  const [activeTab, setActiveTab] = React.useState("specific");
+  const handleTabChange = (event: any) => {
+    const text = event.target.innerHTML?.split(" ")[0].toLowerCase();
+    setActiveTab(() => {
+      return text === "all" ? "all" : "specific";
+    });
+  };
+
   return (
-    <ModalComponent
-      onClose={onClose}
-      isOpen={isOpen}
-      size={"xl"}
-    >
-      <SimpleGrid columns={[1]} gap={4}>
-        <Heading fontWeight="700" fontSize="16px" textTransform="uppercase">Generate Invoice</Heading>
-        <AuthInput
-          label="Facility"
-          name="facility_id"
-          control={control}
-          isSelect
-          data={facilities.map((facility) => ({
-            value: facility.id,
-            label: facility.name,
-          }))}
-          rules={{ required: "facility is required" }}
-        />
-        <AuthInput
-          label="Inspector's name"
-          name="inspector_name"
-          control={control}
-          rules={{ required: "Inspector's name is required" }}
-        />
-        <AuthInput
-          label="Inspection date"
-          name="inspection_date"
-          control={control}
-          rules={{ required: "Inspection date is required" }}
-          type="date"
-          width={"50%"}
-        />
-        <CustomButton
-          isLoading={isLoading}
-          onClick={handleScheduleInspection}
-          width="108px"
-          marginLeft="auto"
+    <ModalComponent onClose={onClose} isOpen={isOpen} size={"3xl"}>
+      <Heading fontWeight="700" fontSize="16px" textTransform="uppercase" mb={9}>
+        Generate Invoice
+      </Heading>
+      <HStack justifyContent="space-between" mb={7}>
+        <ButtonGroup
+          w={"full"}
+          maxW={"400px"}
+          border="1px solid"
+          borderColor="#E3EBE2"
+          borderRadius={"4px"}
+          p={1}
+          bg={"#F4F7F4"}
+          rounded={"sm"}
         >
-          Generate
-        </CustomButton>
-      </SimpleGrid>
+          <CustomButton
+            onClick={handleTabChange}
+            bg={activeTab === "specific" ? "white" : "transparent"}
+            fontWeight = {activeTab ==="specific" ?  700: 500}
+            color={"#363A43"}
+            textTransform={"capitalize"}
+            sx={{ boxShadow: activeTab === "specific" && "0px 4px 10px 0px rgba(0, 0, 0, 0.10)"}}
+            flex={1}
+            variant={"solid"}
+            _hover={{bg: activeTab === "specific" ? "white" : "transparent"}}
+          >
+            Specific Facility
+          </CustomButton>
+          <CustomButton
+            onClick={handleTabChange}
+            fontWeight = {activeTab ==="all" ?  700: 500}
+            sx={{ boxShadow: activeTab === "all" && "0px 4px 10px 0px rgba(0, 0, 0, 0.10)"}}
+            bg={activeTab === "all" ? "white" : "transparent"}
+            color={"#363A43"}
+            textTransform={"capitalize"}
+            flex={1}
+            _hover={{bg: activeTab === "all" ? "white" : "transparent"}}
+          >
+            All Facilities
+          </CustomButton>
+        </ButtonGroup>
+      </HStack>
+      <Box p={2} px={3} bg={"white"} rounded={"md"}>
+        {activeTab === "all" ? (
+          <AllFacilitiesInvoiceForm onClose={onClose}/>
+        ) : (
+          <SomeFacilitiesInvoiceForm onClose={onClose}/>
+        )}
+      </Box>
     </ModalComponent>
   );
 };

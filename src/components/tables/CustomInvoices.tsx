@@ -23,26 +23,17 @@ import ActionModal from "../modals/ActionModal";
 import { executeDeleteFacility } from "../../apis/facility";
 import { populateFacilities } from "../../store/slice/dataSlice";
 import { useForm } from "react-hook-form";
-import {
-  executeDocumentInspection,
-  executeScheduleInspection,
-} from "../../apis/audit";
-import useFetchHook from "./../../pages/dashboard/audit-compliance/hooks/useFetchHook";
-import SubmitInspectionModal from "./../../pages/dashboard/audit-compliance/SubmitInspectionModal";
 import DrawerComponent from "../../components/common/Drawer";
 import FilterForm from "../../pages/dashboard/financial/FilterForm";
-import { executeGetAllInvoices } from "./../../apis/finances";
 import { registrationData } from "./../../pages/dashboard/financial/helpers";
 import GenerateInvoiceModal from "./../../pages/dashboard/financial/GenerateInvoiceModal";
+import useFetchHook from "./../../pages/dashboard/financial/hooks/useFetchInvoice";
 
 const CustomInvoicesTable = () => {
   const facilities = useAppSelector((state) => state.dataStore.facilities);
-  const [invoices, setInvoices] = React.useState<InvoiceDataType[]>([]);
-  const status = "upcoming";
-  const { data, loadingData, handleReloadData } = useFetchHook(status);
-  const { control, trigger, getValues, reset } = useForm<InspectionPayload>({
-    mode: "onSubmit",
-  });
+  const [initialState, setInitialState] = React.useState(null);
+  const { data, loadingData, handleReloadData } = useFetchHook(initialState);
+  const [invoices, setInvoices] = React.useState<InvoiceDataType[]>(data);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -84,35 +75,6 @@ const CustomInvoicesTable = () => {
       item.facility.name &&
       item.facility.name.toLowerCase().includes(filterText.toLowerCase())
   );
-
-  const handleScheduleInspection = async () => {
-    if (!(await trigger())) return;
-    try {
-      openLoading();
-      const payload: InspectionPayload = {
-        ...getValues(),
-        facility_id: (getValues("facility_id") as any).value,
-      };
-      const response = await executeScheduleInspection(payload, token!);
-      if (response.status === "error") throw new Error(response.message);
-
-      toast({
-        status: "success",
-        title: response.message,
-      });
-      reset();
-      onClose();
-      handleReloadData();
-    } catch (error: any) {
-      console.log("ERROR: ", error.message);
-      toast({
-        status: "error",
-        title: error.message,
-      });
-    } finally {
-      closeLoading();
-    }
-  };
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
@@ -172,16 +134,10 @@ const CustomInvoicesTable = () => {
         status: (xgetValues("status") as any).value,
         fee_category: (xgetValues("fee_category") as any).value,
       };
-      const response = await executeGetAllInvoices(payload, token!);
-      if (response.status === "error") throw new Error(response.message);
 
-      toast({
-        status: "success",
-        title: response.message,
-      });
+      setInitialState(payload);
 
       xreset();
-      setInvoices(response.data.data);
       closeDrawer();
       handleReloadData();
     } catch (error: any) {
@@ -194,6 +150,10 @@ const CustomInvoicesTable = () => {
       closeLoading();
     }
   };
+
+  React.useEffect(() => {
+    setInvoices(data);
+  }, [data]);
 
   return (
     <>
@@ -215,14 +175,7 @@ const CustomInvoicesTable = () => {
         onClose={() => setDeletingFacility(null)}
         actionBtnText="Confirm"
       />
-      <GenerateInvoiceModal
-        isOpen={isOpen}
-        isLoading={isLoading}
-        onClose={onClose}
-        control={control}
-        handleScheduleInspection={handleScheduleInspection}
-        facilities={facilities}
-      />
+      <GenerateInvoiceModal isOpen={isOpen} onClose={onClose} />
       <DrawerComponent isOpen={isDrawerOpen} onClose={closeDrawer}>
         <FilterForm control={xcontrol} handleFilters={handleFilters} />
       </DrawerComponent>

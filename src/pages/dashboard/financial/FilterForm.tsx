@@ -16,10 +16,6 @@ const FilterForm: React.FC<FilterProps> = ({ control, handleFilters }) => {
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
   const status = [
     {
-      label:"all",
-      value: "all"
-    },
-    {
       label: "Paid",
       value: "paid",
     },
