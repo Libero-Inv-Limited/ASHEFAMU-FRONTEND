@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { log } from "../utils/helpers";
-import { GENERATE_BULK_INVOICES, GET_ALL_FEES, GET_ALL_INVOICES, ISSUE_FACILITY_PENALTY } from "./index";
+import {
+  GENERATE_BULK_INVOICES,
+  GET_ALL_FEES,
+  GET_ALL_INVOICES,
+  ISSUE_FACILITY_PENALTY,
+  UPDATE_FEE_ENDPOINT,
+} from "./index";
 
 export const executeGetAllInvoices = async (
   data: InvoiceFilters,
@@ -11,7 +17,9 @@ export const executeGetAllInvoices = async (
   try {
     const options: RequestInit = {
       method: "POST",
-      body: JSON.stringify(data ? { filter: data, page, perPage }: { page, perPage }),
+      body: JSON.stringify(
+        data ? { filter: data, page, perPage } : { page, perPage }
+      ),
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -29,7 +37,7 @@ export const executeGetAllInvoices = async (
 
 export const executeGenerateBulkInvoices = async (
   data: InvoicePayload,
-  token: string,
+  token: string
 ): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
@@ -52,7 +60,7 @@ export const executeGenerateBulkInvoices = async (
 
 export const executeGeneratePenalty = async (
   data: PenaltyPayload,
-  token: string,
+  token: string
 ): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
@@ -74,7 +82,9 @@ export const executeGeneratePenalty = async (
 };
 
 export const executeGetAllFees = async (
-  token: string
+  token: string,
+  page?: number,
+  perPage?: number
 ): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
@@ -84,7 +94,31 @@ export const executeGetAllFees = async (
         Accept: "application/json",
       },
     };
+    console.log({ page, perPage });
     const request = await fetch(GET_ALL_FEES, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("DOCS [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+export const executeUpdateFee = async (
+  data: FeePayload,
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    };
+    const request = await fetch(UPDATE_FEE_ENDPOINT, options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {

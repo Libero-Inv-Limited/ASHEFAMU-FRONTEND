@@ -1,40 +1,64 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  Box,
-  Button,
-  Stack,
-  Text,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Text, useDisclosure, useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { DARK, TEXT_DARK_GRAY } from "../../../utils/color";
+import { DARK } from "../../../utils/color";
 import CustomTable from "../../../components/tables/CustomTable";
 import FilterComponent from "../../../components/common/FilterComponent";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
 import InvoiceModal from "../../../components/modals/InvoiceModal";
 import usePaginatedTableData from "../../../hooks/usePaginatedTableData";
-import { executeGetFacilityInvoices } from "../../../apis/facility";
-import { useAppContext } from "../../../contexts/AppContext";
 import { useAppSelector } from "../../../store/hook";
 import CustomSelect from "../../../components/common/CustomSelect";
 import { executeDownloadInvoice, executePayInvoice } from "../../../apis/user";
+import { executeGetAllFees } from "./../../../apis/finances";
+import { Switch } from "@chakra-ui/react";
+import { executeUpdateFee } from "./../../../apis/finances";
 
 interface PaymentProps {}
 const Fees: React.FC<PaymentProps> = () => {
   const [selectedData, setSelectedData] = useState<FeeDataType | null>(null);
-  const { currentFacility } = useAppContext();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
+  const { onOpen: openEditing, onClose: closeEditing } = useDisclosure();
   const {
     data,
     totalRows,
     handlePageChange,
     handlePerRowsChange,
     loadingData,
+    handleReloadData,
   } = usePaginatedTableData((page, perPage) =>
-    executeGetFacilityInvoices(currentFacility!.id, token!, page, perPage)
+    executeGetAllFees(token!, page, perPage)
   );
-  const [invoices, setInvoices] = useState<InvoiceDataType[]>(data);
+  const [fees, setFees] = useState<FeeDataType[]>(data);
+  const [filterText, setFilterText] = React.useState("");
+  const [resetPaginationToggle, setResetPaginationToggle] =
+    React.useState(false);
+    const filteredItems = fees.filter(
+      (item) =>
+        item.category &&
+        item.category.toLowerCase().includes(filterText.toLowerCase())
+    );
+  
+
+  const handleToggleStatus = async (
+    id: number,
+    status: string,
+    data: FeeDataType
+  ) => {
+    try {
+      openEditing();
+      const response = await executeUpdateFee({ ...data, id, status }, token!);
+      if (response.status === "error") throw new Error(response.message);
+      toast({
+        title: response.message,
+        status: response.status,
+      });
+      handleReloadData();
+      closeEditing();
+    } catch (e: any) {
+      console.log("Error:", e.message);
+    }
+  };
 
   const {
     isOpen: isLoading,
@@ -50,36 +74,33 @@ const Fees: React.FC<PaymentProps> = () => {
   const columns = [
     {
       name: "Name",
-      cell: (item: FeeDataType) => {
-        return (
-          <Button
-            color={DARK}
-            onClick={() => setSelectedData(item)}
-            variant={"link"}
-            size={"sm"}
-          >
-            {item.id}
-          </Button>
-        );
-      },
+      selector: "category",
       sortable: false,
     },
     {
-      name: "Date Sent",
-      cell: (data: InvoiceDataType) => {
-        const date = new Date(+data.invoice_date);
-        return <Text>{date.toLocaleDateString()}</Text>;
+      name: "Date Created",
+      cell: (data: FeeDataType) => {
+        const date = new Date(data.created_at);
+        return (
+          <Text>
+            {date.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </Text>
+        );
       },
       sortable: true,
     },
     {
-      name: "Fee Category",
+      name: "Description",
       selector: "description",
       sortable: false,
     },
     {
       name: "Amount (N)",
-      cell: (data: InvoiceDataType) => {
+      cell: (data: FeeDataType) => {
         return <Text>{(+data.amount).toLocaleString()}</Text>;
       },
       sortable: true,
@@ -87,46 +108,35 @@ const Fees: React.FC<PaymentProps> = () => {
     {
       name: "Due date",
       selector: "due_date",
-      cell: (data: InvoiceDataType) => {
-        const date = new Date(+data.due_date);
+      cell: (data: FeeDataType) => {
+        const date = new Date(+data.updates_at);
         return <Text>{date.toDateString()}</Text>;
       },
       sortable: true,
     },
     {
-      name: "Status",
-      selector: "status",
-      cell: (data: InvoiceDataType) => {
-        const isPaid = data.status === "paid";
-        const color = isPaid ? "#48A874" : "#DC2626";
-        const paymentInfo =
-          data.payments.length > 0 && data.payments[0]
-            ? (JSON.parse(data.payments[0].payment_method) as PaymentDataType)
-            : null;
-
+      name: "Enable/Disable",
+      cell: (data: FeeDataType) => {
         return (
-          <Stack spacing={0}>
-            <Text
-              color={color}
-              fontWeight={"semibold"}
-              textTransform={"capitalize"}
-            >
-              {data.status}
-            </Text>
-            {data.status === "paid" && paymentInfo && (
-              <Text color={TEXT_DARK_GRAY} fontSize={"xs"}>
-                with {paymentInfo.authorization.channel}
-              </Text>
-            )}
-          </Stack>
+          <Switch
+            isChecked={data.status === "active"}
+            colorScheme="brand"
+            onChange={() => {
+              const status = data.status === "active" ? "inactive" : "active";
+              handleToggleStatus(data.id, status, data);
+            }}
+            color={DARK}
+            size="md"
+            fontWeight="500"
+            py={1}
+          />
         );
       },
+      sortable: true,
     },
   ];
 
-  const [filterText, setFilterText] = React.useState("");
-  const [resetPaginationToggle, setResetPaginationToggle] =
-    React.useState(false);
+ 
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
@@ -144,11 +154,11 @@ const Fees: React.FC<PaymentProps> = () => {
 
     const handleChange = (item: { label: string; value: string }) => {
       const val = item.value;
-      if (!val || val === "*") return setInvoices(data);
-      const filtered = (data as InvoiceDataType[]).filter(
-        (elem) => elem.status.toLowerCase() === val.toLowerCase()
+      if (!val || val === "*") return setFees(data);
+      const filtered = (data as FeeDataType[]).filter(
+        (elem) => elem.category.toLowerCase() === val.toLowerCase()
       );
-      setInvoices(filtered);
+      setFees(filtered);
     };
 
     return (
@@ -169,7 +179,7 @@ const Fees: React.FC<PaymentProps> = () => {
   }, [filterText, resetPaginationToggle]);
 
   React.useEffect(() => {
-    setInvoices(data);
+    setFees(data);
   }, [data]);
 
   // HANDLE PAYMENT
@@ -217,7 +227,7 @@ const Fees: React.FC<PaymentProps> = () => {
       <Box p={4} bg={"white"} rounded={"md"}>
         <CustomTable
           columns={columns as any}
-          data={invoices}
+          data={filteredItems}
           paginationResetDefaultPage={resetPaginationToggle}
           subHeaderComponent={subHeaderComponentMemo}
           progressPending={loadingData}
