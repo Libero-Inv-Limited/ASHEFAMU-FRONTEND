@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { log } from "../utils/helpers";
-import { GENERATE_BULK_INVOICES, GET_ALL_FEES, GET_ALL_INVOICES } from "./index";
+import { GENERATE_BULK_INVOICES, GET_ALL_FEES, GET_ALL_INVOICES, ISSUE_FACILITY_PENALTY } from "./index";
 
 export const executeGetAllInvoices = async (
   data: InvoiceFilters,
@@ -42,6 +42,29 @@ export const executeGenerateBulkInvoices = async (
       },
     };
     const request = await fetch(GENERATE_BULK_INVOICES, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("DOCS [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+export const executeGeneratePenalty = async (
+  data: PenaltyPayload,
+  token: string,
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    };
+    const request = await fetch(ISSUE_FACILITY_PENALTY, options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {

@@ -1,19 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import {
-  SimpleGrid,
-  useToast,
-  HStack,
-  Box,
-  Text,
-  Heading,
-} from "@chakra-ui/react";
+import { SimpleGrid, useToast } from "@chakra-ui/react";
 import AuthInput from "./../../../components/common/AuthInput";
 import { useAppSelector } from "../../../store/hook";
 import { useForm } from "react-hook-form";
 import CustomButton from "./../../../components/common/CustomButton";
 import { useDisclosure } from "@chakra-ui/react";
-import { executeGetAllFacilityCategories } from "./../../../apis/facility";
 import {
   executeGenerateBulkInvoices,
   executeGetAllFees,
@@ -23,7 +15,8 @@ interface Props {
   onClose: () => void;
 }
 
-const AllFacilitiesInvoiceForm = (props: Props) => {
+const SomeFacilitiesPenaltyForm = (props: Props) => {
+  const { facilities } = useAppSelector((state) => state.dataStore);
   const { control, trigger, getValues, reset } = useForm<InvoicePayload>();
   const {
     isOpen: isLoading,
@@ -31,13 +24,6 @@ const AllFacilitiesInvoiceForm = (props: Props) => {
     onClose: closeLoading,
   } = useDisclosure();
   const [fees, setFees] = React.useState([]);
-  const [categories, setCategories] = React.useState([]);
-  const [facilitySector, setFacilitySector] = React.useState(1);
-
-  const handleCheckboxChange = (id: number) => {
-    setFacilitySector(id);
-  };
-
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
   const toast = useToast({
     position: "bottom",
@@ -45,11 +31,9 @@ const AllFacilitiesInvoiceForm = (props: Props) => {
     variant: "subtle",
   });
 
-  const handleFetchData = async () => {
+  const fetchFees = async () => {
     try {
-      const fees = await executeGetAllFees(token!);
-      const categories = await executeGetAllFacilityCategories(token!);
-      setCategories(categories.data);
+      const fees = await executeGetAllFees(token);
       setFees(fees.data);
     } catch (error) {
       console.error("Error fetching fees:", error);
@@ -57,7 +41,7 @@ const AllFacilitiesInvoiceForm = (props: Props) => {
   };
 
   React.useEffect(() => {
-    handleFetchData();
+    fetchFees();
     //eslint-disable-next-line
   }, []);
 
@@ -68,10 +52,9 @@ const AllFacilitiesInvoiceForm = (props: Props) => {
       const payload: InvoicePayload = {
         ...getValues(),
         fee_type: (getValues("fee_type") as any).value,
-        facility_category: (getValues("facility_category") as any).value,
-        specific_facilities: false,
-        all_facilities: true,
-        facility_sector: facilitySector
+        facilities: (getValues("facilities") as any).map((item) => item.value),
+        specific_facilities: true,
+        all_facilities: false,
       };
 
       const response = await executeGenerateBulkInvoices(payload, token!);
@@ -97,38 +80,6 @@ const AllFacilitiesInvoiceForm = (props: Props) => {
   };
   return (
     <SimpleGrid columns={[1]} gap={4}>
-      <Heading
-        fontSize="14px"
-        color="#4E596C"
-        fontWeight="500"
-      >
-        Sector category
-      </Heading>
-      <HStack spacing={4}>
-        <StyledCheckbox
-          isChecked={facilitySector === 1}
-          onChange={() => handleCheckboxChange(1)}
-        >
-          <Text mx="auto">Private</Text>
-        </StyledCheckbox>
-        <StyledCheckbox
-          isChecked={facilitySector === 2}
-          onChange={() => handleCheckboxChange(2)}
-        >
-          <Text mx="auto">Public</Text>
-        </StyledCheckbox>
-      </HStack>
-      <AuthInput
-        label="Facility Category"
-        name="facility_category"
-        control={control}
-        isSelect
-        data={categories.map((category) => ({
-          value: category.id,
-          label: category.name,
-        }))}
-        rules={{ required: "Facility category is required" }}
-      />
       <AuthInput
         label="Fee Category"
         name="fee_type"
@@ -136,6 +87,24 @@ const AllFacilitiesInvoiceForm = (props: Props) => {
         isSelect
         data={fees.map((fee) => ({ value: fee.id, label: fee.category }))}
         rules={{ required: "Fee category is required" }}
+      />
+      <AuthInput
+        label="Facility"
+        name="facilities"
+        control={control}
+        isSelect
+        data={facilities.map((facility) => ({
+          value: facility.id,
+          label: facility.name,
+        }))}
+        rules={{ required: "facility is required" }}
+        selectProps={{ isMulti: true }}
+      />
+      <AuthInput
+        label="Amount"
+        name="amount"
+        control={control}
+        rules={{ required: "Amount is required" }}
       />
       <CustomButton
         isLoading={isLoading}
@@ -149,24 +118,4 @@ const AllFacilitiesInvoiceForm = (props: Props) => {
   );
 };
 
-const StyledCheckbox = ({ children, isChecked, onChange }) => {
-  return (
-    <Box
-      display="flex"
-      alignItems="center"
-      borderWidth="1px"
-      borderRadius="50px"
-      borderColor={isChecked ? "#62C28D" : "#C9CFD8"}
-      bg={isChecked ? "#62C28D" : "white"}
-      width="100px"
-      py={2}
-      color={isChecked ? "white" : "363A43"}
-      _hover={{ cursor: "pointer" }}
-      onClick={onChange}
-    >
-      {children}
-    </Box>
-  );
-};
-
-export default AllFacilitiesInvoiceForm;
+export default SomeFacilitiesPenaltyForm;

@@ -4,7 +4,6 @@ import {
   Center,
   HStack,
   Icon,
-  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
@@ -14,41 +13,41 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { AiOutlineFileText, AiOutlineSearch } from "react-icons/ai";
-import { RED, TEXT_GRAY, YELLOW } from "../../utils/color";
+import { AiOutlineSearch } from "react-icons/ai";
+import { TEXT_GRAY } from "../../utils/color";
 import CustomButton from "../common/CustomButton";
 import { BsPlus } from "react-icons/bs";
 import CustomTable from "./CustomTable";
-import { BiTrash } from "react-icons/bi";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import ActionModal from "../modals/ActionModal";
 import { executeDeleteFacility } from "../../apis/facility";
 import { populateFacilities } from "../../store/slice/dataSlice";
-import ScheduleInspectionModal from "../../pages/dashboard/audit-compliance/ScheduleInspectionModal";
 import { useForm } from "react-hook-form";
-import {
-  executeDocumentInspection,
-  executeScheduleInspection,
-} from "../../apis/audit";
-import useFetchHook from "./../../pages/dashboard/audit-compliance/hooks/useFetchHook";
-import SubmitInspectionModal from "./../../pages/dashboard/audit-compliance/SubmitInspectionModal";
+import DrawerComponent from "../../components/common/Drawer";
+import FilterForm from "../../pages/dashboard/financial/FilterForm";
+import { registrationData } from "./../../pages/dashboard/financial/helpers";
+import useFetchHook from "./../../pages/dashboard/financial/hooks/useFetchInvoice";
+import { BiFilter } from "react-icons/bi";
+import GeneratePenaltyModal from './../../pages/dashboard/financial/GeneratePenaltyModal';
 
 const CustomPenaltiesTable = () => {
   const facilities = useAppSelector((state) => state.dataStore.facilities);
-  const status = "upcoming";
-  const { data, loadingData, handleReloadData } = useFetchHook(status);
-  const [inspectionId, setInspectionId] = React.useState(null);
-  const { control, trigger, getValues, reset } = useForm<InspectionPayload>({
-    mode: "onSubmit",
-  });
+  const [initialState, setInitialState] = React.useState(null);
+  const { data, loadingData, handleReloadData } = useFetchHook(initialState);
+  const [invoices, setInvoices] = React.useState<InvoiceDataType[]>(data);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isDrawerOpen,
+    onOpen: openDrawer,
+    onClose: closeDrawer,
+  } = useDisclosure();
   const {
     control: xcontrol,
     trigger: xtrigger,
     getValues: xgetValues,
     reset: xreset,
-  } = useForm<InspectionReportPayload>({
+  } = useForm<InvoiceFilters>({
     mode: "onSubmit",
   });
 
@@ -68,124 +67,15 @@ const CustomPenaltiesTable = () => {
     variant: "subtle",
   });
 
-  const registrationData = {
-    data,
-    columns: [
-      {
-        name: "Facility",
-        selector: "name",
-        sortable: false,
-        cell: (data: InspectionData) => {
-          console.log(data);
-          return <Text>{data.facility_name}</Text>;
-        },
-      },
-      {
-        name: "Inspector",
-        selector: "created_at",
-        cell: (data: any) => {
-          return <Text>{data.inspector_names}</Text>;
-        },
-        sortable: true,
-      },
-      {
-        name: "Scheduled Date",
-        selector: "schedule_date",
-        cell: (data: InspectionData) => {
-          const date = new Date(data.schedule_date);
-          const readableDate = date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          });
-          const readableTime = date.toLocaleTimeString("en-US", {
-            hour: "numeric",
-            minute: "numeric",
-            second: "numeric",
-          });
-          const formattedDateTime = `${readableDate} ${readableTime}`;
-
-          return <Text>{formattedDateTime}</Text>;
-        },
-        sortable: false,
-      },
-      {
-        name: "Action",
-        cell: (item: InspectionData) => {
-          return (
-            <HStack justifyContent="center">
-              <IconButton
-                bg={"#FEE2E2"}
-                _hover={{ bg: "#FEE2E2" }}
-                rounded={"full"}
-                colorScheme="red"
-                aria-label="delete"
-                isLoading={item.id === deletingFacility && isLoading}
-                onClick={() => setDeletingFacility(item.id! as number)}
-                icon={<Icon fontSize={"xl"} as={BiTrash} color={RED} />}
-              />
-              <IconButton
-                _hover={{ bg: "#FFEBC9" }}
-                rounded={"full"}
-                bg={"#FFEBC9"}
-                colorScheme="red"
-                aria-label="submit"
-                isLoading={item.id === deletingFacility && isLoading}
-                onClick={() => setInspectionId(item.id! as number)}
-                icon={
-                  <Icon
-                    fontSize={"xl"}
-                    as={AiOutlineFileText}
-                    color={YELLOW}
-                  />
-                }
-              />
-            </HStack>
-          );
-        },
-      },
-    ],
-  };
-
-  const { columns } = registrationData;
+  const { columns } = registrationData(invoices);
   const [filterText, setFilterText] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
-  const filteredItems = data.filter(
+  const filteredItems = invoices.filter(
     (item) =>
-      item.facility_name &&
-      item.facility_name.toLowerCase().includes(filterText.toLowerCase())
+      item.facility.name &&
+      item.facility.name.toLowerCase().includes(filterText.toLowerCase())
   );
-
-  const handleScheduleInspection = async () => {
-    if (!(await trigger())) return;
-    try {
-      openLoading();
-      const payload: InspectionPayload = {
-        ...getValues(),
-        facility_id: (getValues("facility_id") as any).value,
-      };
-      const response = await executeScheduleInspection(payload, token!);
-      if (response.status === "error") throw new Error(response.message);
-
-      toast({
-        status: "success",
-        title: response.message,
-      });
-
-      reset();
-      onClose();
-      handleReloadData();
-    } catch (error: any) {
-      console.log("ERROR: ", error.message);
-      toast({
-        status: "error",
-        title: error.message,
-      });
-    } finally {
-      closeLoading();
-    }
-  };
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
@@ -201,6 +91,7 @@ const CustomPenaltiesTable = () => {
         onClear={handleClear}
         filterText={filterText}
         handleScheduleInspection={onOpen}
+        handleFilter={openDrawer}
       />
     );
     // eslint-disable-next-line
@@ -235,24 +126,20 @@ const CustomPenaltiesTable = () => {
     }
   };
 
-  const handleSubmitInspection = async () => {
+  const handleFilters = async () => {
     if (!(await xtrigger())) return;
     try {
       openLoading();
-      const payload: InspectionReportPayload = {
+      const payload: InvoiceFilters = {
         ...xgetValues(),
-        inspection_id: inspectionId,
+        status: (xgetValues("status") as any).value,
+        fee_category: (xgetValues("fee_category") as any).value,
       };
-      const response = await executeDocumentInspection(payload, token!);
-      if (response.status === "error") throw new Error(response.message);
 
-      toast({
-        status: "success",
-        title: response.message,
-      });
+      setInitialState(payload);
 
       xreset();
-      setInspectionId(null);
+      closeDrawer();
       handleReloadData();
     } catch (error: any) {
       console.log("ERROR: ", error.message);
@@ -264,6 +151,10 @@ const CustomPenaltiesTable = () => {
       closeLoading();
     }
   };
+
+  React.useEffect(() => {
+    setInvoices(data);
+  }, [data]);
 
   return (
     <>
@@ -285,21 +176,19 @@ const CustomPenaltiesTable = () => {
         onClose={() => setDeletingFacility(null)}
         actionBtnText="Confirm"
       />
-      <ScheduleInspectionModal
-        isOpen={isOpen}
-        isLoading={isLoading}
-        onClose={onClose}
-        control={control}
-        handleScheduleInspection={handleScheduleInspection}
-        facilities={facilities}
-      />
-      <SubmitInspectionModal
-        isOpen={Boolean(inspectionId)}
-        isLoading={isLoading}
-        onClose={() => setInspectionId(null)}
-        control={xcontrol}
-        handleScheduleInspection={handleSubmitInspection}
-      />
+      <GeneratePenaltyModal isOpen={isOpen} onClose={onClose} handleReloadData={handleReloadData}/>
+      <DrawerComponent
+        isOpen={isDrawerOpen}
+        onClose={closeDrawer}
+        title={
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <BiFilter size={24} />
+            <span style={{ marginLeft: "8px" }}>Filter</span>
+          </div>
+        }
+      >
+        <FilterForm control={xcontrol} handleFilters={handleFilters} />
+      </DrawerComponent>
     </>
   );
 };
@@ -310,11 +199,13 @@ interface FilterComponentProp {
   onClear: () => void;
   filterText: string;
   handleScheduleInspection: () => void;
+  handleFilter: () => void;
 }
 const FilterComponent: React.FC<FilterComponentProp> = ({
   onFilter,
   filterText,
   handleScheduleInspection,
+  handleFilter,
 }) => {
   return (
     <HStack
@@ -338,11 +229,24 @@ const FilterComponent: React.FC<FilterComponentProp> = ({
 
       <Spacer />
       <CustomButton
+        onClick={handleFilter}
+        alignSelf={["flex-end", "flex-end", "unset"]}
+        sx={{
+          bg: "transparent",
+          color: "#363A43",
+          border: "1px solid #C9CFD8",
+        }}
+        borderRadius={4}
+        _hover={{ bg: "transparent" }}
+      >
+        Filter
+      </CustomButton>
+      <CustomButton
         onClick={handleScheduleInspection}
         alignSelf={["flex-end", "flex-end", "unset"]}
         leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
       >
-        Schedule Inspection
+        Generate Penalty
       </CustomButton>
     </HStack>
   );

@@ -448,6 +448,12 @@ type InvoicePayload = {
   description?: string;
 }
 
+type PenaltyPayload = {
+  facility_id: number;
+  amount: number;
+  details: string;
+}
+
 type InvoiceDataType = {
   id: number;
   facility_id: number;
