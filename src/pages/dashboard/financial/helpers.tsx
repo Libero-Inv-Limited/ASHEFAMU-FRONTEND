@@ -16,7 +16,6 @@ export const registrationData = (invoices: InvoiceDataType[]) => ({
       selector: "id",
       sortable: false,
       cell: (data: InvoiceDataType) => {
-        console.log(data);
         return <Text>{data.id}</Text>;
       },
     },

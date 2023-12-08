@@ -1,3 +1,4 @@
+import React from 'react'
 import { useAppSelector } from "../../../../store/hook";
 import usePaginatedTableData from "../../../../hooks/usePaginatedTableData";
 import { executeGetAllInvoices } from "./../../../../apis/finances";
@@ -8,7 +9,9 @@ interface Filters {
 }
 const useFetchHook = (arg: Filters) => {
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
-  const filters = arg ? { status: arg.status, fee_category: arg.fee_category }: null;
+  const filters = arg
+    ? { status: arg.status, fee_category: arg.fee_category }
+    : null;
   const {
     data,
     totalRows,
@@ -19,6 +22,11 @@ const useFetchHook = (arg: Filters) => {
   } = usePaginatedTableData((page, perPage) =>
     executeGetAllInvoices(filters, token, page, perPage)
   );
+
+  React.useEffect(() =>  {
+    handleReloadData()
+    //eslint-disable-next-line
+  },[arg, token])
 
   return {
     data,

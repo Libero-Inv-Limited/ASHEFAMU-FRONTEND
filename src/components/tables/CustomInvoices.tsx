@@ -155,6 +155,10 @@ const CustomInvoicesTable = () => {
     setInvoices(data);
   }, [data]);
 
+  React.useEffect(() => {
+    console.log("Inside useeffect", data);
+  }, [data]);
+
   return (
     <>
       <CustomTable
