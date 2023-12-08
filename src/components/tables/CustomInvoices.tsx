@@ -28,6 +28,7 @@ import FilterForm from "../../pages/dashboard/financial/FilterForm";
 import { registrationData } from "./../../pages/dashboard/financial/helpers";
 import GenerateInvoiceModal from "./../../pages/dashboard/financial/GenerateInvoiceModal";
 import useFetchHook from "./../../pages/dashboard/financial/hooks/useFetchInvoice";
+import { BiFilter } from "react-icons/bi";
 
 const CustomInvoicesTable = () => {
   const facilities = useAppSelector((state) => state.dataStore.facilities);
@@ -180,7 +181,16 @@ const CustomInvoicesTable = () => {
         actionBtnText="Confirm"
       />
       <GenerateInvoiceModal isOpen={isOpen} onClose={onClose} />
-      <DrawerComponent isOpen={isDrawerOpen} onClose={closeDrawer}>
+      <DrawerComponent
+        isOpen={isDrawerOpen}
+        onClose={closeDrawer}
+        title={
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <BiFilter size={24} />
+            <span style={{ marginLeft: "8px" }}>Filter</span>
+          </div>
+        }
+      >
         <FilterForm control={xcontrol} handleFilters={handleFilters} />
       </DrawerComponent>
     </>

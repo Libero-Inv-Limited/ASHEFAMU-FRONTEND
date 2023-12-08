@@ -5,10 +5,11 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerBody,
+  Center
 } from "@chakra-ui/react";
 
 type Props = {
-  title?: string;
+  title?: string | React.ReactNode;
   children: React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
@@ -18,10 +19,17 @@ type Props = {
 const DrawerComponent = (props: Props) => {
   return (
     <>
-      <Drawer isOpen={props.isOpen} placement="right" onClose={props.onClose}>
+      <Drawer
+        isOpen={props.isOpen}
+        placement="right"
+        onClose={props.onClose}
+        size={"sm"}
+      >
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader>{props.title}</DrawerHeader>
+          <DrawerHeader>
+            <Center>{props.title}</Center>
+          </DrawerHeader>
           <DrawerBody>{props.children}</DrawerBody>
         </DrawerContent>
       </Drawer>

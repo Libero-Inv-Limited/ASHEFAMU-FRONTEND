@@ -38,7 +38,6 @@ const FilterForm: React.FC<FilterProps> = ({ control, handleFilters }) => {
     fetchFees();
     //eslint-disable-next-line
   }, []);
-  console.log({ fees });
   return (
     <SimpleGrid columns={[1]} gap={4}>
       <AuthInput
