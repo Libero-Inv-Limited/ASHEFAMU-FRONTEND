@@ -23,6 +23,7 @@ import {
   UPDATE_FACILITY_STATUS_ENDPOINT,
 } from ".";
 import { log } from "../utils/helpers";
+import { GET_ALL_FACILITY_CATEGORIES } from './index';
 
 export const executeCreateIntent = async (
   data: FormData,
@@ -533,3 +534,21 @@ export const executeUpdateFacilityStatus = async (
     return { message: error.message, status: "error" } as ResponseDataType;
   }
 };
+
+export const executeGetAllFacilityCategories = async (token: string): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    }
+    const request = await fetch(GET_ALL_FACILITY_CATEGORIES, options)
+    const response = await request.json() satisfies ResponseDataType
+    return response
+  }
+  catch(error: any) {
+    log("FACILITY CATEGORY [ERROR]:", error.message)
+    return { message: error.message, status: "error" } as ResponseDataType
+  }
+}
