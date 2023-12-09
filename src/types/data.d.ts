@@ -403,6 +403,9 @@ type InspectionData = {
   inspector_names: string;
   status: string;
   schedule_date: string;
+  facility_id?: number;
+  findings?: any[];
+  results?: any[];
 };
 
 type ConductedData = {

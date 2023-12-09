@@ -3,11 +3,12 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import { useAppDispatch, useAppSelector } from "../store/hook";
 import { clearAccount, populateUser } from "../store/slice/accountSlice";
 import { executeGetFacilities } from "../apis/facility";
-import { populateFacilities } from "../store/slice/dataSlice";
+import { populateFacilities, populateFees } from "../store/slice/dataSlice";
 import { useDisclosure, useToast } from "@chakra-ui/react";
 import { executeGetProfile } from "../apis/auth";
 import { useLocation, useNavigate } from "react-router-dom";
 import ROUTES from "../utils/routeNames";
+import { executeGetAllFees } from "../apis/finances";
 
 interface AppContextProps {
   logoutAccount: () => void;
@@ -107,8 +108,32 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     }
   }
 
+  const handleGetAllFees = async () => {
+    if (!pathname.includes("dashboard")) return
+    if (!tokenStore) return
+    try {
+      openLoadingData()
+      const result = await executeGetAllFees(tokenStore.token)
+      if (result.status === "error") throw new Error(result.message)
+      dispatch(populateFees(result.data))
+    }
+    catch (err: any) {
+      console.log("Error:", err.message)
+      const isNetwork = err.message.toLowerCase().includes("network")
+      if (!pathname.includes("dashboard")) return
+      toast({
+        title: isNetwork ? "Can't connect to internet, check your network settings" : err.message,
+        status: isNetwork ? "warning" : "error"
+      })
+    }
+    finally {
+      closeLoadingData()
+    }
+  }
+
   useEffect(() => {
     handleGetFacilities()
+    handleGetAllFees()
       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenStore])
 

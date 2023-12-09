@@ -7,8 +7,7 @@ import DashboardLayout from "../../../components/layouts/DashboardLayout";
 import usePaginatedTableData from "../../../hooks/usePaginatedTableData";
 import { useAppSelector } from "../../../store/hook";
 import { executeGetAllFees } from "./../../../apis/finances";
-import FeeModal from "./../../../components/modals/FeeModal";
-import { useForm } from "react-hook-form";
+import EditFeeModal from "./../../../components/modals/FeeModal";
 import CreateFeeModal from "./../../../components/modals/CreateFeeModal";
 import { HStack } from "@chakra-ui/react";
 import { InputGroup } from "@chakra-ui/react";
@@ -26,11 +25,7 @@ interface PaymentProps {}
 const Fees: React.FC<PaymentProps> = () => {
   const [editId, setEditId] = React.useState<number>();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
-  const { control, trigger, getValues, reset } = useForm<FeeDataType>({
-    mode: "onSubmit",
-  });
 
-  console.log({trigger, getValues, reset})
 
   const {
     isOpen: isEditing,
@@ -51,7 +46,7 @@ const Fees: React.FC<PaymentProps> = () => {
     executeGetAllFees(token!, page, perPage)
   );
 
-  const { handleToggleStatus, handleEdit } = useFeeHook(
+  const { handleToggleStatus } = useFeeHook(
     openEditing,
     token,
     handleReloadData,
@@ -67,12 +62,6 @@ const Fees: React.FC<PaymentProps> = () => {
       item.category &&
       item.category.toLowerCase().includes(filterText.toLowerCase())
   );
-
-  React.useEffect(() => {
-    if (!editId) return;
-    handleEdit(editId);
-    //eslint-disable-next-line
-  }, [editId]);
 
   React.useEffect(() => {
     setFees(data);
@@ -116,12 +105,11 @@ const Fees: React.FC<PaymentProps> = () => {
         />
       </Box>
 
-      <FeeModal
-        isEditing={isEditing}
-        handleEdit={handleEdit}
-        control={control}
+      <EditFeeModal
         isOpen={Boolean(editId)}
         onClose={() => setEditId(undefined)}
+        editId={editId}
+        handleReloadData={handleReloadData}
       />
       <CreateFeeModal
         isOpen={isOpen}
