@@ -30,6 +30,8 @@ const Fees: React.FC<PaymentProps> = () => {
     mode: "onSubmit",
   });
 
+  console.log({trigger, getValues, reset})
+
   const {
     isOpen: isEditing,
     onOpen: openEditing,
