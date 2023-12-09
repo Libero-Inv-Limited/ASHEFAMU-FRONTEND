@@ -380,7 +380,14 @@ type InspectionPayload = {
 type InvoiceFilters = {
   status: string;
   fee_category?: number;
-}
+};
+
+
+type PenaltyFilters = {
+  status?: string;
+  fee_category?: number;
+  facility_id: number;
+};
 
 type InspectionReportPayload = {
   inspection_id: number;
@@ -455,13 +462,27 @@ type InvoicePayload = {
   facility_sector?: number;
   facility_category?: number;
   description?: string;
-}
+};
 
 type PenaltyPayload = {
   facility_id: number;
   amount: number;
   details: string;
-}
+};
+
+type PenaltyDataType = {
+  id: number;
+  facility_id: number;
+  created_at: string;
+  paid: boolean;
+  amount: string;
+  details: string;
+  payment_details: string;
+  facility: {
+    name: string;
+    id: number;
+  };
+};
 
 type InvoiceDataType = {
   id: number;
@@ -479,7 +500,7 @@ type InvoiceDataType = {
   facility: {
     id: number;
     name: string;
-  }
+  };
   invoiceHistory: {
     id: number;
     facility_id: number;

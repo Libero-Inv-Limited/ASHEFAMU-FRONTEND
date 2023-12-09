@@ -1,16 +1,20 @@
-import React from 'react'
+import React from "react";
 import { useAppSelector } from "../../../../store/hook";
 import usePaginatedTableData from "../../../../hooks/usePaginatedTableData";
-import { executeGetAllInvoices } from "./../../../../apis/finances";
+import { executeGetAllPenalties } from "./../../../../apis/finances";
 
 interface Filters {
   status: string;
   fee_category: number;
+  facility_id: number;
 }
-const useFetchHook = (arg: Filters) => {
+const useFetchPenalties = (arg: Filters) => {
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
-  const filters = arg
-    ? { status: arg.status, fee_category: arg.fee_category }
+  const payload = arg
+    ? {
+        filter: { status: arg.status, fee_category: arg.fee_category },
+        facility_id: arg.facility_id,
+      }
     : null;
   const {
     data,
@@ -20,13 +24,13 @@ const useFetchHook = (arg: Filters) => {
     loadingData,
     handleReloadData,
   } = usePaginatedTableData((page, perPage) =>
-    executeGetAllInvoices(filters, token, page, perPage)
+    executeGetAllPenalties(payload, token, page, perPage)
   );
 
-  React.useEffect(() =>  {
-    handleReloadData()
+  React.useEffect(() => {
+    handleReloadData();
     //eslint-disable-next-line
-  },[arg, token])
+  }, [arg, token]);
 
   return {
     data,
@@ -38,4 +42,4 @@ const useFetchHook = (arg: Filters) => {
   };
 };
 
-export default useFetchHook;
+export default useFetchPenalties;

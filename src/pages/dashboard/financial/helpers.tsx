@@ -1,10 +1,9 @@
 import { Text } from "@chakra-ui/react";
-import { HStack, Switch } from "@chakra-ui/react";
+import { Switch } from "@chakra-ui/react";
 import { IconButton } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
-import { AiOutlineFileText } from "react-icons/ai";
-import { DARK, RED, YELLOW } from "../../../utils/color";
-import { BiEdit, BiTrash } from "react-icons/bi";
+import { DARK, YELLOW } from "../../../utils/color";
+import { BiEdit } from "react-icons/bi";
 
 export const registrationData = (invoices: InvoiceDataType[]) => ({
   invoices,
@@ -67,44 +66,68 @@ export const registrationData = (invoices: InvoiceDataType[]) => ({
       },
       sortable: false,
     },
+  ],
+});
 
+export const penaltiesData = (invoices: PenaltyDataType[]) => ({
+  invoices,
+  columns: [
     {
-      name: "Action",
-      cell: (item: InvoiceDataType) => {
+      name: "Penalty Id",
+      selector: "id",
+      sortable: false,
+    },
+    {
+      name: "facility",
+      selector: "facility",
+      cell: (data: PenaltyDataType) => {
+        return <Text>{data.facility.name}</Text>;
+      },
+      sortable: true,
+    },
+    {
+      name: "Date Sent",
+      selector: "invoice_date",
+      cell: (data: PenaltyDataType) => {
+        const date = new Date(data.created_at);
         return (
-          <HStack justifyContent="center">
-            <IconButton
-              bg={"#FEE2E2"}
-              _hover={{ bg: "#FEE2E2" }}
-              rounded={"full"}
-              colorScheme="red"
-              aria-label="delete"
-              // isLoading={item.id === deletingFacility && isLoading}
-              // onClick={() => setDeletingFacility(item.id! as number)}
-              onClick={() => console.log("Click me", item)}
-              icon={<Icon fontSize={"xl"} as={BiTrash} color={RED} />}
-            />
-            <IconButton
-              _hover={{ bg: "#FFEBC9" }}
-              rounded={"full"}
-              bg={"#FFEBC9"}
-              colorScheme="red"
-              aria-label="submit"
-              onClick={() => console.log("Click me", item)}
-              // isLoading={item.id === deletingFacility && isLoading}
-              // onClick={() => setInspectionId(item.id! as number)}
-              icon={
-                <Icon fontSize={"xl"} as={AiOutlineFileText} color={YELLOW} />
-              }
-            />
-          </HStack>
+          <Text>
+            {date.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </Text>
         );
       },
+      sortable: false,
+    },
+    {
+      name: "Amount",
+      selector: "amount",
+      sortable: true,
+    },
+    {
+      name: "Status",
+      selector: "paid",
+      cell: (data: PenaltyDataType) => {
+        return (
+          <Text fontWeight={"700"} color={data.paid ? "#48A874" : "#DC2626"}>
+            {data.paid ? `Paid with ${data.payment_details}` : "Unpaid"}
+          </Text>
+        );
+      },
+      sortable: false,
     },
   ],
 });
 
-export const feeColumns = (handleToggleStatus, isEditing, editId, setEditId) => {
+export const feeColumns = (
+  handleToggleStatus,
+  isEditing,
+  editId,
+  setEditId
+) => {
   return [
     {
       name: "Name",

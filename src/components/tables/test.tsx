@@ -8,6 +8,7 @@ import {
   InputGroup,
   InputLeftElement,
   Spacer,
+  Text,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -23,18 +24,17 @@ import { executeDeleteFacility } from "../../apis/facility";
 import { populateFacilities } from "../../store/slice/dataSlice";
 import { useForm } from "react-hook-form";
 import DrawerComponent from "../../components/common/Drawer";
-import FilterForm from "../../pages/dashboard/financial/PenaltyFilterForm";
-import { penaltiesData } from "./../../pages/dashboard/financial/helpers";
+import FilterForm from "../../pages/dashboard/financial/FilterForm";
+import { registrationData } from "./../../pages/dashboard/financial/helpers";
+import useFetchHook from "./../../pages/dashboard/financial/hooks/useFetchInvoice";
 import { BiFilter } from "react-icons/bi";
-import useFetchPenalties from "./../../pages/dashboard/financial/hooks/useFetchPenalties";
-import GeneratePenaltyModal from "./../../pages/dashboard/financial/GeneratePenaltyModal";
+import GeneratePenaltyModal from './../../pages/dashboard/financial/GeneratePenaltyModal';
 
 const CustomPenaltiesTable = () => {
   const facilities = useAppSelector((state) => state.dataStore.facilities);
   const [initialState, setInitialState] = React.useState(null);
-  const { data, loadingData, handleReloadData } =
-    useFetchPenalties(initialState);
-  const [penalties, setPenalties] = React.useState<PenaltyDataType[]>(data);
+  const { data, loadingData, handleReloadData } = useFetchHook(initialState);
+  const [invoices, setInvoices] = React.useState<InvoiceDataType[]>(data);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -47,7 +47,7 @@ const CustomPenaltiesTable = () => {
     trigger: xtrigger,
     getValues: xgetValues,
     reset: xreset,
-  } = useForm<PenaltyFilters>({
+  } = useForm<InvoiceFilters>({
     mode: "onSubmit",
   });
 
@@ -67,11 +67,11 @@ const CustomPenaltiesTable = () => {
     variant: "subtle",
   });
 
-  const { columns } = penaltiesData(penalties);
+  const { columns } = registrationData(invoices);
   const [filterText, setFilterText] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
-  const filteredItems = penalties.filter(
+  const filteredItems = invoices.filter(
     (item) =>
       item.facility.name &&
       item.facility.name.toLowerCase().includes(filterText.toLowerCase())
@@ -90,7 +90,7 @@ const CustomPenaltiesTable = () => {
         onFilter={(e) => setFilterText(e.target.value)}
         onClear={handleClear}
         filterText={filterText}
-        handleGeneratePenalty={onOpen}
+        handleScheduleInspection={onOpen}
         handleFilter={openDrawer}
       />
     );
@@ -130,12 +130,12 @@ const CustomPenaltiesTable = () => {
     if (!(await xtrigger())) return;
     try {
       openLoading();
-      const payload: PenaltyFilters = {
+      const payload: InvoiceFilters = {
         ...xgetValues(),
         status: (xgetValues("status") as any).value,
         fee_category: (xgetValues("fee_category") as any).value,
-        facility_id: (xgetValues("facility_id") as any).value,
       };
+
       setInitialState(payload);
 
       xreset();
@@ -153,7 +153,7 @@ const CustomPenaltiesTable = () => {
   };
 
   React.useEffect(() => {
-    setPenalties(data);
+    setInvoices(data);
   }, [data]);
 
   return (
@@ -176,11 +176,7 @@ const CustomPenaltiesTable = () => {
         onClose={() => setDeletingFacility(null)}
         actionBtnText="Confirm"
       />
-      <GeneratePenaltyModal
-        isOpen={isOpen}
-        onClose={onClose}
-        handleReloadData={handleReloadData}
-      />
+      <GeneratePenaltyModal isOpen={isOpen} onClose={onClose} handleReloadData={handleReloadData}/>
       <DrawerComponent
         isOpen={isDrawerOpen}
         onClose={closeDrawer}
@@ -202,13 +198,13 @@ interface FilterComponentProp {
   onFilter: (e: any) => void;
   onClear: () => void;
   filterText: string;
-  handleGeneratePenalty: () => void;
+  handleScheduleInspection: () => void;
   handleFilter: () => void;
 }
 const FilterComponent: React.FC<FilterComponentProp> = ({
   onFilter,
   filterText,
-  handleGeneratePenalty,
+  handleScheduleInspection,
   handleFilter,
 }) => {
   return (
@@ -246,7 +242,7 @@ const FilterComponent: React.FC<FilterComponentProp> = ({
         Filter
       </CustomButton>
       <CustomButton
-        onClick={handleGeneratePenalty}
+        onClick={handleScheduleInspection}
         alignSelf={["flex-end", "flex-end", "unset"]}
         leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
       >
