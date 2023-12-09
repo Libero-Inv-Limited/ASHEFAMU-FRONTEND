@@ -1,10 +1,10 @@
 import { Text } from "@chakra-ui/react";
-import { HStack } from "@chakra-ui/react";
+import { HStack, Switch } from "@chakra-ui/react";
 import { IconButton } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
 import { AiOutlineFileText } from "react-icons/ai";
-import { RED, YELLOW } from "../../../utils/color";
-import { BiTrash } from "react-icons/bi";
+import { DARK, RED, YELLOW } from "../../../utils/color";
+import { BiEdit, BiTrash } from "react-icons/bi";
 
 export const registrationData = (invoices: InvoiceDataType[]) => ({
   invoices,
@@ -103,3 +103,77 @@ export const registrationData = (invoices: InvoiceDataType[]) => ({
     },
   ],
 });
+
+export const feeColumns = (handleToggleStatus, isEditing, editId, setEditId) => {
+  return [
+    {
+      name: "Name",
+      selector: "category",
+      sortable: false,
+    },
+    {
+      name: "Date Created",
+      cell: (data: FeeDataType) => {
+        const date = new Date(data.created_at);
+        return (
+          <Text>
+            {date.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </Text>
+        );
+      },
+      sortable: true,
+    },
+    {
+      name: "Amount (N)",
+      cell: (data: FeeDataType) => {
+        return <Text>{(+data.amount).toLocaleString()}</Text>;
+      },
+      sortable: true,
+    },
+    {
+      name: "Description",
+      selector: "description",
+      sortable: false,
+    },
+    {
+      name: "Enable/Disable",
+      cell: (data: FeeDataType) => {
+        return (
+          <Switch
+            isChecked={data.status === "active"}
+            colorScheme="brand"
+            onChange={() => {
+              const status = data.status === "active" ? "inactive" : "active";
+              handleToggleStatus(data.id, status, data);
+            }}
+            color={DARK}
+            size="md"
+            fontWeight="500"
+            py={1}
+          />
+        );
+      },
+      sortable: true,
+    },
+    {
+      name: "Action",
+      cell: (item: FeeDataType) => {
+        return (
+          <IconButton
+            _hover={{ bg: "#FFEBC9" }}
+            rounded={"full"}
+            bg={"#FFEBC9"}
+            aria-label="edit"
+            isLoading={isEditing && item.id === editId}
+            onClick={() => setEditId(item.id)}
+            icon={<Icon fontSize={"xl"} as={BiEdit} color={YELLOW} />}
+          />
+        );
+      },
+    },
+  ];
+};

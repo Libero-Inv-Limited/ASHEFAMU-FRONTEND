@@ -1,34 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  Box,
-  IconButton,
-  Text,
-  useDisclosure,
-  useToast,
-  Icon,
-} from "@chakra-ui/react";
+import { Box, useDisclosure, Icon } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { DARK, TEXT_GRAY, YELLOW } from "../../../utils/color";
+import { TEXT_GRAY } from "../../../utils/color";
 import CustomTable from "../../../components/tables/CustomTable";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
 import usePaginatedTableData from "../../../hooks/usePaginatedTableData";
 import { useAppSelector } from "../../../store/hook";
 import { executeGetAllFees } from "./../../../apis/finances";
-import { Switch } from "@chakra-ui/react";
-import { executeUpdateFee } from "./../../../apis/finances";
-import { BiEdit } from "react-icons/bi";
 import FeeModal from "./../../../components/modals/FeeModal";
 import { useForm } from "react-hook-form";
 import CreateFeeModal from "./../../../components/modals/CreateFeeModal";
-import { HStack } from '@chakra-ui/react';
-import { InputGroup } from '@chakra-ui/react';
-import { InputLeftElement } from '@chakra-ui/react';
-import { Center } from '@chakra-ui/react';
-import { AiOutlineSearch } from 'react-icons/ai';
-import { Input } from '@chakra-ui/react';
-import { Spacer } from '@chakra-ui/react';
-import CustomButton from './../../../components/common/CustomButton';
-import { BsPlus } from 'react-icons/bs';
+import { HStack } from "@chakra-ui/react";
+import { InputGroup } from "@chakra-ui/react";
+import { InputLeftElement } from "@chakra-ui/react";
+import { Center } from "@chakra-ui/react";
+import { AiOutlineSearch } from "react-icons/ai";
+import { Input } from "@chakra-ui/react";
+import { Spacer } from "@chakra-ui/react";
+import CustomButton from "./../../../components/common/CustomButton";
+import { BsPlus } from "react-icons/bs";
+import useFeeHook from "./hooks/useFeeHook";
+import { feeColumns } from "./helpers";
 
 interface PaymentProps {}
 const Fees: React.FC<PaymentProps> = () => {
@@ -56,6 +48,14 @@ const Fees: React.FC<PaymentProps> = () => {
   } = usePaginatedTableData((page, perPage) =>
     executeGetAllFees(token!, page, perPage)
   );
+
+  const { handleToggleStatus, handleEdit } = useFeeHook(
+    openEditing,
+    token,
+    handleReloadData,
+    closeEditing
+  );
+
   const [fees, setFees] = useState<FeeDataType[]>(data);
   const [filterText, setFilterText] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] =
@@ -66,129 +66,11 @@ const Fees: React.FC<PaymentProps> = () => {
       item.category.toLowerCase().includes(filterText.toLowerCase())
   );
 
-  const handleToggleStatus = async (
-    id: number,
-    status: string,
-    data: FeeDataType
-  ) => {
-    try {
-      openEditing();
-      const response = await executeUpdateFee({ ...data, id, status }, token!);
-      if (response.status === "error") throw new Error(response.message);
-      toast({
-        title: response.message,
-        status: response.status,
-      });
-      handleReloadData();
-      closeEditing();
-    } catch (e: any) {
-      console.log("Error:", e.message);
-    }
-  };
-
-  const toast = useToast({
-    position: "bottom",
-    isClosable: true,
-    variant: "subtle",
-  });
-
-  const columns = [
-    {
-      name: "Name",
-      selector: "category",
-      sortable: false,
-    },
-    {
-      name: "Date Created",
-      cell: (data: FeeDataType) => {
-        const date = new Date(data.created_at);
-        return (
-          <Text>
-            {date.toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </Text>
-        );
-      },
-      sortable: true,
-    },
-    {
-      name: "Amount (N)",
-      cell: (data: FeeDataType) => {
-        return <Text>{(+data.amount).toLocaleString()}</Text>;
-      },
-      sortable: true,
-    },
-    {
-      name: "Description",
-      selector: "description",
-      sortable: false,
-    },
-    {
-      name: "Enable/Disable",
-      cell: (data: FeeDataType) => {
-        return (
-          <Switch
-            isChecked={data.status === "active"}
-            colorScheme="brand"
-            onChange={() => {
-              const status = data.status === "active" ? "inactive" : "active";
-              handleToggleStatus(data.id, status, data);
-            }}
-            color={DARK}
-            size="md"
-            fontWeight="500"
-            py={1}
-          />
-        );
-      },
-      sortable: true,
-    },
-    {
-      name: "Action",
-      cell: (item: FeeDataType) => {
-        return (
-          <IconButton
-            _hover={{ bg: "#FFEBC9" }}
-            rounded={"full"}
-            bg={"#FFEBC9"}
-            aria-label="edit"
-            isLoading={isEditing && item.id === editId}
-            onClick={() => setEditId(item.id)}
-            icon={<Icon fontSize={"xl"} as={BiEdit} color={YELLOW} />}
-          />
-        );
-      },
-    },
-  ];
-
-  const handleEdit = async (id: number) => {
-    try {
-      openEditing();
-      console.log({ id });
-      // const response = await executeGetPermissionDetails(id, token!);
-      // if (response.status === "error") throw new Error(response.message);
-
-      // const name = response.data.role.name;
-      // navigate(ROUTES.EDIT_ROLE_ROUTE(getSlug(name)), {
-      //   state: response?.data?.user,
-      // });
-    } catch (e: any) {
-      console.log("Error:", e.meesage);
-    } finally {
-      closeEditing();
-      // setEditId(undefined);
-    }
-  };
-
   React.useEffect(() => {
     if (!editId) return;
     handleEdit(editId);
     //eslint-disable-next-line
   }, [editId]);
-
 
   React.useEffect(() => {
     setFees(data);
@@ -217,7 +99,9 @@ const Fees: React.FC<PaymentProps> = () => {
     <DashboardLayout>
       <Box p={4} bg={"white"} rounded={"md"}>
         <CustomTable
-          columns={columns as any}
+          columns={
+            feeColumns(handleToggleStatus, isEditing, editId, setEditId) as any
+          }
           data={filteredItems}
           paginationResetDefaultPage={resetPaginationToggle}
           subHeaderComponent={subHeaderComponentMemo}
