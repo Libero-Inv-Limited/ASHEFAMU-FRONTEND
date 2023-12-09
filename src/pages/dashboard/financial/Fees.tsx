@@ -1,24 +1,51 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Text, useDisclosure, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  IconButton,
+  Text,
+  useDisclosure,
+  useToast,
+  Icon,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
-import { DARK } from "../../../utils/color";
+import { DARK, TEXT_GRAY, YELLOW } from "../../../utils/color";
 import CustomTable from "../../../components/tables/CustomTable";
-import FilterComponent from "../../../components/common/FilterComponent";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
-import InvoiceModal from "../../../components/modals/InvoiceModal";
 import usePaginatedTableData from "../../../hooks/usePaginatedTableData";
 import { useAppSelector } from "../../../store/hook";
-import CustomSelect from "../../../components/common/CustomSelect";
-import { executeDownloadInvoice, executePayInvoice } from "../../../apis/user";
 import { executeGetAllFees } from "./../../../apis/finances";
 import { Switch } from "@chakra-ui/react";
 import { executeUpdateFee } from "./../../../apis/finances";
+import { BiEdit } from "react-icons/bi";
+import FeeModal from "./../../../components/modals/FeeModal";
+import { useForm } from "react-hook-form";
+import CreateFeeModal from "./../../../components/modals/CreateFeeModal";
+import { HStack } from '@chakra-ui/react';
+import { InputGroup } from '@chakra-ui/react';
+import { InputLeftElement } from '@chakra-ui/react';
+import { Center } from '@chakra-ui/react';
+import { AiOutlineSearch } from 'react-icons/ai';
+import { Input } from '@chakra-ui/react';
+import { Spacer } from '@chakra-ui/react';
+import CustomButton from './../../../components/common/CustomButton';
+import { BsPlus } from 'react-icons/bs';
 
 interface PaymentProps {}
 const Fees: React.FC<PaymentProps> = () => {
-  const [selectedData, setSelectedData] = useState<FeeDataType | null>(null);
+  const [editId, setEditId] = React.useState<number>();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
-  const { onOpen: openEditing, onClose: closeEditing } = useDisclosure();
+  const { control, trigger, getValues, reset } = useForm<FeeDataType>({
+    mode: "onSubmit",
+  });
+
+  const {
+    isOpen: isEditing,
+    onOpen: openEditing,
+    onClose: closeEditing,
+  } = useDisclosure();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const {
     data,
     totalRows,
@@ -33,12 +60,11 @@ const Fees: React.FC<PaymentProps> = () => {
   const [filterText, setFilterText] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
-    const filteredItems = fees.filter(
-      (item) =>
-        item.category &&
-        item.category.toLowerCase().includes(filterText.toLowerCase())
-    );
-  
+  const filteredItems = fees.filter(
+    (item) =>
+      item.category &&
+      item.category.toLowerCase().includes(filterText.toLowerCase())
+  );
 
   const handleToggleStatus = async (
     id: number,
@@ -60,11 +86,6 @@ const Fees: React.FC<PaymentProps> = () => {
     }
   };
 
-  const {
-    isOpen: isLoading,
-    onClose: closeLoading,
-    onOpen: openLoading,
-  } = useDisclosure();
   const toast = useToast({
     position: "bottom",
     isClosable: true,
@@ -94,11 +115,6 @@ const Fees: React.FC<PaymentProps> = () => {
       sortable: true,
     },
     {
-      name: "Description",
-      selector: "description",
-      sortable: false,
-    },
-    {
       name: "Amount (N)",
       cell: (data: FeeDataType) => {
         return <Text>{(+data.amount).toLocaleString()}</Text>;
@@ -106,13 +122,9 @@ const Fees: React.FC<PaymentProps> = () => {
       sortable: true,
     },
     {
-      name: "Due date",
-      selector: "due_date",
-      cell: (data: FeeDataType) => {
-        const date = new Date(+data.updates_at);
-        return <Text>{date.toDateString()}</Text>;
-      },
-      sortable: true,
+      name: "Description",
+      selector: "description",
+      sortable: false,
     },
     {
       name: "Enable/Disable",
@@ -134,9 +146,53 @@ const Fees: React.FC<PaymentProps> = () => {
       },
       sortable: true,
     },
+    {
+      name: "Action",
+      cell: (item: FeeDataType) => {
+        return (
+          <IconButton
+            _hover={{ bg: "#FFEBC9" }}
+            rounded={"full"}
+            bg={"#FFEBC9"}
+            aria-label="edit"
+            isLoading={isEditing && item.id === editId}
+            onClick={() => setEditId(item.id)}
+            icon={<Icon fontSize={"xl"} as={BiEdit} color={YELLOW} />}
+          />
+        );
+      },
+    },
   ];
 
- 
+  const handleEdit = async (id: number) => {
+    try {
+      openEditing();
+      console.log({ id });
+      // const response = await executeGetPermissionDetails(id, token!);
+      // if (response.status === "error") throw new Error(response.message);
+
+      // const name = response.data.role.name;
+      // navigate(ROUTES.EDIT_ROLE_ROUTE(getSlug(name)), {
+      //   state: response?.data?.user,
+      // });
+    } catch (e: any) {
+      console.log("Error:", e.meesage);
+    } finally {
+      closeEditing();
+      // setEditId(undefined);
+    }
+  };
+
+  React.useEffect(() => {
+    if (!editId) return;
+    handleEdit(editId);
+    //eslint-disable-next-line
+  }, [editId]);
+
+
+  React.useEffect(() => {
+    setFees(data);
+  }, [data]);
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
@@ -146,81 +202,16 @@ const Fees: React.FC<PaymentProps> = () => {
       }
     };
 
-    const filterData = [
-      { label: "All", value: "*" },
-      { label: "Paid", value: "paid" },
-      { label: "Unpaid", value: "unpaid" },
-    ];
-
-    const handleChange = (item: { label: string; value: string }) => {
-      const val = item.value;
-      if (!val || val === "*") return setFees(data);
-      const filtered = (data as FeeDataType[]).filter(
-        (elem) => elem.category.toLowerCase() === val.toLowerCase()
-      );
-      setFees(filtered);
-    };
-
     return (
       <FilterComponent
-        placeholder="Search status"
         onFilter={(e) => setFilterText(e.target.value)}
         onClear={handleClear}
         filterText={filterText}
-        customRightElement={
-          <CustomSelect
-            onChange={(value) => handleChange(value as any)}
-            options={filterData}
-            fontSize="sm"
-          />
-        }
+        handleCreateFee={onOpen}
       />
     );
+    // eslint-disable-next-line
   }, [filterText, resetPaginationToggle]);
-
-  React.useEffect(() => {
-    setFees(data);
-  }, [data]);
-
-  // HANDLE PAYMENT
-  const handlePayment = async (method: PayOptions) => {
-    try {
-      openLoading();
-      const payload: PayInvoice = {
-        paymentMethod: method,
-        invoiceId: selectedData!.id,
-      };
-      const result = await executePayInvoice(payload, token!);
-      if (result.status === "error") throw new Error(result.message);
-
-      // REDIRECT
-      window.open(result.data.url, "_blank");
-    } catch (e: any) {
-      toast({
-        title: e.message,
-        status: "error",
-      });
-    } finally {
-      closeLoading();
-      setSelectedData(null);
-    }
-  };
-
-  //executeDownloadInvoice
-  const handleViewInvoice = async () => {
-    try {
-      openLoading();
-      await executeDownloadInvoice(selectedData?.id, token!);
-    } catch (e: any) {
-      toast({
-        title: e.message,
-        status: "error",
-      });
-    } finally {
-      closeLoading();
-      setSelectedData(null);
-    }
-  };
 
   return (
     <DashboardLayout>
@@ -239,16 +230,62 @@ const Fees: React.FC<PaymentProps> = () => {
         />
       </Box>
 
-      <InvoiceModal
-        invoiceId={selectedData?.id as any}
-        isOpen={Boolean(selectedData)}
-        onClose={() => setSelectedData(null)}
-        status={selectedData?.status as any}
-        isLoading={isLoading}
-        handleAction={handlePayment}
-        handleViewInvoice={handleViewInvoice}
+      <FeeModal
+        isEditing={isEditing}
+        handleEdit={handleEdit}
+        control={control}
+        isOpen={Boolean(editId)}
+        onClose={() => setEditId(undefined)}
+      />
+      <CreateFeeModal
+        isOpen={isOpen}
+        onClose={onClose}
+        handleReloadData={handleReloadData}
       />
     </DashboardLayout>
+  );
+};
+
+interface FilterComponentProp {
+  onFilter: (e: any) => void;
+  onClear: () => void;
+  filterText: string;
+  handleCreateFee: () => void;
+}
+const FilterComponent: React.FC<FilterComponentProp> = ({
+  onFilter,
+  filterText,
+  handleCreateFee,
+}) => {
+  return (
+    <HStack
+      flexWrap={"wrap"}
+      flexDir={["column-reverse", "column-reverse", "row"]}
+      spacing={2}
+      alignItems={["flex-start", "flex-start", "center"]}
+      w={"full"}
+    >
+      <InputGroup flex={1} maxW={["full", "full", 435]}>
+        <InputLeftElement as={Center}>
+          <Icon as={AiOutlineSearch} fontSize={"24px"} color={TEXT_GRAY} />
+        </InputLeftElement>
+        <Input
+          fontSize={"sm"}
+          onChange={onFilter}
+          value={filterText}
+          placeholder="Search"
+        />
+      </InputGroup>
+
+      <Spacer />
+      <CustomButton
+        onClick={handleCreateFee}
+        alignSelf={["flex-end", "flex-end", "unset"]}
+        leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
+      >
+        Create Fee
+      </CustomButton>
+    </HStack>
   );
 };
 

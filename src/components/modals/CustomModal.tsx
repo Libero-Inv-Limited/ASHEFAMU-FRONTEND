@@ -4,6 +4,7 @@ import {
   ModalContent,
   ModalBody,
   ModalCloseButton,
+  ModalHeader,
 } from "@chakra-ui/react";
 
 type Props = {
@@ -22,8 +23,10 @@ function ModalComponent(props: Props) {
       isOpen={props.isOpen}
       onClose={props.onClose}
     >
+      
       <ModalOverlay/>
       <ModalContent >
+      {props.title && <ModalHeader>{props.title}</ModalHeader>}
         {props.closeButton && <ModalCloseButton />}
 
         <ModalBody maxH="80vh" overflow="auto" py={5}>
