@@ -12,13 +12,15 @@ interface SuccessPageProps {}
 const SuccessPage: React.FC<SuccessPageProps> = () => {
   const { type } = useParams();
   const navigate = useNavigate();
-  const { user } = useAppSelector((state) => state.accountStore.user);
+  const { user } = useAppSelector((state) => state.accountStore);
+
+  console.log({ user });
 
   useEffect(() => {
     setTimeout(() => {
       if (type === "register") return navigate(ROUTES.LOGIN_ROUTE);
       if (type === "login") {
-        if (user.login_count === 1) {
+        if (user.user.login_count === 1) {
           return navigate(ROUTES.FACILITY_FORM_INTRO);
         } else {
           return navigate(ROUTES.DASHBOARD_ROUTE);

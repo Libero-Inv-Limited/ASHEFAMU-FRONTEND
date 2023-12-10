@@ -51,10 +51,10 @@ const Login: React.FC<LoginProps> = () => {
 
       // GET TOKEN
       const tokenData = result.data.token
+      getUsersProfile(tokenData.token!)
       dispatch(populateToken(tokenData))
 
       // GET PROFILE
-      getUsersProfile(tokenData.token!)
       // SHOW SUCCESS TOAST
       toast({
         status: "success",

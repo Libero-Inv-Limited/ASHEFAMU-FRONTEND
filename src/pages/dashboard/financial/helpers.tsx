@@ -38,7 +38,7 @@ export const registrationData = (invoices: InvoiceDataType[], setSelectedData: (
       name: "Date Sent",
       selector: "invoice_date",
       cell: (data: InvoiceDataType) => {
-        const date = new Date(+data.invoice_date);
+        const date = new Date(+data.invoice_date * 1000);
         return (
           <Text>
             {date.toLocaleDateString("en-US", {
@@ -63,7 +63,7 @@ export const registrationData = (invoices: InvoiceDataType[], setSelectedData: (
       name: "Due Date",
       selector: "invoice_date",
       cell: (data: InvoiceDataType) => {
-        const date = new Date(+data.due_date);
+        const date = new Date(+data.due_date * 1000);
         return (
           <Text>
             {date.toLocaleDateString("en-US", {
