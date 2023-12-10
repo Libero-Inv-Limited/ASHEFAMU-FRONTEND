@@ -31,8 +31,6 @@ const FacilityLists: React.FC<FacilityListsProps> = ({ isOpen, onToggle }) => {
   const { isLoadingData } = useAppContext();
   const { facilities } = useAppSelector((state) => state.dataStore);
 
-  console.log({facilities}, "*****************")
-
   const [changingFacilities, setChangingFacilities] =
     useState<FacilityData[]>(facilities);
   const [search, setSearch] = useState<string>("");

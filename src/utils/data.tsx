@@ -208,49 +208,49 @@ export const secondarySidebarContents = (contents) =>
     isElementIcon: content.isElementIcon,
   }));
 
-  export const facilityNavContents = [
+  export const facilityNavContents = (name: string) => [
     {
       name: "dashboard",
-      link: "/dashboard/facilities/:name",
+      link: `/dashboard/facilities/${name}`,
       icon: <DashIcon w={"25px"} h={"25px"} fill={"none"} stroke={"inherit"} />,
       hasStroke: true,
       isElementIcon: true
     },
     {
       name: "documents",
-      link: "/dashboard/facilities/:name/documents",
+      link: `/dashboard/facilities/${name}/documents`,
       icon: <FileIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} stroke={"inherit"} />,
       hasStroke: true,
       isElementIcon: true
     },
     {
       name: "members",
-      link: "/dashboard/facilities/:name/members",
+      link: `/dashboard/facilities/${name}/members`,
       icon: <MemberIcon w={"23px"} h={"15px"} color={"inherit"} fill={"inherit"} />,
       isElementIcon: true
     },
     {
       name: "profile",
-      link: "/dashboard/facilities/:name/profile",
+      link: `/dashboard/facilities/${name}/profile`,
       icon: <UserIcon w={"26px"} h={"26px"} color={"inherit"} fill={"inherit"} />,
       isElementIcon: true
       
     },
-    {
-      name: "analytics",
-      link: "/dashboard/facilities/:name/analytics",
-      icon: <ChartIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
-      isElementIcon: true
-    },
+    // {
+    //   name: "analytics",
+    //   link: `/dashboard/facilities/${name}/analytics`,
+    //   icon: <ChartIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
+    //   isElementIcon: true
+    // },
     {
       name: "notifications",
-      link: "/dashboard/facilities/:name/notifications",
+      link: `/dashboard/facilities/${name}/notifications`,
       icon: <NotificationIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
       isElementIcon: true
     },
     {
       name: "invoice",
-      link: "/dashboard/facilities/:name/invoices",
+      link: `/dashboard/facilities/${name}/invoices`,
       icon: <CardIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
       isElementIcon: true
     },

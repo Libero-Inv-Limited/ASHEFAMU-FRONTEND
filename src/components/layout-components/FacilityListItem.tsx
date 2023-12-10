@@ -13,7 +13,7 @@ const FacilityListItem: React.FC<FacilityListItemProps> = ({ name }) => {
   const handleClick = (e) => {
     e.preventDefault();
     navigate(`/dashboard/facilities/${getSlug(name!)}`);
-    updateNavigation(getSlug(name!), facilityNavContents)
+    updateNavigation(getSlug(name!), facilityNavContents(getSlug(name!)));
   };
   return (
     <HStack
