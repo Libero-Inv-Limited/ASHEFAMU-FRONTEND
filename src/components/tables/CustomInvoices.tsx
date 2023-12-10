@@ -8,7 +8,6 @@ import {
   InputGroup,
   InputLeftElement,
   Spacer,
-  Text,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";

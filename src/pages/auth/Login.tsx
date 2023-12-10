@@ -78,10 +78,12 @@ const Login: React.FC<LoginProps> = () => {
     if(isAuthenticated){
       navigate(ROUTES.SUCCESS_ROUTE("login"))
     }
+    //eslint-disable-next-line
   },[isAuthenticated])
 
   useEffect(() => {
     checkIncompleteReg()
+        //eslint-disable-next-line
   }, [])
 
   return (

@@ -27,6 +27,7 @@ const AuditAndCompliance: React.FC<FacilitiesProps> = () => {
   useEffect(() => {
     if (activeTab) return;
     navigate(`${pathname}?tab=invoices`);
+    //eslint-disable-next-line
   }, []);
 
   const handleTabChange = (event: any) => {
