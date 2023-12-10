@@ -2,7 +2,7 @@ import { Text } from "@chakra-ui/react";
 import { Switch, Button, Stack } from "@chakra-ui/react";
 import { IconButton } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
-import { DARK, TEXT_DARK_GRAY, YELLOW } from "../../../utils/color";
+import { DARK, YELLOW } from "../../../utils/color";
 import { BiEdit } from "react-icons/bi";
 
 export const registrationData = (
