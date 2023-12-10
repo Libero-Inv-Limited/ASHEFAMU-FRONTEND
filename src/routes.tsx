@@ -203,7 +203,7 @@ export default [
     path: "/dashboard/all-fees",
     element: <Fees />,
     name: "Payments",
-    permissions: ["super admin"],
+    permissions: ["super admin, admin, guest"],
   },
 
   // ANALYTICS

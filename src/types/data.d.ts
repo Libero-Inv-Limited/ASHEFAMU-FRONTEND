@@ -380,6 +380,7 @@ type InspectionPayload = {
 type InvoiceFilters = {
   status: string;
   fee_category?: number;
+  facility_id?: number;
 };
 
 

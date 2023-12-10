@@ -14,13 +14,18 @@ export const executeGetAllInvoices = async (
   data: InvoiceFilters,
   token: string,
   page?: number,
-  perPage?: number
+  perPage?: number,
+  facility_id?: number,
 ): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
       method: "POST",
       body: JSON.stringify(
-        data ? { filter: data, page, perPage } : { page, perPage }
+        data
+          ? { filter: data, page, perPage }
+          : facility_id
+          ? { page, perPage, facility_id }
+          : { page, perPage }
       ),
       headers: {
         "Content-Type": "application/json",

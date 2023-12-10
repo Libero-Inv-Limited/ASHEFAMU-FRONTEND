@@ -1,134 +1,82 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Box,
-  Button,
-  Stack,
-  Text,
+  Center,
+  HStack,
+  Icon,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Spacer,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { DARK, TEXT_DARK_GRAY } from "../../utils/color";
+import { AiOutlineSearch } from "react-icons/ai";
+import { TEXT_GRAY } from "../../utils/color";
+import CustomButton from "../../components/common/CustomButton";
 import CustomTable from "../../components/tables/CustomTable";
-import FilterComponent from "../../components/common/FilterComponent";
-import DashboardLayout from "../../components/layouts/DashboardLayout";
-import InvoiceModal from "../../components/modals/InvoiceModal";
-import usePaginatedTableData from "../../hooks/usePaginatedTableData";
-import { executeGetFacilityInvoices } from "../../apis/facility";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
+import ActionModal from "../../components/modals/ActionModal";
+import { executeDeleteFacility } from "../../apis/facility";
+import { populateFacilities } from "../../store/slice/dataSlice";
+import { useForm } from "react-hook-form";
+import DrawerComponent from "../../components/common/Drawer";
+import FilterForm from "../../pages/dashboard/financial/FilterForm";
+import { registrationData } from "../../pages/dashboard/financial/helpers";
+import { BiFilter } from "react-icons/bi";
+import DashboardLayout from "./../../components/layouts/DashboardLayout";
+import { Stack } from "@chakra-ui/react";
 import { useAppContext } from "../../contexts/AppContext";
-import { useAppSelector } from "../../store/hook";
-import CustomSelect from "../../components/common/CustomSelect";
-import { executeDownloadInvoice, executePayInvoice } from "../../apis/user";
+import useFetchHookForAFacility from "./financial/hooks/useFetchHookForAFacility";
 
-interface PaymentProps {}
-const Payment: React.FC<PaymentProps> = () => {
-  const [selectedData, setSelectedData] = useState<InvoiceDataType | null>(
-    null
-  );
+const Payments = () => {
+  const facilities = useAppSelector((state) => state.dataStore.facilities);
   const { currentFacility } = useAppContext();
-  const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
+  const [initialState, setInitialState] = React.useState(null);
+  const { data, loadingData, handleReloadData } = useFetchHookForAFacility(initialState);
+  const [invoices, setInvoices] = React.useState<InvoiceDataType[]>(data);
+
   const {
-    data,
-    totalRows,
-    handlePageChange,
-    handlePerRowsChange,
-    loadingData,
-  } = usePaginatedTableData((page, perPage) =>
-    executeGetFacilityInvoices(currentFacility!.id, token!, page, perPage)
-  );
-  const [invoices, setInvoices] = useState<InvoiceDataType[]>(data);
+    isOpen: isDrawerOpen,
+    onOpen: openDrawer,
+    onClose: closeDrawer,
+  } = useDisclosure();
+  const {
+    control: xcontrol,
+    trigger: xtrigger,
+    getValues: xgetValues,
+    reset: xreset,
+  } = useForm<InvoiceFilters>({
+    mode: "onSubmit",
+  });
+
+  const [deletingFacility, setDeletingFacility] = useState<number | null>(null);
+
+  const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
 
   const {
     isOpen: isLoading,
     onClose: closeLoading,
     onOpen: openLoading,
   } = useDisclosure();
+
+  const dispatch = useAppDispatch();
   const toast = useToast({
     position: "bottom",
     isClosable: true,
     variant: "subtle",
   });
 
-  const columns = [
-    {
-      name: "Invoice ID",
-      cell: (item: InvoiceDataType) => {
-        return (
-          <Button
-            color={DARK}
-            onClick={() => setSelectedData(item)}
-            variant={"link"}
-            size={"sm"}
-          >
-            {item.id}
-          </Button>
-        );
-      },
-      sortable: false,
-    },
-    {
-      name: "Date Sent",
-      cell: (data: InvoiceDataType) => {
-        const date = new Date(+data.invoice_date);
-        return <Text>{date.toLocaleDateString()}</Text>;
-      },
-      sortable: true,
-    },
-    {
-      name: "Fee Category",
-      selector: "description",
-      sortable: false,
-    },
-    {
-      name: "Amount (N)",
-      cell: (data: InvoiceDataType) => {
-        return <Text>{(+data.amount).toLocaleString()}</Text>;
-      },
-      sortable: true,
-    },
-    {
-      name: "Due date",
-      selector: "due_date",
-      cell: (data: InvoiceDataType) => {
-        const date = new Date(+data.due_date);
-        return <Text>{date.toDateString()}</Text>;
-      },
-      sortable: true,
-    },
-    {
-      name: "Status",
-      selector: "status",
-      cell: (data: InvoiceDataType) => {
-        const isPaid = data.status === "paid";
-        const color = isPaid ? "#48A874" : "#DC2626";
-        const paymentInfo =
-          data.payments.length > 0 && data.payments[0]
-            ? (JSON.parse(data.payments[0].payment_method) as PaymentDataType)
-            : null;
-
-        return (
-          <Stack spacing={0}>
-            <Text
-              color={color}
-              fontWeight={"semibold"}
-              textTransform={"capitalize"}
-            >
-              {data.status}
-            </Text>
-            {data.status === "paid" && paymentInfo && (
-              <Text color={TEXT_DARK_GRAY} fontSize={"xs"}>
-                with {paymentInfo.authorization.channel}
-              </Text>
-            )}
-          </Stack>
-        );
-      },
-    },
-  ];
-
+  const { columns } = registrationData(invoices);
   const [filterText, setFilterText] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
+  const filteredItems = invoices.filter(
+    (item) =>
+      item.facility.name &&
+      item.facility.name.toLowerCase().includes(filterText.toLowerCase())
+  );
 
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
@@ -138,110 +86,163 @@ const Payment: React.FC<PaymentProps> = () => {
       }
     };
 
-    const filterData = [
-      { label: "All", value: "*" },
-      { label: "Paid", value: "paid" },
-      { label: "Unpaid", value: "unpaid" },
-    ];
-
-    const handleChange = (item: { label: string; value: string }) => {
-      const val = item.value;
-      if (!val || val === "*") return setInvoices(data);
-      const filtered = (data as InvoiceDataType[]).filter(
-        (elem) => elem.status.toLowerCase() === val.toLowerCase()
-      );
-      setInvoices(filtered);
-    };
-
     return (
       <FilterComponent
-        placeholder="Search status"
         onFilter={(e) => setFilterText(e.target.value)}
         onClear={handleClear}
         filterText={filterText}
-        customRightElement={
-          <CustomSelect
-            onChange={(value) => handleChange(value as any)}
-            options={filterData}
-            fontSize="sm"
-          />
-        }
+        handleFilter={openDrawer}
       />
     );
+    // eslint-disable-next-line
   }, [filterText, resetPaginationToggle]);
+
+  // DELETE FACILITY
+  const handleDelete = async () => {
+    try {
+      openLoading();
+      const result = await executeDeleteFacility([deletingFacility!], token!);
+      if (result.status === "error") throw new Error(result.message);
+
+      // UPDATE FACILITIES STATE
+      const newFacilities = facilities.filter(
+        (item) => item.id !== deletingFacility
+      );
+      dispatch(populateFacilities(newFacilities));
+
+      toast({
+        title: "Facility deleted!",
+        status: "success",
+      });
+      setDeletingFacility(null);
+    } catch (e: any) {
+      console.log("ERROR:", e.message);
+      toast({
+        title: e.message,
+        status: "error",
+      });
+    } finally {
+      closeLoading();
+    }
+  };
+
+  const handleFilters = async () => {
+    if (!(await xtrigger())) return;
+    try {
+      openLoading();
+      const payload: InvoiceFilters = {
+        ...xgetValues(),
+        status: (xgetValues("status") as any).value,
+        fee_category: (xgetValues("fee_category") as any).value,
+        facility_id: currentFacility.id,
+      };
+
+      setInitialState(payload);
+
+      xreset();
+      closeDrawer();
+      handleReloadData();
+    } catch (error: any) {
+      console.log("ERROR: ", error.message);
+      toast({
+        status: "error",
+        title: error.message,
+      });
+    } finally {
+      closeLoading();
+    }
+  };
 
   React.useEffect(() => {
     setInvoices(data);
   }, [data]);
 
-  // HANDLE PAYMENT
-  const handlePayment = async (method: PayOptions) => {
-    try {
-      openLoading();
-      const payload: PayInvoice = {
-        paymentMethod: method,
-        invoiceId: selectedData!.id,
-      };
-      const result = await executePayInvoice(payload, token!);
-      if (result.status === "error") throw new Error(result.message);
-
-      // REDIRECT
-      window.open(result.data.url, "_blank");
-    } catch (e: any) {
-      toast({
-        title: e.message,
-        status: "error",
-      });
-    } finally {
-      closeLoading();
-      setSelectedData(null);
-    }
-  };
-
-  //executeDownloadInvoice
-  const handleViewInvoice = async () => {
-    try {
-      openLoading();
-      await executeDownloadInvoice(selectedData?.id, token!);
-    } catch (e: any) {
-      toast({
-        title: e.message,
-        status: "error",
-      });
-    } finally {
-      closeLoading();
-      setSelectedData(null);
-    }
-  };
-
   return (
     <DashboardLayout>
-      <Box p={4} bg={"white"} rounded={"md"}>
+      <Stack spacing={4} p={2} px={3} bg={"white"} rounded={"md"}>
         <CustomTable
           columns={columns as any}
-          data={invoices}
+          data={filteredItems}
           paginationResetDefaultPage={resetPaginationToggle}
           subHeaderComponent={subHeaderComponentMemo}
           progressPending={loadingData}
-          pagination
-          paginationServer
-          paginationTotalRows={totalRows}
-          onChangeRowsPerPage={handlePerRowsChange}
-          onChangePage={handlePageChange}
         />
-      </Box>
 
-      <InvoiceModal
-        invoiceId={selectedData?.id as any}
-        isOpen={Boolean(selectedData)}
-        onClose={() => setSelectedData(null)}
-        status={selectedData?.status as any}
-        isLoading={isLoading}
-        handleAction={handlePayment}
-        handleViewInvoice={handleViewInvoice}
-      />
+        <ActionModal
+          title="Are you sure you want to delete this facility?"
+          text="This action cannot be undone"
+          status="danger"
+          isLoading={isLoading}
+          handleAction={handleDelete}
+          isOpen={Boolean(deletingFacility)}
+          onClose={() => setDeletingFacility(null)}
+          actionBtnText="Confirm"
+        />
+        <DrawerComponent
+          isOpen={isDrawerOpen}
+          onClose={closeDrawer}
+          title={
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <BiFilter size={24} />
+              <span style={{ marginLeft: "8px" }}>Filter</span>
+            </div>
+          }
+        >
+          <FilterForm control={xcontrol} handleFilters={handleFilters} />
+        </DrawerComponent>
+      </Stack>
     </DashboardLayout>
   );
 };
 
-export default Payment;
+// TABLE HEADER
+interface FilterComponentProp {
+  onFilter: (e: any) => void;
+  onClear: () => void;
+  filterText: string;
+  handleFilter: () => void;
+}
+const FilterComponent: React.FC<FilterComponentProp> = ({
+  onFilter,
+  filterText,
+  handleFilter,
+}) => {
+  return (
+    <HStack
+      flexWrap={"wrap"}
+      flexDir={["column-reverse", "column-reverse", "row"]}
+      spacing={2}
+      alignItems={["flex-start", "flex-start", "center"]}
+      w={"full"}
+    >
+      <InputGroup flex={1} maxW={["full", "full", 435]}>
+        <InputLeftElement as={Center}>
+          <Icon as={AiOutlineSearch} fontSize={"24px"} color={TEXT_GRAY} />
+        </InputLeftElement>
+        <Input
+          fontSize={"sm"}
+          onChange={onFilter}
+          value={filterText}
+          placeholder="Search"
+        />
+      </InputGroup>
+
+      <Spacer />
+      <CustomButton
+        onClick={handleFilter}
+        alignSelf={["flex-end", "flex-end", "unset"]}
+        sx={{
+          bg: "transparent",
+          color: "#363A43",
+          border: "1px solid #C9CFD8",
+        }}
+        borderRadius={4}
+        _hover={{ bg: "transparent" }}
+      >
+        Filter
+      </CustomButton>
+    </HStack>
+  );
+};
+
+export default Payments;
