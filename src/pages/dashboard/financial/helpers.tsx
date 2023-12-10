@@ -1,19 +1,29 @@
 import { Text } from "@chakra-ui/react";
-import { Switch } from "@chakra-ui/react";
+import { Switch, Button } from "@chakra-ui/react";
 import { IconButton } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
 import { DARK, YELLOW } from "../../../utils/color";
 import { BiEdit } from "react-icons/bi";
 
-export const registrationData = (invoices: InvoiceDataType[]) => ({
+export const registrationData = (invoices: InvoiceDataType[], setSelectedData: (data) => void) => ({
   invoices,
+  setSelectedData,
   columns: [
     {
       name: "Invoice Id",
       selector: "id",
       sortable: false,
       cell: (data: InvoiceDataType) => {
-        return <Text>{data.id}</Text>;
+        return (
+          <Button
+            color={DARK}
+            onClick={() => setSelectedData(data)}
+            variant={"link"}
+            size={"sm"}
+          >
+            {data.id}
+          </Button>
+        );
       },
     },
     {

@@ -29,12 +29,18 @@ import DashboardLayout from "./../../components/layouts/DashboardLayout";
 import { Stack } from "@chakra-ui/react";
 import { useAppContext } from "../../contexts/AppContext";
 import useFetchHookForAFacility from "./financial/hooks/useFetchHookForAFacility";
+import InvoiceModal from './../../components/modals/InvoiceModal';
+import { executeDownloadInvoice, executePayInvoice } from './../../apis/user';
 
 const Payments = () => {
   const facilities = useAppSelector((state) => state.dataStore.facilities);
   const { currentFacility } = useAppContext();
   const [initialState, setInitialState] = React.useState(null);
-  const { data, loadingData, handleReloadData } = useFetchHookForAFacility(initialState);
+  const [selectedData, setSelectedData] = React.useState<InvoiceDataType | null>(
+    null
+  );
+  const { data, loadingData, handleReloadData } =
+    useFetchHookForAFacility(initialState);
   const [invoices, setInvoices] = React.useState<InvoiceDataType[]>(data);
 
   const {
@@ -68,7 +74,7 @@ const Payments = () => {
     variant: "subtle",
   });
 
-  const { columns } = registrationData(invoices);
+  const { columns } = registrationData(invoices, setSelectedData);
   const [filterText, setFilterText] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
@@ -85,6 +91,7 @@ const Payments = () => {
         setFilterText("");
       }
     };
+
 
     return (
       <FilterComponent
@@ -153,6 +160,44 @@ const Payments = () => {
     }
   };
 
+  const handleViewInvoice = async () => {
+    try {
+      openLoading();
+      await executeDownloadInvoice(selectedData?.id, token!);
+    } catch (e: any) {
+      toast({
+        title: e.message,
+        status: "error",
+      });
+    } finally {
+      closeLoading();
+      setSelectedData(null);
+    }
+  };
+
+  const handlePayment = async (method: PayOptions) => {
+    try {
+      openLoading();
+      const payload: PayInvoice = {
+        paymentMethod: method,
+        invoiceId: selectedData!.id,
+      };
+      const result = await executePayInvoice(payload, token!);
+      if (result.status === "error") throw new Error(result.message);
+
+      // REDIRECT
+      window.open(result.data.url, "_blank");
+    } catch (e: any) {
+      toast({
+        title: e.message,
+        status: "error",
+      });
+    } finally {
+      closeLoading();
+      setSelectedData(null);
+    }
+  };
+
   React.useEffect(() => {
     setInvoices(data);
   }, [data]);
@@ -166,6 +211,16 @@ const Payments = () => {
           paginationResetDefaultPage={resetPaginationToggle}
           subHeaderComponent={subHeaderComponentMemo}
           progressPending={loadingData}
+        />
+
+        <InvoiceModal
+          invoiceId={selectedData?.id as any}
+          isOpen={Boolean(selectedData)}
+          onClose={() => setSelectedData(null)}
+          status={selectedData?.status as any}
+          isLoading={isLoading}
+          handleAction={handlePayment}
+          handleViewInvoice={handleViewInvoice}
         />
 
         <ActionModal
