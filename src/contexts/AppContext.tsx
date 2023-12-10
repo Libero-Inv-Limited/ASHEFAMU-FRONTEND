@@ -86,7 +86,6 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
   // GET USER'S FACILITIES
   const handleGetFacilities = async () => {
-    if (!pathname.includes("dashboard")) return
     if (!tokenStore) return
     try {
       openLoadingData()

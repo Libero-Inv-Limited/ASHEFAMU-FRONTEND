@@ -26,7 +26,6 @@ const Fees: React.FC<PaymentProps> = () => {
   const [editId, setEditId] = React.useState<number>();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
 
-
   const {
     isOpen: isEditing,
     onOpen: openEditing,
@@ -112,6 +111,7 @@ const Fees: React.FC<PaymentProps> = () => {
         handleReloadData={handleReloadData}
       />
       <CreateFeeModal
+        data={data}
         isOpen={isOpen}
         onClose={onClose}
         handleReloadData={handleReloadData}

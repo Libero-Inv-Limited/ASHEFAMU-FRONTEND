@@ -32,6 +32,7 @@ const Login: React.FC<LoginProps> = () => {
     isClosable: true,
     variant: "subtle",
   })
+  
 
   const handleLogin = async () => {
     try {
@@ -54,7 +55,6 @@ const Login: React.FC<LoginProps> = () => {
 
       // GET PROFILE
       getUsersProfile(tokenData.token!)
-
       // SHOW SUCCESS TOAST
       toast({
         status: "success",

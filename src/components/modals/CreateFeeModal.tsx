@@ -9,8 +9,10 @@ import { useForm } from "react-hook-form";
 import { useToast } from '@chakra-ui/react';
 import { useAppSelector } from "../../store/hook";
 import { executeCreateFee } from "../../apis/finances";
+import { useAppDispatch } from './../../store/hook';
+import { populateFees } from '../../store/slice/dataSlice';
 
-const CreateFeeModal = ({ onClose, isOpen, handleReloadData }) => {
+const CreateFeeModal = ({ onClose, isOpen, handleReloadData, data }) => {
   const [duration, setDuration] = React.useState<string>(null);
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
   const { control, getValues, reset, trigger } = useForm<FeePayload>({
@@ -30,6 +32,8 @@ const CreateFeeModal = ({ onClose, isOpen, handleReloadData }) => {
   });
 
 
+  const dispatch = useAppDispatch()
+
   const handleCheckboxChange = (value: string) => {
     setDuration(value);
   };
@@ -45,6 +49,7 @@ const CreateFeeModal = ({ onClose, isOpen, handleReloadData }) => {
 
       const response = await executeCreateFee(payload, token!);
       if (response.status === "error") throw new Error(response.message);
+      
 
       toast({
         status: "success",
@@ -54,6 +59,7 @@ const CreateFeeModal = ({ onClose, isOpen, handleReloadData }) => {
       reset();
       onClose();
       handleReloadData();
+      dispatch(populateFees(data))
     } catch (error: any) {
       console.log("ERROR: ", error.message);
       toast({
@@ -124,6 +130,14 @@ const CreateFeeModal = ({ onClose, isOpen, handleReloadData }) => {
             >
               <Text mx="auto" fontSize="14px" fontWeight="500">
                 Weekly
+              </Text>
+            </StyledCheckbox>
+            <StyledCheckbox
+              isChecked={duration === "one-time"}
+              onChange={() => handleCheckboxChange("one-time")}
+            >
+              <Text mx="auto" fontSize="14px" fontWeight="500">
+                One-Time
               </Text>
             </StyledCheckbox>
           </HStack>
