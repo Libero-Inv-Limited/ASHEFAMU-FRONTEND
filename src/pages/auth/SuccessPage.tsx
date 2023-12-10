@@ -13,9 +13,7 @@ const SuccessPage: React.FC<SuccessPageProps> = () => {
   const { type } = useParams();
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.accountStore);
-
-  console.log({ user });
-
+  
   useEffect(() => {
     setTimeout(() => {
       if (type === "register") return navigate(ROUTES.LOGIN_ROUTE);

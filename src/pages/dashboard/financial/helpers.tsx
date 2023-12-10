@@ -1,11 +1,14 @@
 import { Text } from "@chakra-ui/react";
-import { Switch, Button } from "@chakra-ui/react";
+import { Switch, Button, Stack } from "@chakra-ui/react";
 import { IconButton } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
-import { DARK, YELLOW } from "../../../utils/color";
+import { DARK, TEXT_DARK_GRAY, YELLOW } from "../../../utils/color";
 import { BiEdit } from "react-icons/bi";
 
-export const registrationData = (invoices: InvoiceDataType[], setSelectedData: (data) => void) => ({
+export const registrationData = (
+  invoices: InvoiceDataType[],
+  setSelectedData: (data) => void
+) => ({
   invoices,
   setSelectedData,
   columns: [
@@ -75,6 +78,25 @@ export const registrationData = (invoices: InvoiceDataType[], setSelectedData: (
         );
       },
       sortable: false,
+    },
+    {
+      name: "Status",
+      selector: "status",
+      cell: (data: InvoiceDataType) => {
+        const isPaid = data.status === "paid";
+        const color = isPaid ? "#48A874" : "#DC2626";
+        return (
+          <Stack spacing={0}>
+            <Text
+              color={color}
+              fontWeight={"semibold"}
+              textTransform={"capitalize"}
+            >
+              {data.status}
+            </Text>
+          </Stack>
+        );
+      },
     },
   ],
 });
