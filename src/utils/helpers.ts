@@ -74,14 +74,32 @@ export const readFile = (file: File | Blob, type: "text" | "base64" = "text") =>
 export const handleConvertCSVToArray = (text: string) => {
   const [head, ...body] = text.trim().split("\r\n").map(line => line.split(","))
   const data: any[] = []
+
   body.forEach((line) => {
     const value: any = {}
+
     line.forEach((item, idx) => {
-      value[head[idx].trim()] = item
-    })
-    data.push(value)
-  })
-  return data
+      let key = head[idx].trim().toLowerCase();
+
+      // Adjustments
+      key = key.replace(/\s+/g, "_"); // Replace spaces with underscores
+      if (key === "full-time/part-time") {
+        key = "employment_type"; // Change key name
+      }
+      if( key ==="post_qualification") {
+        key = "post_graduate_qualification"
+      }
+      if(key === "year_of_qulification"){
+        key="year_of_qualification"
+      }
+
+      value[key] = item;
+    });
+
+    data.push(value);
+  });
+
+  return data;
 }
 
 

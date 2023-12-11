@@ -97,6 +97,7 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({
       startLoadingText();
       // ADD PROF STAFFS
       const facilityId = sessionStorage.getItem("FACILITY_ID");
+      console.log({facilityId, staffs})
       const profStaffPayload: ProfessionStaff = {
         facility_id: +facilityId!,
         staff_csv: staffs.map((item) => {
@@ -107,9 +108,9 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({
           return newItem;
         }),
       };
-      // const resultProf = await executeAddProfessional(profStaffPayload, token!)
-      await executeAddProfessional(profStaffPayload, token!);
-      // if(resultProf.status === "error") throw new Error(resultProf.message)
+      const resultProf = await executeAddProfessional(profStaffPayload, token!)
+      // await executeAddProfessional(profStaffPayload, token!);
+      if(resultProf.status === "error") throw new Error(resultProf.message)
 
       const values = getValues();
       const mappedValue = Object.entries(values).map(([key, value]) => {
