@@ -16,20 +16,29 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
+import {
+  useJsApiLoader,
+  GoogleMap,
+  MarkerF,
+  InfoWindowF,
+} from "@react-google-maps/api";
 import Autocomplete from "./AutoComplete";
+import { BuildingIcon, AddressIcon } from "../../components/icons";
 import { DARK, RED } from "../../utils/color";
 import { BookIcon } from "../../components/icons";
 import DrawerComponent from "./../common/Drawer";
 import CustomButton from "./../common/CustomButton";
-import { MdOutlinePhoneEnabled } from "react-icons/md";
+import { MdOutlinePhoneEnabled, MdPlace } from "react-icons/md";
 import { TEXT_DARK_GRAY } from "./../../utils/color";
-import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaMapMarkerAlt, FaPhone, FaPhoneAlt } from "react-icons/fa";
 import { BiFilter } from "react-icons/bi";
 import FilterForm from "../../pages/home/GISFilterForm";
 import { useForm } from "react-hook-form";
 import useFetchHook from "./hooks/useFetchHook";
 import { calculateBoundingBox } from "../../utils/helpers";
+import { FaMarker } from "react-icons/fa";
+import { FiMapPin } from "react-icons/fi";
+import { AiOutlineClockCircle } from "react-icons/ai";
 
 const center = { lat: 6.104541, lng: 7.00192 };
 const distance = 1200000000;
@@ -48,6 +57,7 @@ const GIS = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data } = useFetchHook(initialState);
+  const [activeMarker, setActiveMarker] = React.useState(null);
 
   const { control, trigger, getValues, reset } = useForm<GISFilters>({
     mode: "onSubmit",
@@ -64,6 +74,13 @@ const GIS = () => {
     isClosable: true,
     variant: "subtle",
   });
+
+  const handleActiveMarker = (marker) => {
+    if (marker === activeMarker) {
+      return;
+    }
+    setActiveMarker(marker);
+  };
 
   const handleFilters = async () => {
     if (!(await trigger())) return;
@@ -100,12 +117,14 @@ const GIS = () => {
     return <SkeletonText />;
   }
 
-  const markers = data?.map((marker: FacilityData) => {
+  const markers = data?.map((marker: FacilityData, id: number) => {
     const coordinates = JSON.parse(marker.gps_cordinates);
-    return { lat: +coordinates.latitude, lng: +coordinates.longitude };
+    return {
+      position: { lat: +coordinates.latitude, lng: +coordinates.longitude },
+      name: marker,
+      id,
+    };
   });
-
-  console.log({ markers });
 
   return (
     <Flex
@@ -133,17 +152,32 @@ const GIS = () => {
             setSelectedFacility={setSelectedFacility}
             selectedFacility={selectedFacility}
           />
+
           <CustomButton onClick={onOpen}>Filter</CustomButton>
         </HStack>
-        <GoogleMap
-          center={center}
-          zoom={10}
-          mapContainerStyle={{ width: "100%", height: "100%" }}
-        >
-          {markers?.map((marker: Coordinates, idx: number) => (
-            <Marker position={marker} key={idx} />
-          ))}
-        </GoogleMap>
+        {isLoaded ? (
+          <GoogleMap
+            center={center}
+            zoom={10}
+            onClick={() => setActiveMarker(null)}
+            mapContainerStyle={{ width: "100%", height: "90vh" }}
+          >
+            {markers?.map(({ id, name, position }) => (
+              <MarkerF
+                key={id}
+                position={position}
+                onMouseOver={() => handleActiveMarker(id)}
+                // onMouseOut={() => setActiveMarker(null)}
+              >
+                {activeMarker === id ? (
+                  <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
+                    <CustomTooltip data={name} setSelectedFacility={setSelectedFacility}/>
+                  </InfoWindowF>
+                ) : null}
+              </MarkerF>
+            ))}
+          </GoogleMap>
+        ) : null}
         <DrawerComponent
           isOpen={Boolean(selectedFacility)}
           onClose={() => setSelectedFacility(null)}
@@ -209,7 +243,7 @@ const DrawerBox = ({ data }) => {
       </HStack>
       <Stack
         border={`2px solid`}
-        borderColor={data.status.status === "approved" ? "brand.500" : RED}
+        borderColor={data?.status?.status === "approved" ? "brand.500" : RED}
         rounded={"md"}
         p={4}
         maxW={"200px"}
@@ -218,15 +252,63 @@ const DrawerBox = ({ data }) => {
         <Center>
           <Text
             fontWeight={"700"}
-            color={data.status.status === "approved" ? "brand.500" : RED}
+            color={data?.status?.status === "approved" ? "brand.500" : RED}
             fontSize={"sm"}
           >
-            {data.status.status === "approved" ? "Accredited" : "UnAccredited"}
+            {data?.status?.status === "approved" ? "Accredited" : "UnAccredited"}
           </Text>
         </Center>
       </Stack>
       <Image src={data?.qr_code} alt={"Qrcode"} maxW={"160px"} />
     </Stack>
+  );
+};
+
+const CustomTooltip = ({ data, setSelectedFacility }) => {
+  return (
+    <Box width={"240px"} p={4}>
+      <Heading color={DARK} fontWeight={"600"} fontSize={"14px"} mb={4}>
+        {data.name}
+      </Heading>
+      <Stack alignItems={"flex-start"} bg={"white"} gap={4}>
+        <HStack>
+          <Icon as={BuildingIcon} />{" "}
+          <Text fontSize={"12px"} fontWeight={"400"} color={TEXT_DARK_GRAY}>
+            {data.categorySelection.category.name}
+          </Text>
+        </HStack>
+        <HStack>
+          <Icon as={FiMapPin} />{" "}
+          <Text fontSize={"12px"} fontWeight={"400"} color={TEXT_DARK_GRAY}>
+            {data.address}
+          </Text>
+        </HStack>
+        <HStack>
+          <Icon as={AiOutlineClockCircle} />{" "}
+          <Text fontSize={"12px"} fontWeight={"400"} color={TEXT_DARK_GRAY}>
+            {data.address}
+          </Text>
+        </HStack>
+        <HStack>
+          <Icon as={FaPhoneAlt} />{" "}
+          <Text fontSize={"12px"} fontWeight={"400"} color={TEXT_DARK_GRAY}>
+            {data.facility_phone}
+          </Text>
+        </HStack>
+        <CustomButton
+          variant={"outline"}
+          w={"full"}
+          rounded={"full"}
+          fontSize={"md"}
+          fontWeight={"600"}
+          colorScheme="#C9CFD8"
+          display={["none", "none", "flex"]}
+          onClick={() => setSelectedFacility(data)}
+        >
+          See More
+        </CustomButton>
+      </Stack>
+    </Box>
   );
 };
 

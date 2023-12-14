@@ -8,6 +8,10 @@ body {
   display: none;
 }
 
+button.gm-ui-hover-effect{
+  display: none !important;
+}
+
 
 
 @media (min-width: 640px) {
