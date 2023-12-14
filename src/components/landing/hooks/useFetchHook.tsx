@@ -16,6 +16,7 @@ const useFetchHook = (arg: GISPayload) => {
 
   React.useEffect(() => {
     fetchData();
+    //eslint-disable-next-line
   }, [arg]);
 
   return {

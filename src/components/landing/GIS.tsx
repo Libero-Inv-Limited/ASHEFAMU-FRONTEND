@@ -23,20 +23,19 @@ import {
   InfoWindowF,
 } from "@react-google-maps/api";
 import Autocomplete from "./AutoComplete";
-import { BuildingIcon, AddressIcon } from "../../components/icons";
+import { BuildingIcon } from "../../components/icons";
 import { DARK, RED } from "../../utils/color";
 import { BookIcon } from "../../components/icons";
 import DrawerComponent from "./../common/Drawer";
 import CustomButton from "./../common/CustomButton";
-import { MdOutlinePhoneEnabled, MdPlace } from "react-icons/md";
+import { MdOutlinePhoneEnabled } from "react-icons/md";
 import { TEXT_DARK_GRAY } from "./../../utils/color";
-import { FaMapMarkerAlt, FaPhone, FaPhoneAlt } from "react-icons/fa";
+import { FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 import { BiFilter } from "react-icons/bi";
 import FilterForm from "../../pages/home/GISFilterForm";
 import { useForm } from "react-hook-form";
 import useFetchHook from "./hooks/useFetchHook";
 import { calculateBoundingBox } from "../../utils/helpers";
-import { FaMarker } from "react-icons/fa";
 import { FiMapPin } from "react-icons/fi";
 import { AiOutlineClockCircle } from "react-icons/ai";
 
