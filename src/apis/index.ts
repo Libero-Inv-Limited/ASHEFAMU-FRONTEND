@@ -17,8 +17,10 @@ export const LETTER_OF_INTENT_ENDPOINT = BASE_URL + "/letter-of-intent"
 export const ADD_FACILITY_ENDPOINT = BASE_URL + "/document-facility"
 export const UPDATE_FACILITY_STATUS_ENDPOINT = BASE_URL + "/update-facility-status"
 export const GET_ALL_FACILITIES_ENDPOINT = BASE_URL + "/all-facilities"
+export const SEARCH_ALL_FACILITIES_ENDPOINT = (query: string) => BASE_URL + `/search-all-facilities?query=${query}`
 export const UPGRADE_FACILITY_ENDPOINT = BASE_URL + "/send-upgrade-request"
 export const GET_ALL_FACILITY_CATEGORIES = BASE_URL + "/all-facility-categories"
+export const GET_ALL_GIS_FACILITIES = BASE_URL + "/facility-gis"
 
 export const DELETE_FACILITY_DOCUMENT_ENDPOINT = BASE_URL + "/remove-document"
 export const DELETE_FACILITY_ENDPOINT = BASE_URL + "/remove-facility"

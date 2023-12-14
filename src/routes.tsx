@@ -23,6 +23,7 @@ import CreateFacility from "./pages/facility-registration/CreateFacility";
 import CreateIntent from "./pages/facility-registration/CreateIntent";
 import FacilityForm from "./pages/facility-registration/FacilityForm";
 import Landing from "./pages/home/Landing";
+import GIS from "./pages/home/GIS"
 import ProfilePage from "./pages/dashboard/ProfilePage";
 import Users from "./pages/dashboard/users";
 import Roles from "./pages/dashboard/roles";
@@ -47,6 +48,13 @@ export default [
     element: <Landing />,
     name: "Landing",
     // permissions: ["admin", "super admin", "user"]
+  },
+
+  // GIS PAGE
+  {
+    path: "/gis",
+    element: <GIS />,
+    name: "Landing",
   },
 
   // AUTH PAGES

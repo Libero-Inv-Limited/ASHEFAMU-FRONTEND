@@ -21,9 +21,11 @@ import {
   UPGRADE_FACILITY_ENDPOINT,
   DASHBOARD_FACILITY_CARD_ENDPOINT,
   UPDATE_FACILITY_STATUS_ENDPOINT,
+  SEARCH_ALL_FACILITIES_ENDPOINT,
 } from ".";
 import { log } from "../utils/helpers";
-import { GET_ALL_FACILITY_CATEGORIES } from './index';
+import { GET_ALL_FACILITY_CATEGORIES } from "./index";
+import { GET_ALL_GIS_FACILITIES } from "./index";
 
 export const executeCreateIntent = async (
   data: FormData,
@@ -98,6 +100,19 @@ export const executeGetFacilities = async (
       },
     };
     const request = await fetch(GET_ALL_FACILITIES_ENDPOINT, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("GET FACILITY [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+export const executeSearchFacilities = async (
+  query: string
+): Promise<ResponseDataType> => {
+  try {
+    const request = await fetch(SEARCH_ALL_FACILITIES_ENDPOINT(query));
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {
@@ -535,20 +550,41 @@ export const executeUpdateFacilityStatus = async (
   }
 };
 
-export const executeGetAllFacilityCategories = async (token: string): Promise<ResponseDataType> => {
+export const executeGetAllFacilityCategories = async (
+  token: string
+): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
-    }
-    const request = await fetch(GET_ALL_FACILITY_CATEGORIES, options)
-    const response = await request.json() satisfies ResponseDataType
-    return response
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const request = await fetch(GET_ALL_FACILITY_CATEGORIES, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("FACILITY CATEGORY [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
   }
-  catch(error: any) {
-    log("FACILITY CATEGORY [ERROR]:", error.message)
-    return { message: error.message, status: "error" } as ResponseDataType
+};
+
+export const executeGetAllGISFacilities = async (
+  payload: GISPayload
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const request = await fetch(GET_ALL_GIS_FACILITIES, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("FACILITY CATEGORY [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
   }
-}
+};

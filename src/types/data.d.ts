@@ -383,6 +383,30 @@ type InvoiceFilters = {
   facility_id?: number;
 };
 
+type BoundingBox = {
+  startLatitude: number;
+  stopLatitude: number;
+  startLongitude: number;
+  stopLongitude: number;
+}
+
+type GISPayload = {
+  startLatitude: number;
+  stopLatitude: number;
+  startLongitude: number;
+  stopLongitude: number;
+  category?: number;
+  sector?: number;
+};
+
+type Coordinates = {
+  lat: number;
+  lng: number;
+}
+
+type GISFilters = {
+  options: { type: string; label: string; value: number };
+};
 
 type PenaltyFilters = {
   status?: string;
