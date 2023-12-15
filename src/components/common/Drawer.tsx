@@ -23,7 +23,7 @@ const DrawerComponent = (props: Props) => {
         isOpen={props.isOpen}
         placement="right"
         onClose={props.onClose}
-        size={"sm"}
+        size={props.size ?? "sm"}
       >
         <DrawerOverlay />
         <DrawerContent>

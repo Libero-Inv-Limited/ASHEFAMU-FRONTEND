@@ -17,7 +17,7 @@ import { UseFormWatch } from "react-hook-form/dist/types";
 
 interface ResetPasswordModalProps {
   control: any;
-  watch: UseFormWatch<RegisterData>;
+  watch: UseFormWatch<UserPayload>;
   onClose: () => void;
   isOpen: boolean;
   handleResetPassword: () => void;

@@ -35,7 +35,7 @@ import { BiFilter } from "react-icons/bi";
 import FilterForm from "../../pages/home/GISFilterForm";
 import { useForm } from "react-hook-form";
 import useFetchHook from "./hooks/useFetchHook";
-import { calculateBoundingBox } from "../../utils/helpers";
+import { calculateBoundingBox, formatTimeRange } from "../../utils/helpers";
 import { FiMapPin } from "react-icons/fi";
 import { AiOutlineClockCircle } from "react-icons/ai";
 
@@ -56,6 +56,8 @@ const GIS = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data } = useFetchHook(initialState);
+
+  console.log({ data });
   const [activeMarker, setActiveMarker] = React.useState(null);
 
   const { control, trigger, getValues, reset } = useForm<GISFilters>({
@@ -63,7 +65,6 @@ const GIS = () => {
   });
 
   const {
-    isOpen: isLoading,
     onClose: closeLoading,
     onOpen: openLoading,
   } = useDisclosure();
@@ -170,7 +171,10 @@ const GIS = () => {
               >
                 {activeMarker === id ? (
                   <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
-                    <CustomTooltip data={name} setSelectedFacility={setSelectedFacility}/>
+                    <CustomTooltip
+                      data={name}
+                      setSelectedFacility={setSelectedFacility}
+                    />
                   </InfoWindowF>
                 ) : null}
               </MarkerF>
@@ -178,6 +182,7 @@ const GIS = () => {
           </GoogleMap>
         ) : null}
         <DrawerComponent
+          size="xs"
           isOpen={Boolean(selectedFacility)}
           onClose={() => setSelectedFacility(null)}
         >
@@ -254,7 +259,9 @@ const DrawerBox = ({ data }) => {
             color={data?.status?.status === "approved" ? "brand.500" : RED}
             fontSize={"sm"}
           >
-            {data?.status?.status === "approved" ? "Accredited" : "UnAccredited"}
+            {data?.status?.status === "approved"
+              ? "Accredited"
+              : "UnAccredited"}
           </Text>
         </Center>
       </Stack>
@@ -285,7 +292,7 @@ const CustomTooltip = ({ data, setSelectedFacility }) => {
         <HStack>
           <Icon as={AiOutlineClockCircle} />{" "}
           <Text fontSize={"12px"} fontWeight={"400"} color={TEXT_DARK_GRAY}>
-            {data.address}
+            {formatTimeRange(data.operationDetails)}
           </Text>
         </HStack>
         <HStack>

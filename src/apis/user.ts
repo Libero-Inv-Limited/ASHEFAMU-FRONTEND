@@ -7,6 +7,7 @@ import {
   PAY_INVOICE_ENDPOINT,
   READ_NOTIFICATIONS_ENDPOINT,
   UPDATE_DASHBOARD_CARD_ENDPOINT,
+  UPDATE_USER_ENDPOINT,
   UPDATE_USER_PASSWORD_ENDPOINT,
 } from ".";
 import { log } from "../utils/helpers";
@@ -102,6 +103,29 @@ export const executeCreateUser = async (
       },
     };
     const request = await fetch(CREATE_USER_ENDPOINT, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("DOCS [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+export const executeUpdateProfile = async (
+  data: UserPayload,
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    };
+    const request = await fetch(UPDATE_USER_ENDPOINT, options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {

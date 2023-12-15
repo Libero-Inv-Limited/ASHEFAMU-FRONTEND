@@ -27,14 +27,16 @@ import ResetPasswordModal from "./../../../components/modals/ResetPassword";
 import { useToast } from "@chakra-ui/react";
 import ROUTES from "./../../../utils/routeNames";
 import { useNavigate } from "react-router-dom";
+import { executeUpdateProfile } from "./../../../apis/user";
+import { useAppSelector } from "../../../store/hook";
 
-
-const BasicForm= () => {
+const BasicForm = () => {
   const location = useLocation();
   const { data: rolesData } = useGetAllRoles();
+  const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
+  const user = location.state;
 
-  const user= location.state;
-  const { control, watch } = useForm<RegisterData>({
+  const { control, watch, trigger, getValues } = useForm<UserPayload>({
     mode: "onSubmit",
   });
   const prevDatas = watch();
@@ -47,14 +49,15 @@ const BasicForm= () => {
     onClose: closeEditing,
   } = useDisclosure();
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const toast = useToast({
     position: "bottom",
     isClosable: true,
     variant: "subtle",
   });
 
-  const { isFetching } =
-    useFetchFacilityData();
+  const { isFetching } = useFetchFacilityData();
 
   const {
     isOpen: isActionOpen,
@@ -73,6 +76,35 @@ const BasicForm= () => {
       status: "success",
       title: "success",
     });
+  };
+
+  const handleUpdateUser = async () => {
+    if (!(await trigger())) return;
+    try {
+      onOpen();
+      const payload: UserPayload = {
+        ...getValues(),
+        role: (getValues("role") as any).value,
+        user_id: user.id,
+        mobile: user.mobile_number,
+      };
+
+      const response = await executeUpdateProfile(payload, token!);
+      if (response.status === "error") throw new Error(response.message);
+
+      toast({
+        status: "success",
+        title: response.message,
+      });
+    } catch (error: any) {
+      console.log("ERROR: ", error.message);
+      toast({
+        status: "error",
+        title: error.message,
+      });
+    } finally {
+      onClose();
+    }
   };
 
   const handleResetPassword = () => {};
@@ -201,6 +233,9 @@ const BasicForm= () => {
             bg={isEditing ? "brand.500" : "#E2E6EB"}
             fontSize="14px"
             color={isEditing ? "white" : "#76859A"}
+            onClick={handleUpdateUser}
+            isDisabled={!isEditing}
+            isLoading={isOpen}
           >
             Update details
           </Button>

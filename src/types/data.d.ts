@@ -283,6 +283,7 @@ type Permission = {
 };
 
 type UserPayload = {
+  user_id?: number;
   firstname: string;
   lastname: string;
   email: string;

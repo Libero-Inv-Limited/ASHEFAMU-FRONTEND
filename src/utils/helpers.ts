@@ -151,3 +151,22 @@ export const calculateBoundingBox = (
     stopLongitude,
   };
 };
+
+
+export const formatTimeRange = (facilityData) => {
+  const { opening_time, closing_time } = facilityData;
+
+  const formatTime = (time) => {
+    const [hours, minutes] = time.split(':');
+    const formattedHours = parseInt(hours, 10) % 12 || 12;
+    const period = parseInt(hours, 10) < 12 ? 'AM' : 'PM';
+
+    return `${formattedHours}:${minutes} ${period}`;
+  };
+
+  const formattedOpeningTime = formatTime(opening_time);
+  const formattedClosingTime = formatTime(closing_time);
+
+  return `${formattedOpeningTime} - ${formattedClosingTime}`;
+}
+

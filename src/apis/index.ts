@@ -69,6 +69,7 @@ export const GET_NOTIFICATIONS_ENDPOINT = BASE_URL + "/get-notifications"
 export const GET_USERS_ENDPOINT = (page: number, perPage: number) =>  BASE_URL + `/all-users/${page}/${perPage}`
 export const GET_USER_FACILITIES_ENDPOINT = (id: number, page:number, perPage:number) => BASE_URL + `/user-facilities/${id}/${page}/${perPage}`
 export const CREATE_USER_ENDPOINT = BASE_URL + "/create-user"
+export const UPDATE_USER_ENDPOINT = BASE_URL + "/update-user-profile"
 export const CREATE_ROLE_ENDPOINT = BASE_URL + "/create-role"
 export const UPDATE_ROLE_ENDPOINT = BASE_URL + "/update-role"
 export const DELETE_ROLE_ENDPOINT = BASE_URL + "/delete-role"
