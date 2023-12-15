@@ -311,4 +311,5 @@ const CustomTooltip = ({ data, setSelectedFacility }) => {
   );
 };
 
+// eslint-disable-next-line
 export default GIS;
