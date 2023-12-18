@@ -290,7 +290,19 @@ type UserPayload = {
   mobile: string;
   username: string;
   password: string;
-  role: number;
+  status: string;
+  role_id: number;
+};
+
+type UserUpdatePayload = {
+  user_id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  mobile: string;
+  username: string;
+  status: string;
+  role_id: number;
 };
 type RequireDocumentType = {
   id: number;

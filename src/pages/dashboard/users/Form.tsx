@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React from "react";
 import {
   FormControl,
   FormLabel,
@@ -35,8 +36,9 @@ const BasicForm = () => {
   const { data: rolesData } = useGetAllRoles();
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
   const user = location.state;
+  const [active, setActive] = React.useState<boolean>(user.status === "active");
 
-  const { control, watch, trigger, getValues } = useForm<UserPayload>({
+  const { control, watch, trigger, getValues } = useForm<UserUpdatePayload>({
     mode: "onSubmit",
   });
   const prevDatas = watch();
@@ -82,14 +84,17 @@ const BasicForm = () => {
     if (!(await trigger())) return;
     try {
       onOpen();
-      const payload: UserPayload = {
-        ...getValues(),
-        role: (getValues("role") as any).value,
-        user_id: user.id,
-        mobile: user.mobile_number,
-      };
-
-      const response = await executeUpdateProfile(payload, token!);
+      const payload = { ...getValues() };
+      const response = await executeUpdateProfile(
+        {
+          ...payload,
+          role_id: (getValues("role_id") as any).value,
+          status: active ? "active" : "inactive",
+          user_id: user.id,
+          mobile: user.mobile_number,
+        },
+        token!
+      );
       if (response.status === "error") throw new Error(response.message);
 
       toast({
@@ -105,6 +110,10 @@ const BasicForm = () => {
     } finally {
       onClose();
     }
+  };
+
+  const handleToggleStatus = () => {
+    setActive((prev) => !prev);
   };
 
   const handleResetPassword = () => {};
@@ -165,8 +174,13 @@ const BasicForm = () => {
         {isEditing && (
           <FormControl>
             <FormLabel htmlFor="isChecked">Activate/Deactivate User</FormLabel>
-            <Switch id="isChecked" isChecked mr={2} />
-            Deactivated
+            <Switch
+              id="isChecked"
+              isChecked={active}
+              mr={2}
+              onChange={handleToggleStatus}
+            />
+            {user.status === "active" ? "Activated" : "Deactivated"}
           </FormControl>
         )}
         {isEditing && (
@@ -220,8 +234,12 @@ const BasicForm = () => {
         </HStack>
       </Stack>
       <Flex justifyContent="space-between">
-        <Text fontWeight={"700"} color={"brand.500"} fontSize={"sm"}>
-          Activated
+        <Text
+          fontWeight={"700"}
+          color={user.status === "active" ? "brand.500" : "red"}
+          fontSize={"sm"}
+        >
+          {user.status === "active" ? "Activated" : "Deactivated"}
         </Text>
         <HStack>
           {isEditing && (

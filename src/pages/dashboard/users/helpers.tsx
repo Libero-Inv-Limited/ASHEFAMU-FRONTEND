@@ -59,7 +59,7 @@ export const formInputsTwo = (values, isEditing: boolean) => {
     return [
       {
         label: "User role",
-        name: "role",
+        name: "role_id",
         rules: "Role is requires",
         icon: MdOutlinePhoneEnabled,
         isSelect: true,
@@ -69,8 +69,8 @@ export const formInputsTwo = (values, isEditing: boolean) => {
   return [
     {
       label: "User role",
-      name: "role",
-      rules: "Role is requires",
+      name: "role_id",
+      rules: "Role is required",
       icon: MdOutlinePhoneEnabled,
       isSelect: true,
     },

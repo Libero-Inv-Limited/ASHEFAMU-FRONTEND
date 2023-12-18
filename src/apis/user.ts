@@ -112,7 +112,7 @@ export const executeCreateUser = async (
 };
 
 export const executeUpdateProfile = async (
-  data: UserPayload,
+  data: UserUpdatePayload,
   token: string
 ): Promise<ResponseDataType> => {
   try {
