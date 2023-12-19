@@ -23,13 +23,13 @@ import { Flex } from "@chakra-ui/react";
 import { formInputs, formInputsTwo } from "./helpers";
 import { Heading } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
-import ActionModal from "../../../components/modals/ActionModal";
 import ResetPasswordModal from "./../../../components/modals/ResetPassword";
 import { useToast } from "@chakra-ui/react";
 import ROUTES from "./../../../utils/routeNames";
 import { useNavigate } from "react-router-dom";
 import { executeUpdateProfile } from "./../../../apis/user";
 import { useAppSelector } from "../../../store/hook";
+import { labelValueMap } from "../../../utils/helpers";
 
 const BasicForm = () => {
   const location = useLocation();
@@ -41,6 +41,8 @@ const BasicForm = () => {
   const { control, watch, trigger, getValues } = useForm<UserUpdatePayload>({
     mode: "onSubmit",
   });
+
+
   const prevDatas = watch();
   console.log("PREV DATA:", prevDatas);
   const navigate = useNavigate();
@@ -62,23 +64,11 @@ const BasicForm = () => {
   const { isFetching } = useFetchFacilityData();
 
   const {
-    isOpen: isActionOpen,
-    onOpen: openAction,
-    onClose: closeAction,
-  } = useDisclosure();
-
-  const {
     isOpen: isResetOpen,
     onOpen: openResetModal,
     onClose: closeResetModal,
   } = useDisclosure();
 
-  const handleSubmit = () => {
-    toast({
-      status: "success",
-      title: "success",
-    });
-  };
 
   const handleUpdateUser = async () => {
     if (!(await trigger())) return;
@@ -116,7 +106,6 @@ const BasicForm = () => {
     setActive((prev) => !prev);
   };
 
-  const handleResetPassword = () => {};
   return (
     <Stack spacing={14}>
       <Stack spacing={6}>
@@ -149,21 +138,18 @@ const BasicForm = () => {
             <GridItem colSpan={isEditing ? [12, 12, 12] : [12, 12, 6]}>
               <AuthInput
                 bg={"#F4F7F4"}
-                data={
-                  item.isSelect
-                    ? rolesData.map((item) => ({
-                        label: item.name,
-                        value: item.id,
-                      }))
-                    : null
-                }
+                data={isEditing ? labelValueMap(rolesData) : null}
                 Icon={item.icon}
+                value={
+                  labelValueMap(rolesData).find(
+                    (role) => role.value === user.role
+                  ) as any
+                }
                 isSelect={item.isSelect}
                 control={control}
                 fontSize={"sm"}
                 label={item.label}
                 name={item.name}
-                value={item.value}
                 rules={{
                   required: item.rules,
                 }}
@@ -180,7 +166,7 @@ const BasicForm = () => {
               mr={2}
               onChange={handleToggleStatus}
             />
-            {user.status === "active" ? "Activated" : "Deactivated"}
+            {active ? "Activated" : "Deactivated"}
           </FormControl>
         )}
         {isEditing && (
@@ -261,21 +247,10 @@ const BasicForm = () => {
       </Flex>
       {isFetching && <Loader />}
       <ResetPasswordModal
-        control={control}
-        watch={watch}
-        handleResetPassword={handleResetPassword}
+        user_id={user.id}
         onClose={closeResetModal}
         isOpen={isResetOpen}
-        openConfirmation={openAction}
         title={`Reset ${user.firstname}'s Password`}
-      />
-      <ActionModal
-        onClose={closeAction}
-        status="danger"
-        actionBtnText="Yes"
-        handleAction={handleSubmit}
-        isOpen={isActionOpen}
-        title="Are you sure you want to reset this user’s password?"
       />
     </Stack>
   );

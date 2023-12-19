@@ -291,7 +291,7 @@ type UserPayload = {
   username: string;
   password: string;
   status: string;
-  role_id: number;
+  role: number;
 };
 
 type UserUpdatePayload = {
@@ -304,6 +304,13 @@ type UserUpdatePayload = {
   status: string;
   role_id: number;
 };
+
+type ResetPassword = {
+  password: string;
+  user_id: number;
+};
+
+
 type RequireDocumentType = {
   id: number;
   name: string;
