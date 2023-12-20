@@ -160,6 +160,7 @@ const Facilities: React.FC<UserProps> = () => {
   useEffect(() => {
     if (!editId) return;
     handleEdit(editId);
+    //eslint-disable-next-line
   }, [editId]);
 
   const [filterText, setFilterText] = React.useState("");
@@ -185,11 +186,8 @@ const Facilities: React.FC<UserProps> = () => {
         onOpen={onOpen}
       />
     );
+    //eslint-disable-next-line
   }, [filterText, resetPaginationToggle]);
-
-  const handleChange = (value) => {
-    console.log({ value });
-  };
 
   return (
     <DashboardLayout>
@@ -229,7 +227,6 @@ const Facilities: React.FC<UserProps> = () => {
               control={control}
               fontSize={"sm"}
               name="facilityId"
-              onChange={handleChange}
               rules={{ required: "Facility is required" }}
             />
           </InputGroup>

@@ -73,7 +73,7 @@ const CreateRole: React.FC<BasicFormProps> = () => {
       <Stack spacing={14}>
         <Stack bg="white" p={8} pt={4} spacing={"8"}>
           <Heading fontFamily={"rubik"} fontWeight={"600"} fontSize={"md"}>
-            CREATE ROLE
+            EDIT ROLE
           </Heading>
           <Grid templateColumns="repeat(6, 1fr)" gap={4}>
             {formInputsForEdit(roleDetails).map((item, idx) => (

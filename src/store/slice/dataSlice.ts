@@ -4,12 +4,14 @@ import { createSlice } from '@reduxjs/toolkit';
 type InitialStateType = {
   facilities: FacilityData[],
   dashboardCards: DashboardCardType[],
-  fees: FeeDataType[]
+  fees: FeeDataType[],
+  permissionCategories: string[]
 }
 const initialState:InitialStateType = {
   facilities: [],
   dashboardCards: [],
-  fees: []
+  fees: [],
+  permissionCategories: []
 };
 
 
@@ -23,6 +25,9 @@ const dataSlice = createSlice({
     populateFees: (state, action) => {
       state.fees = action.payload
     },
+    populateCategories: (state, action) => {
+      state.permissionCategories = action.payload
+    },
     populateDashboardCards: (state, action) => {
       const data = action.payload as DashboardCardType[]
       state.dashboardCards = data.sort((a, b) => a.position - b.position)
@@ -31,5 +36,5 @@ const dataSlice = createSlice({
 })
 
 
-export const { populateFacilities, populateDashboardCards, populateFees } = dataSlice.actions;
+export const { populateFacilities, populateDashboardCards, populateFees, populateCategories } = dataSlice.actions;
 export default dataSlice.reducer;

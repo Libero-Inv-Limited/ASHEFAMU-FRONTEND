@@ -129,3 +129,20 @@ export const groupPermissionsByCategory = (
 
   return groupedPermissions;
 };
+
+export const getCategoriesFromPermissions = (
+  permissions: Permission[]
+): string[] => {
+  const uniqueCategories: string[] = [];
+
+  permissions.forEach((permission) => {
+    const category = permission.category;
+
+    if (!uniqueCategories.includes(category)) {
+      uniqueCategories.push(category);
+    }
+  });
+
+  return uniqueCategories;
+};
+

@@ -63,6 +63,9 @@ const Permission: React.FC<PermissionProps> = () => {
   const { FilterComponent } = useFilterComponent();
   const [editId, setEditId] = React.useState<number>();
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
+  const categories = useAppSelector(
+    (state) => state.dataStore.permissionCategories
+  );
   const toast = useToast();
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
@@ -93,6 +96,7 @@ const Permission: React.FC<PermissionProps> = () => {
       openLoading();
       const payload: PermissionData = {
         ...getValues(),
+        category: (getValues("category") as any).value,
       };
 
       const response = await executeCreatePermission(payload, token!);
@@ -205,6 +209,14 @@ const Permission: React.FC<PermissionProps> = () => {
         size="md"
         title="Create Permission"
       >
+        <AuthInput
+          name="category"
+          control={control}
+          data={categories.map((item) => ({ value: item, label: item }))}
+          rules={{ required: "Category is required" }}
+          label="Enter permission category"
+          isSelect
+        />
         <AuthInput
           name="name"
           control={control}

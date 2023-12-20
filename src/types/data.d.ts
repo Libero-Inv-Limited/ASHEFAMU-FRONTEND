@@ -383,6 +383,7 @@ type ProffessionalStaffData = {
 type PermissionData = {
   name: string;
   description: string;
+  category: string;
 };
 
 type InspectionPayload = {

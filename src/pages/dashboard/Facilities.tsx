@@ -19,6 +19,7 @@ const Facilities: React.FC<FacilitiesProps> = () => {
   useEffect(() => {
     if (activeTab) return
     navigate(`${pathname}?tab=registration`)
+    //eslint-disable-next-line
   }, [])
 
 

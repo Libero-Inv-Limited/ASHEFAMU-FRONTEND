@@ -40,6 +40,7 @@ import AuditAndCompliance from "./pages/dashboard/audit-compliance/index";
 import Compliance from "./pages/dashboard/audit-compliance/compliance";
 import Log from "./pages/dashboard/audit-compliance/log";
 import UserActivities from "./pages/dashboard/audit-compliance/UserActivities";
+import UserPermissions from './pages/dashboard/users/UserPermissions';
 
 export default [
   // HOME PAGE
@@ -254,6 +255,12 @@ export default [
     path: "/dashboard/users/:user/facilities",
     element: <UserFacilities />,
     name: "USER FACILITIES",
+    permissions: ["super admin"],
+  },
+  {
+    path: "/dashboard/users/:user/permissions",
+    element: <UserPermissions />,
+    name: "USER PERMISSIONS",
     permissions: ["super admin"],
   },
   {

@@ -13,6 +13,7 @@ const ROUTES = {
   EDIT_USER_ROUTE: (name: string) => `/dashboard/users/${name}/edit-user`,
   EDIT_ROLE_ROUTE: (name: string) => `/dashboard/roles/${name}/edit-role`,
   VIEW_USER_FACILITIES_ROUTE: (name: string) => `/dashboard/users/${name.toLocaleLowerCase()}/facilities`,
+  VIEW_USER_PERMISSIONS_ROUTE: (name: string) => `/dashboard/users/${name.toLocaleLowerCase()}/permissions`,
   DASHBOARD_ROUTE: "/dashboard",
   FACILITY_FORM_INTRO: "/dashboard/facilities/facility-faq",
   CREATE_FACILITY_ROUTE: "/dashboard/facilities/register-facility",

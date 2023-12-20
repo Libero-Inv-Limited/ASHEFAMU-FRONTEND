@@ -118,6 +118,7 @@ const User: React.FC<UserProps> = () => {
   useEffect(() => {
     if (!editId) return;
     handleEdit(editId);
+    //eslint-disable-next-line
   }, [editId]);
 
   const columns = [

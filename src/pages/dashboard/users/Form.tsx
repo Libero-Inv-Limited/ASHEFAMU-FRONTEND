@@ -214,6 +214,11 @@ const BasicForm = () => {
             maxW={150}
             colorScheme="gray"
             rounded={"full"}
+            onClick={() =>
+              navigate(ROUTES.VIEW_USER_PERMISSIONS_ROUTE(`${user.firstname}`), {
+                state: user,
+              })
+            }
           >
             View permissions
           </CustomButton>
