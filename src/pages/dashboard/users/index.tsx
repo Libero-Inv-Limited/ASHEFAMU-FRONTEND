@@ -210,6 +210,7 @@ const User: React.FC<UserProps> = () => {
         onOpen={onOpen}
       />
     );
+    // eslint-disable-next-line
   }, [filterText, resetPaginationToggle]);
 
   // HANDLE CREATE USER

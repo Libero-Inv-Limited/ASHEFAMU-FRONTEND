@@ -88,6 +88,8 @@ export const GET_ALL_LOGS = (page: number =1, perPage: number=15) => BASE_URL + 
 export const GET_ALL_SCHEDULED_INSPECTIONS = (page: number =1, perPage: number=15, status: string) => BASE_URL + `/inspection-schedules?page=${page}&perPage=${perPage}&status=${status}`
 export const GET_ONE_PERMISSION_ENDPOINT = (id: number) => BASE_URL + "/permission-detail/" + id
 export const UPDATE_USER_PASSWORD_ENDPOINT = BASE_URL + "/update-user-password"
+export const ASSIGN_FACILITY = BASE_URL + "/assign-facility"
+export const REMOVE_FACILITY = BASE_URL + "/remove-facility"
 export const UPDATE_DASHBOARD_CARD_ENDPOINT = BASE_URL + "/update-card-setting"
 export const READ_NOTIFICATIONS_ENDPOINT = (id: number) => BASE_URL + "/read-notification/" + id
 export const GET_ALL_INVOICES = BASE_URL + `/invoices`

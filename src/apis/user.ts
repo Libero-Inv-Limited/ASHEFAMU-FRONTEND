@@ -6,6 +6,7 @@ import {
   GET_SCHEDULE_ENDPOINT,
   PAY_INVOICE_ENDPOINT,
   READ_NOTIFICATIONS_ENDPOINT,
+  REMOVE_FACILITY,
   UPDATE_DASHBOARD_CARD_ENDPOINT,
   UPDATE_USER_ENDPOINT,
   UPDATE_USER_PASSWORD_ENDPOINT,
@@ -16,6 +17,7 @@ import { CREATE_USER_ENDPOINT } from "./index";
 import { GET_USER_FACILITIES_ENDPOINT } from "./index";
 import { DOWNLOAD_INVOICE_ENDPOINT } from './index';
 import { DELETE_USER_ACCOUNT } from './index';
+import { ASSIGN_FACILITY } from './index';
 
 export const executeGetUserNotification = async (
   token: string,
@@ -191,6 +193,50 @@ export const executeUpdatePassword = async (
       },
     };
     const request = await fetch(UPDATE_USER_PASSWORD_ENDPOINT, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("UPDATE PASSWORD [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+export const executeAssignFacility = async (
+  data: AssignFacility,
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const request = await fetch(ASSIGN_FACILITY, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("UPDATE PASSWORD [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+export const executeRemoveFacility = async (
+  data: RemoveFacility,
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const request = await fetch(REMOVE_FACILITY, options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {

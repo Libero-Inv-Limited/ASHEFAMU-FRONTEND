@@ -305,12 +305,6 @@ type UserUpdatePayload = {
   role_id: number;
 };
 
-type ResetPassword = {
-  password: string;
-  user_id: number;
-};
-
-
 type RequireDocumentType = {
   id: number;
   name: string;
@@ -422,6 +416,16 @@ type GISPayload = {
 type Coordinates = {
   lat: number;
   lng: number;
+}
+
+type AssignFacility = {
+  userId: number,
+  facilityId: number
+}
+
+type RemoveFacility = {
+  userId: number,
+  ids: number[]
 }
 
 type GISFilters = {

@@ -33,7 +33,7 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
   user_id,
 }) => {
   const [isSmall] = useMediaQuery("(max-width: 640px)");
-  const { control, watch, trigger, getValues } = useForm<ResetPassword>({
+  const { control, watch, trigger, getValues } = useForm<UpdatePassword>({
     mode: "onSubmit",
   });
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);

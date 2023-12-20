@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MdOutlinePhoneEnabled } from "react-icons/md";
 import { HStack, Tag, Text, IconButton, Icon } from "@chakra-ui/react";
-import { BiEdit } from "react-icons/bi";
 import { BiTrash } from "react-icons/bi";
-import { YELLOW, RED } from "./../../../utils/color";
+import { RED } from "./../../../utils/color";
 
 export const statusTypes = [
   { value: "approved", color: "green", bg: "", label: "Approved" },
@@ -85,7 +85,7 @@ export const formInputsTwo = (values, isEditing: boolean) => {
   ];
 };
 
-export const facilitiesColumns = () => [
+export const facilitiesColumns = (setDeleteId: (id: number | null) => void) => [
   {
     name: "Name",
     cell: (data: FacilityData) => {
@@ -120,26 +120,16 @@ export const facilitiesColumns = () => [
     name: "Actions",
     selector: "",
     sortable: false,
-    cell: () => {
+    cell: (item: any) => {
       return (
         <HStack>
-          <IconButton
-            _hover={{ bg: "#FFEBC9" }}
-            rounded={"full"}
-            bg={"#FFEBC9"}
-            aria-label="edit"
-            // isLoading={isEditing && item.id === editId}
-            // onClick={() => setEditId(item.id)}
-            icon={<Icon fontSize={"xl"} as={BiEdit} color={YELLOW} />}
-          />
           <IconButton
             bg={"#FEE2E2"}
             _hover={{ bg: "#FEE2E2" }}
             rounded={"full"}
             colorScheme="red"
             aria-label="delete"
-            // isLoading={(item.id === deletingFacility) && isLoading}
-            // onClick={() => setDeletingFacility(item.id! as number)}
+            onClick={() => setDeleteId(item.id! as number)}
             icon={<Icon fontSize={"xl"} as={BiTrash} color={RED} />}
           />
         </HStack>

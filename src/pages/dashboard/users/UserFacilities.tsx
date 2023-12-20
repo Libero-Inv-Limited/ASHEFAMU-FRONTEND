@@ -19,6 +19,7 @@ import { useAppSelector } from "../../../store/hook";
 import {
   executeGetUserFacilities,
   executeGetUserProfile,
+  executeRemoveFacility,
 } from "../../../apis/user";
 import ModalComponent from "../../../components/modals/CustomModal";
 import { useForm } from "react-hook-form";
@@ -34,20 +35,34 @@ import { Heading } from "@chakra-ui/react";
 import { AiOutlineSearch } from "react-icons/ai";
 import CustomButton from "./../../../components/common/CustomButton";
 import { BsPlus } from "react-icons/bs";
+import { useToast } from "@chakra-ui/react";
+import { executeAssignFacility } from "./../../../apis/user";
+import ActionModal from './../../../components/modals/ActionModal';
 
 interface UserProps {}
 const Facilities: React.FC<UserProps> = () => {
   const location = useLocation();
   const { id } = location.state;
   const [editId, setEditId] = useState<number>();
+  const [deleteId, setDeleteId] = useState<number | null>();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
   const allFacilities = useAppSelector((state) => state.dataStore.facilities);
-  const { control } = useForm<ProffessionalStaffData>({
+  const { control, trigger, getValues, reset } = useForm<AssignFacility>({
     mode: "onSubmit",
   });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { onOpen: openEditing, onClose: closeEditing } = useDisclosure();
+  const {
+    isOpen: isLoading,
+    onOpen: openLoading,
+    onClose: closeLoading,
+  } = useDisclosure();
+  const toast = useToast({
+    position: "bottom",
+    isClosable: true,
+    variant: "subtle",
+  });
 
   const {
     data,
@@ -55,11 +70,11 @@ const Facilities: React.FC<UserProps> = () => {
     handlePageChange,
     handlePerRowsChange,
     loadingData,
-    // handleReloadData,
+    handleReloadData,
   } = usePaginatedTableData((page, perPage) =>
     executeGetUserFacilities(token, id, page, perPage)
   );
- 
+
   const navigate = useNavigate();
 
   const handleEdit = async (id: number) => {
@@ -79,6 +94,68 @@ const Facilities: React.FC<UserProps> = () => {
       setEditId(undefined);
     }
   };
+
+  const handleAddUserFacilities = async () => {
+    if (!(await trigger())) return;
+    try {
+      openLoading();
+      const payload: AssignFacility = {
+        ...getValues(),
+        facilityId: (getValues("facilityId") as any).value,
+        userId: id,
+      };
+
+      const response = await executeAssignFacility(payload, token!);
+      if (response.status === "error") throw new Error(response.message);
+
+      toast({
+        status: "success",
+        title: response.message,
+      });
+
+      reset();
+      onClose();
+      handleReloadData();
+    } catch (error: any) {
+      console.log("ERROR: ", error.message);
+      toast({
+        status: "error",
+        title: error.message,
+      });
+    } finally {
+      closeLoading();
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!(await trigger())) return;
+    try {
+      openLoading();
+      const payload: RemoveFacility = {
+        ids: [deleteId],
+        userId: id,
+      };
+
+      const response = await executeRemoveFacility(payload, token!);
+      if (response.status === "error") throw new Error(response.message);
+
+      toast({
+        status: "success",
+        title: response.message,
+      });
+      setDeleteId(null)
+      handleReloadData();
+    } catch (error: any) {
+      console.log("ERROR: ", error.message);
+      toast({
+        status: "error",
+        title: error.message,
+      });
+    } finally {
+      closeLoading();
+    }
+  };
+
 
   useEffect(() => {
     if (!editId) return;
@@ -118,7 +195,7 @@ const Facilities: React.FC<UserProps> = () => {
     <DashboardLayout>
       <Box p={4} bg={"white"} rounded={"md"}>
         <CustomTable
-          columns={facilitiesColumns() as any}
+          columns={facilitiesColumns(setDeleteId) as any}
           data={filteredItems}
           paginationResetDefaultPage={resetPaginationToggle}
           subHeaderComponent={subHeaderComponentMemo}
@@ -132,11 +209,16 @@ const Facilities: React.FC<UserProps> = () => {
       </Box>
 
       <ModalComponent isOpen={isOpen} onClose={onClose} size="md">
-        <SimpleGrid columns={[1]} gap={4}>
+        <SimpleGrid
+          columns={[1]}
+          gap={4}
+          minHeight={"30vh"}
+          position="relative"
+        >
           <Heading size={"md"} lineHeight={"7"} color={DARK} fontSize="md">
             ASSIGN FACILITY
           </Heading>
-          <InputGroup flex={1} maxW={["full", "full", 435]}>
+          <InputGroup flex={1} maxW={["full", "full", 435]} zIndex={3}>
             <AuthInput
               bg={"#F4F7F4"}
               data={allFacilities.map((item) => ({
@@ -146,7 +228,7 @@ const Facilities: React.FC<UserProps> = () => {
               isSelect={true}
               control={control}
               fontSize={"sm"}
-              name="facilities"
+              name="facilityId"
               onChange={handleChange}
               rules={{ required: "Facility is required" }}
             />
@@ -154,8 +236,21 @@ const Facilities: React.FC<UserProps> = () => {
           <Text fontSize="sm" fontWeight={500}>
             Added Facilities
           </Text>
+          <CustomButton isLoading={isLoading} onClick={handleAddUserFacilities}>
+            Add
+          </CustomButton>
         </SimpleGrid>
       </ModalComponent>
+      <ActionModal
+        title={`Are you sure you want to remove this facility?`}
+        text="This action cannot be undone"
+        status="danger"
+        isLoading={isLoading}
+        handleAction={handleDelete}
+        isOpen={Boolean(deleteId)}
+        onClose={() => setDeleteId(null)}
+        actionBtnText="Confirm"
+      />
     </DashboardLayout>
   );
 };
@@ -169,7 +264,7 @@ interface FilterComponentProp {
 const FilterComponent: React.FC<FilterComponentProp> = ({
   onFilter,
   filterText,
-  onOpen
+  onOpen,
 }) => {
   return (
     <HStack
