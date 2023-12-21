@@ -82,6 +82,7 @@ export const GET_PERMISSIONS_ENDPOINT = BASE_URL + "/all-permissions"
 export const GET_USER_POSSIBLE_PERMISSIONS_ENDPOINT = (id: number) => BASE_URL + `/possible-user-permissions/${id}`
 export const CREATE_PERMISSION_ENDPOINT = BASE_URL + "/create-permission"
 export const UPDATE_USER_PERMISSION_ENDPOINT = BASE_URL + "/update-user-permission"
+export const UPDATE_PERMISSION_ENDPOINT = BASE_URL + "/update-permission"
 export const DELETE_PERMISSION_ENDPOINT = BASE_URL + "/delete-permissions"
 export const SCHEDULE_INSPECTION_ENDPOINT = BASE_URL + "/document-inspection"
 export const DOCUMENT_INSPECTION_ENDPOINT = BASE_URL + "/schedule-inspection"

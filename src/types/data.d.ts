@@ -392,6 +392,7 @@ type PermissionData = {
   name: string;
   description: string;
   category: string;
+  id?: number;
 };
 
 type InspectionPayload = {

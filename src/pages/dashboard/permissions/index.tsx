@@ -20,6 +20,8 @@ import CustomButton from "./../../../components/common/CustomButton";
 import useFilterComponent from "./../../../hooks/useFilterComponent";
 import AuthInput from "./../../../components/common/AuthInput";
 import { executeCreatePermission } from "../../../apis/permission";
+import { SimpleGrid } from "@chakra-ui/react";
+import { executeUpdatePermission } from "./../../../apis/permission";
 
 interface PermissionProps {}
 const Permission: React.FC<PermissionProps> = () => {
@@ -57,11 +59,23 @@ const Permission: React.FC<PermissionProps> = () => {
     mode: "onSubmit",
   });
 
+  const {
+    control: xcontrol,
+    trigger: xtrigger,
+    getValues: xgetValues,
+    reset: xreset,
+    setValue,
+  } = useForm<PermissionData>({
+    mode: "onSubmit",
+  });
+
   const [deletingPermission, setDeletingPermission] = React.useState<
     number | null
   >(null);
   const { FilterComponent } = useFilterComponent();
-  const [editId, setEditId] = React.useState<number>();
+  const [editId, setEditId] = React.useState<number | null>();
+  const [editablePermission, setEditablePermission] =
+    React.useState<PermissionData>(null);
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
   const categories = useAppSelector(
     (state) => state.dataStore.permissionCategories
@@ -145,28 +159,51 @@ const Permission: React.FC<PermissionProps> = () => {
     }
   };
 
-  const handleEdit = async (id: number) => {
+  const handleEdit = async () => {
+    if (!(await xtrigger())) return;
     try {
       openEditing();
-      const response = await executeGetPermissionDetails(id, token!);
+      const payload: PermissionData = {
+        ...xgetValues(),
+        id: editablePermission.id,
+        category: (getValues("category") as any).value,
+      };
+
+      const response = await executeUpdatePermission(payload, token!);
       if (response.status === "error") throw new Error(response.message);
 
-      const name = response.data.role.name;
-      navigate(ROUTES.EDIT_ROLE_ROUTE(getSlug(name)), {
-        state: response?.data?.user,
+      toast({
+        status: "success",
+        title: response.message,
       });
-    } catch (e: any) {
-      console.log("Error:", e.meesage);
+
+      xreset();
+      handleReloadData();
+      setEditId(null);
+    } catch (error: any) {
+      console.log("ERROR: ", error.message);
+      toast({
+        status: "error",
+        title: error.message,
+      });
     } finally {
       closeEditing();
-      setEditId(undefined);
     }
   };
 
   React.useEffect(() => {
     if (!editId) return;
-    handleEdit(editId);
+    setEditablePermission(() => data.find((item) => item.id === editId));
+    //eslint-disable-next-line
   }, [editId]);
+
+  React.useEffect(() => {
+    if (editablePermission) {
+      setValue("category", editablePermission.category || "");
+      setValue("description", editablePermission.description || "");
+    }
+    //eslint-disable-next-line
+  }, [editablePermission]);
 
   return (
     <DashboardLayout>
@@ -234,26 +271,34 @@ const Permission: React.FC<PermissionProps> = () => {
         </CustomButton>
       </ModalComponent>
       <ModalComponent
-        onClose={closeEditing}
-        isOpen={isEditing}
+        onClose={() => setEditId(null)}
+        isOpen={Boolean(editId)}
         size="md"
-        title="Create Permission"
+        title="Edit Permission"
       >
-        <AuthInput
-          name="name"
-          control={control}
-          rules={{ required: "Permission Name is required" }}
-          placeholder="Enter permission name"
-        />
-        <AuthInput
-          name="description"
-          control={control}
-          rules={{ required: "Description is required" }}
-          placeholder="Enter Description"
-        />
-        <CustomButton isLoading={isLoading} onClick={handleCreatePermission}>
-          Add Permission
-        </CustomButton>
+        {editablePermission && (
+          <SimpleGrid columns={[1]} gap={4}>
+            <AuthInput
+              name="category"
+              control={control}
+              data={categories.map((item) => ({ value: item, label: item }))}
+              rules={{ required: "Category is required" }}
+              value={editablePermission.category}
+              label="Enter permission category"
+              isSelect
+            />
+            <AuthInput
+              name="description"
+              control={xcontrol}
+              rules={{ required: "Description is required" }}
+              value={editablePermission.description}
+              placeholder="Enter Description"
+            />
+            <CustomButton isLoading={isEditing} onClick={handleEdit}>
+              Edit Permission
+            </CustomButton>
+          </SimpleGrid>
+        )}
       </ModalComponent>
     </DashboardLayout>
   );

@@ -7,6 +7,7 @@ import {
   GET_PERMISSIONS_ENDPOINT,
   GET_USER_POSSIBLE_PERMISSIONS_ENDPOINT,
   UPDATE_USER_PERMISSION_ENDPOINT,
+  UPDATE_PERMISSION_ENDPOINT,
 } from "./index";
 
 export const executeGetAllPermissions = async (
@@ -21,7 +22,7 @@ export const executeGetAllPermissions = async (
         Authorization: `Bearer ${token}`,
       },
     };
-    console.log({page, perPage})
+    console.log({ page, perPage });
     const request = await fetch(GET_PERMISSIONS_ENDPOINT, options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
@@ -44,8 +45,11 @@ export const executeGetAllPossibleUserPermissions = async (
         Authorization: `Bearer ${token}`,
       },
     };
-    console.log({page, perPage})
-    const request = await fetch(GET_USER_POSSIBLE_PERMISSIONS_ENDPOINT(id), options);
+    console.log({ page, perPage });
+    const request = await fetch(
+      GET_USER_POSSIBLE_PERMISSIONS_ENDPOINT(id),
+      options
+    );
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {
@@ -92,6 +96,29 @@ export const executeUpdateUserPermission = async (
       },
     };
     const request = await fetch(UPDATE_USER_PERMISSION_ENDPOINT, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("DOCS [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+export const executeUpdatePermission = async (
+  data: PermissionData,
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    };
+    const request = await fetch(UPDATE_PERMISSION_ENDPOINT, options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {
