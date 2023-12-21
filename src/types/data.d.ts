@@ -274,12 +274,20 @@ type SecondarySidebarItem = {
 };
 
 type Permission = {
-  id: number;
+  id: string;
   name: string;
   description: string;
   updated_at: string;
   created_at: string;
   category: string;
+  assigned?: boolean;
+  isRolePermission?: boolean;
+};
+
+type UserPermissions = {
+  userId: number;
+  permissions: string[];
+  assigned?: boolean;
 };
 
 type UserPayload = {
@@ -403,7 +411,7 @@ type BoundingBox = {
   stopLatitude: number;
   startLongitude: number;
   stopLongitude: number;
-}
+};
 
 type GISPayload = {
   startLatitude: number;
@@ -417,17 +425,17 @@ type GISPayload = {
 type Coordinates = {
   lat: number;
   lng: number;
-}
+};
 
 type AssignFacility = {
-  userId: number,
-  facilityId: number
-}
+  userId: number;
+  facilityId: number;
+};
 
 type RemoveFacility = {
-  userId: number,
-  ids: number[]
-}
+  userId: number;
+  ids: number[];
+};
 
 type GISFilters = {
   options: { type: string; label: string; value: number };

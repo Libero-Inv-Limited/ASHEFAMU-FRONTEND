@@ -79,7 +79,9 @@ export const GET_ROLES_ENDPOINT =(page:number, perPage: number) =>  BASE_URL + `
 export const GET_ONE_ROLE_ENDPOINT = (id: number) => BASE_URL + "/role-detail/" + id
 export const TOGGLE_ROLE_ENDPOINT = (id: number, status: boolean) => BASE_URL + `/toggle-status/${id}/${status}`
 export const GET_PERMISSIONS_ENDPOINT = BASE_URL + "/all-permissions"
+export const GET_USER_POSSIBLE_PERMISSIONS_ENDPOINT = (id: number) => BASE_URL + `/possible-user-permissions/${id}`
 export const CREATE_PERMISSION_ENDPOINT = BASE_URL + "/create-permission"
+export const UPDATE_USER_PERMISSION_ENDPOINT = BASE_URL + "/update-user-permission"
 export const DELETE_PERMISSION_ENDPOINT = BASE_URL + "/delete-permissions"
 export const SCHEDULE_INSPECTION_ENDPOINT = BASE_URL + "/document-inspection"
 export const DOCUMENT_INSPECTION_ENDPOINT = BASE_URL + "/schedule-inspection"

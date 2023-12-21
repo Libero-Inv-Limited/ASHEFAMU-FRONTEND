@@ -1,6 +1,6 @@
 import { Checkbox, Grid, GridItem, Stack } from "@chakra-ui/react";
 import { DARK } from "../../../utils/color";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export const CheckboxGroup = ({
@@ -9,19 +9,9 @@ export const CheckboxGroup = ({
   register,
   setValue,
   getAllPermissionIds,
-  rolePermissions,
+  assignedPermissions,
 }) => {
-  const [selectedPermissionIds, setSelectedPermissionIds] = React.useState([]);
-
-  React.useEffect(() => {
-    const initialSelectedIds = rolePermissions.map(
-      (permission) => permission.permission
-    );
-    setSelectedPermissionIds(initialSelectedIds);
-    setValue("permissions", initialSelectedIds);
-    getAllPermissionIds(initialSelectedIds, true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rolePermissions]);
+  const [selectedPermissionIds, setSelectedPermissionIds] = useState([]);
 
   const handleParentCheckboxChange = (e) => {
     if (e.target.checked) {
@@ -53,6 +43,14 @@ export const CheckboxGroup = ({
     );
   };
 
+  useEffect(() => {
+    const initialSelectedIds = assignedPermissions.map((item) => item.id);
+    setSelectedPermissionIds(initialSelectedIds);
+    setValue("permissions", initialSelectedIds);
+    getAllPermissionIds(initialSelectedIds, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [permissions]);
+
   return (
     <div>
       <Checkbox
@@ -73,7 +71,11 @@ export const CheckboxGroup = ({
         {permissions.map((permission) => (
           <Checkbox
             key={permission.id}
-            isChecked={selectedPermissionIds.includes(permission.id)}
+            isChecked={
+              selectedPermissionIds.includes(permission.id) ||
+              permission.isRolePermission 
+            }
+            isDisabled={permission.isRolePermission}
             colorScheme="brand"
             color={DARK}
             size="sm"
@@ -96,19 +98,25 @@ export const CheckboxGroup = ({
 interface PermissionProps {
   groupedPermissions: { [key: string]: Permission[] };
   handleAddPermissions: (arr: string[]) => void;
-  rolePermissions: { permission: number }[];
 }
+
 export const PermissionList: React.FC<PermissionProps> = ({
   groupedPermissions,
   handleAddPermissions,
-  rolePermissions,
 }) => {
   const { register, setValue } = useForm();
-  const [selectedPermissions, setSelectedPermissions] = React.useState<
-    string[]
-  >([]);
+  const assignedPermissions = Object.values(groupedPermissions).flatMap(
+    (permissions) =>
+      permissions.filter(
+        (permission) =>
+          permission.assigned === true && permission.isRolePermission === false
+      )
+  );
+  const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
 
-  React.useEffect(() => {
+  console.log({selectedPermissions });
+
+  useEffect(() => {
     handleAddPermissions(selectedPermissions);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPermissions]);
@@ -141,11 +149,12 @@ export const PermissionList: React.FC<PermissionProps> = ({
             register={register}
             setValue={setValue}
             getAllPermissionIds={getAllPermissionIds}
-            rolePermissions={rolePermissions}
+            assignedPermissions={assignedPermissions}
           />
         </GridItem>
       ))}
     </Grid>
   );
 };
+
 export default PermissionList;
