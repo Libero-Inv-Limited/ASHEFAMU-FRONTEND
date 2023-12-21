@@ -3,17 +3,11 @@ import { Box, useDisclosure, useToast } from "@chakra-ui/react";
 import React from "react";
 import CustomTable from "../../../components/tables/CustomTable";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
-import ROUTES from "./../../../utils/routeNames";
 import { columns } from "./helpers";
-import { useNavigate } from "react-router-dom";
 import useFetchHook from "./useFetchHook";
-import {
-  executeDeletePermission,
-  executeGetPermissionDetails,
-} from "./../../../apis/permission";
+import { executeDeletePermission } from "./../../../apis/permission";
 import { useAppSelector } from "../../../store/hook";
 import ActionModal from "./../../../components/modals/ActionModal";
-import { getSlug } from "../../../utils/helpers";
 import ModalComponent from "./../../../components/modals/FormModal";
 import { useForm } from "react-hook-form";
 import CustomButton from "./../../../components/common/CustomButton";
@@ -25,7 +19,6 @@ import { executeUpdatePermission } from "./../../../apis/permission";
 
 interface PermissionProps {}
 const Permission: React.FC<PermissionProps> = () => {
-  const navigate = useNavigate();
   const {
     data,
     totalRows,
