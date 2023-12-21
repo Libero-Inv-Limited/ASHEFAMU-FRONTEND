@@ -95,6 +95,7 @@ const Permission: React.FC<PermissionProps> = () => {
         isFilterable={true}
       />
     );
+    //eslint-disable-next-line
   }, [filterText, resetPaginationToggle]);
 
   const handleCreatePermission = async () => {
