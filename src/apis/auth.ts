@@ -19,7 +19,7 @@ export const executeRegistration = async (data: RegisterData): Promise<ResponseD
   }
   catch(error: any) {
     log("REGISTER [ERROR]:", error.message)
-    return { message: error.message, status: "error" } as ResponseDataType
+    return { message: error.message, status: "error", code: error.code } as ResponseDataType
   }
 }
 
@@ -39,7 +39,7 @@ export const executeLogin = async (data: LoginData): Promise<ResponseDataType> =
   }
   catch(error: any) {
     log("LOGIN [ERROR]:", error.message)
-    return { message: error.message, status: "error" } as ResponseDataType
+    return { message: error.message, status: "error", code: error.code } as ResponseDataType
   }
 }
 
