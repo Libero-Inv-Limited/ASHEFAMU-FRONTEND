@@ -14,6 +14,7 @@ import customTheme from "./theme/index";
 import AppContextProvider from "./contexts/AppContext";
 import { NavigationProvider } from "./contexts/NavContexts";
 
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
