@@ -7,6 +7,102 @@ import { BiEdit } from "react-icons/bi";
 
 export const registrationData = (
   invoices: InvoiceDataType[],
+  setSelectedData: (data) => void
+) => ({
+  invoices,
+  setSelectedData,
+  columns: [
+    {
+      name: "Invoice Id",
+      selector: "id",
+      sortable: false,
+      cell: (data: InvoiceDataType) => {
+        return (
+          <Button
+            color={DARK}
+            onClick={() => setSelectedData(data)}
+            variant={"link"}
+            size={"sm"}
+          >
+            {data.id}
+          </Button>
+        );
+      },
+    },
+    {
+      name: "facility",
+      selector: "facility",
+      cell: (data: InvoiceDataType) => {
+        return <Text>{data.facility.name}</Text>;
+      },
+      sortable: true,
+    },
+    {
+      name: "Date Sent",
+      selector: "invoice_date",
+      cell: (data: InvoiceDataType) => {
+        const date = new Date(+data.invoice_date * 1000);
+        return (
+          <Text>
+            {date.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </Text>
+        );
+      },
+      sortable: false,
+    },
+    {
+      name: "Fee Category",
+      selector: "facility",
+      cell: (data: InvoiceDataType) => {
+        return <Text>{data.description}</Text>;
+      },
+      sortable: true,
+    },
+    {
+      name: "Due Date",
+      selector: "invoice_date",
+      cell: (data: InvoiceDataType) => {
+        const date = new Date(+data.due_date * 1000);
+        return (
+          <Text>
+            {date.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </Text>
+        );
+      },
+      sortable: false,
+    },
+    {
+      name: "Status",
+      selector: "status",
+      cell: (data: InvoiceDataType) => {
+        const isPaid = data.status === "paid";
+        const color = isPaid ? "#48A874" : "#DC2626";
+        return (
+          <Stack spacing={0}>
+            <Text
+              color={color}
+              fontWeight={"semibold"}
+              textTransform={"capitalize"}
+            >
+              {data.status}
+            </Text>
+          </Stack>
+        );
+      },
+    },
+  ],
+});
+
+export const registrationDataTwo = (
+  invoices: InvoiceDataType[],
 ) => ({
   invoices,
   columns: [
