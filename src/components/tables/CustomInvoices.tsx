@@ -24,7 +24,7 @@ import { populateFacilities } from "../../store/slice/dataSlice";
 import { useForm } from "react-hook-form";
 import DrawerComponent from "../../components/common/Drawer";
 import FilterForm from "../../pages/dashboard/financial/FilterForm";
-import { registrationData, registrationDataTwo } from "./../../pages/dashboard/financial/helpers";
+import { registrationDataTwo } from "./../../pages/dashboard/financial/helpers";
 import GenerateInvoiceModal from "./../../pages/dashboard/financial/GenerateInvoiceModal";
 import useFetchHook from "./../../pages/dashboard/financial/hooks/useFetchInvoice";
 import { BiFilter } from "react-icons/bi";

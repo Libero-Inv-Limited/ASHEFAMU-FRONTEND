@@ -100,6 +100,7 @@ const CustomInvoiceTable: React.FC<CustomInvoiceTableProps> = () => {
     return (
       <FilterComponent onChange={handleChange} onFilter={(e) => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />
     );
+    //eslint-disable-next-line
   }, [filterText, resetPaginationToggle]);
 
   return (
