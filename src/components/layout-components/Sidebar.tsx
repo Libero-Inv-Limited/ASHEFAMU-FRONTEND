@@ -36,13 +36,14 @@ const Sidebar: React.FC<SidebarProps> = ({
         "users",
         "roles",
         "permissions",
-        "notifications",
         "analytics",
         "audits and compliance",
+        "payments",
       ].includes(item.name)
     );
   });
 
+  console.log({ filteredPaths });
   return (
     <Stack
       h={"full"}

@@ -7,10 +7,8 @@ import { BiEdit } from "react-icons/bi";
 
 export const registrationData = (
   invoices: InvoiceDataType[],
-  setSelectedData: (data) => void
 ) => ({
   invoices,
-  setSelectedData,
   columns: [
     {
       name: "Invoice Id",
@@ -20,7 +18,6 @@ export const registrationData = (
         return (
           <Button
             color={DARK}
-            onClick={() => setSelectedData(data)}
             variant={"link"}
             size={"sm"}
           >

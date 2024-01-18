@@ -44,7 +44,7 @@ const distance = 1200000000;
 
 const GIS = () => {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyBWtwYNp4Cx4fcHj9FCy-dHTVoCb6E21bE",
+    googleMapsApiKey: "AIzaSyB2a8zhc_1LmMerhLFdDO8FpWyJE_W75Xc",
   });
 
   const [initialState, setInitialState] = React.useState<
