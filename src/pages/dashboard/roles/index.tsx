@@ -48,6 +48,12 @@ const Role: React.FC<RoleProps> = () => {
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
 
+  const filteredItems = data.filter(
+    (item) =>
+      item.name &&
+      item.name.toLowerCase().includes(filterText.toLowerCase())
+  );
+
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
       if (filterText) {
@@ -141,7 +147,7 @@ const Role: React.FC<RoleProps> = () => {
               handleToggleStatus
             ) as any
           }
-          data={data}
+          data={filteredItems}
           paginationResetDefaultPage={resetPaginationToggle}
           subHeaderComponent={subHeaderComponentMemo}
           progressPending={loadingData}
