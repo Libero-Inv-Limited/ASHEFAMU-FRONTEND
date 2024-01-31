@@ -77,6 +77,12 @@ const Permission: React.FC<PermissionProps> = () => {
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
 
+  const filteredItems = data.filter(
+    (item) =>
+      (item.name &&
+        item.name.toLowerCase().includes(filterText.toLowerCase()))
+  );
+
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
       if (filterText) {
@@ -213,7 +219,7 @@ const Permission: React.FC<PermissionProps> = () => {
               setEditId
             ) as any
           }
-          data={data}
+          data={filteredItems}
           paginationResetDefaultPage={resetPaginationToggle}
           subHeaderComponent={subHeaderComponentMemo}
           progressPending={loadingData}
