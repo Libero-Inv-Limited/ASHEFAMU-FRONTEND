@@ -765,16 +765,16 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
           </GridItem>
 
           <GridItem colSpan={[12]}>
-            <Controller
+            <AuthInput
               control={control}
+              fontSize={"sm"}
+              isSelect
+              data={labelValueMap(serviceScope)}
+              label="Scope of the services in the facility"
               name="service_scope"
-              render={({ field }) => (
-                <Select
-                  options={labelValueMap(serviceScope)}
-                  isMulti
-                  {...field}
-                />
-              )}
+              value={defaultValues?.["service_scope"]}
+              rules={{}}
+              selectProps={{ isMulti: true }}
             />
           </GridItem>
         </Grid>
