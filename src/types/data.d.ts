@@ -328,6 +328,11 @@ type SectorCategoryType = {
   description: string;
 };
 
+type AreaCategoryType = {
+  id: string;
+  name: string;
+}
+
 type FacilityCategoryType = {
   id: number;
   name: string;
