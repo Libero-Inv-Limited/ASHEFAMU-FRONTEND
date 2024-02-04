@@ -36,9 +36,7 @@ const ServicesForm: React.FC<ServicesFormProps> = ({
     useFetchFacilityData();
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
   const addons = useAppSelector((state) => state.dataStore.facilityAddons);
-
-  console.log({ addons });
-
+  
   const {
     isOpen: isLoading,
     onOpen: openLoading,
