@@ -144,6 +144,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
         }),
         cac_number: getValues("cac_number"),
         facility_sector: getValues("facility_sector").value,
+        area_category: getValues("area_category").value,
         multiple_branch: getValues("has_multiple_facility") === "yes",
         closest_landmark: getValues("closet_landmark"),
         local_gov_area: getValues("local_gov_area").value,
@@ -200,6 +201,11 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
     return result;
   };
 
+  const area_category = [
+    { id: "urban", name: "urban" },
+    { id: "rural", name: "rural" },
+  ];
+
   return (
     <Stack spacing={14}>
       {/* FACILITY DETAILS */}
@@ -234,6 +240,25 @@ const BasicForm: React.FC<BasicFormProps> = ({ setActiveStep, activeStep }) => {
               value={prevIntentData?.["sector_category"]}
               isSelect
               data={labelValueMap(sectorCategory)}
+              rules={{
+                required: "Facility sector is required",
+              }}
+            />
+          </GridItem>
+
+          
+          <GridItem colSpan={[5, 5, 1]}>
+            <AuthInput
+              bg={LIGHT_BG}
+              placeholder="Public"
+              control={control}
+              fontSize={"sm"}
+              isDisabled={true}
+              label="Facility area category"
+              name="area_category"
+              value={prevIntentData?.["area_category"]}
+              isSelect
+              data={labelValueMap<AreaCategoryType>(area_category)}
               rules={{
                 required: "Facility sector is required",
               }}

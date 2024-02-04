@@ -511,6 +511,12 @@ type FeeDataType = {
   duration: string;
 };
 
+type AddonDataType = {
+  id: number,
+  name: string,
+  feature_price: string
+}
+
 type FeePayload = {
   id: number;
   category?: string;

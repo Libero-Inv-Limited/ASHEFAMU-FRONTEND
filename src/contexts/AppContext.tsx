@@ -3,7 +3,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import { useAppDispatch, useAppSelector } from "../store/hook";
 import { clearAccount, populateUser } from "../store/slice/accountSlice";
 import { executeGetFacilities } from "../apis/facility";
-import { populateCategories, populateFacilities, populateFees } from "../store/slice/dataSlice";
+import { populateCategories, populateFacilities, populateFacilityAddons, populateFees } from "../store/slice/dataSlice";
 import { useDisclosure, useToast } from "@chakra-ui/react";
 import { executeGetProfile } from "../apis/auth";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import ROUTES from "../utils/routeNames";
 import { executeGetAllFees } from "../apis/finances";
 import { executeGetAllPermissions } from './../apis/permission';
 import { getCategoriesFromPermissions } from "../pages/dashboard/roles/helpers";
+import { executeGetFacilityAddons } from './../apis/facility';
 
 interface AppContextProps {
   logoutAccount: () => void;
@@ -137,6 +138,21 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     if (!tokenStore) return
     try {
       openLoadingData()
+      const response = await executeGetFacilityAddons(tokenStore.token);
+      if (response.status === "error") throw new Error(response.message);
+      dispatch(populateFacilityAddons(response.data.features));
+    } catch (e: any) {
+      console.log("ERROR HOOKKKK: ", e.message);
+    } finally {
+       closeLoadingData()
+    }
+  };
+
+  const handleGetAllFacilityAddons = async() => {
+    if (!pathname.includes("dashboard")) return
+    if (!tokenStore) return
+    try {
+      openLoadingData()
       const response = await executeGetAllPermissions(tokenStore.token);
       if (response.status === "error") throw new Error(response.message);
       dispatch(populateCategories(getCategoriesFromPermissions(response.data)));
@@ -145,13 +161,14 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     } finally {
        closeLoadingData()
     }
-  };
+  }
 
 
   useEffect(() => {
     handleGetFacilities()
     handleGetAllFees()
     handleGetAllPermissionCategories()
+    handleGetAllFacilityAddons()
       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenStore])
 

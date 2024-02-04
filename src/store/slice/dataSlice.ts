@@ -5,13 +5,15 @@ type InitialStateType = {
   facilities: FacilityData[],
   dashboardCards: DashboardCardType[],
   fees: FeeDataType[],
-  permissionCategories: string[]
+  permissionCategories: string[],
+  facilityAddons: AddonDataType[]
 }
 const initialState:InitialStateType = {
   facilities: [],
   dashboardCards: [],
   fees: [],
-  permissionCategories: []
+  permissionCategories: [],
+  facilityAddons: []
 };
 
 
@@ -32,9 +34,12 @@ const dataSlice = createSlice({
       const data = action.payload as DashboardCardType[]
       state.dashboardCards = data.sort((a, b) => a.position - b.position)
     },
+    populateFacilityAddons: (state, action)=> {
+      state.facilityAddons = action.payload
+    }
   }
 })
 
 
-export const { populateFacilities, populateDashboardCards, populateFees, populateCategories } = dataSlice.actions;
+export const { populateFacilities, populateDashboardCards, populateFees, populateCategories, populateFacilityAddons } = dataSlice.actions;
 export default dataSlice.reducer;

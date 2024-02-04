@@ -22,6 +22,7 @@ import {
   DASHBOARD_FACILITY_CARD_ENDPOINT,
   UPDATE_FACILITY_STATUS_ENDPOINT,
   SEARCH_ALL_FACILITIES_ENDPOINT,
+  GET_FACILITY_ADDONS_ENDPOINT,
 } from ".";
 import { log } from "../utils/helpers";
 import { GET_ALL_FACILITY_CATEGORIES } from "./index";
@@ -100,6 +101,24 @@ export const executeGetFacilities = async (
       },
     };
     const request = await fetch(GET_ALL_FACILITIES_ENDPOINT, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("GET FACILITY [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+export const executeGetFacilityAddons = async (
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const request = await fetch(GET_FACILITY_ADDONS_ENDPOINT, options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {

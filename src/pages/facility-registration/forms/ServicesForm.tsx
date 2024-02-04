@@ -35,6 +35,10 @@ const ServicesForm: React.FC<ServicesFormProps> = ({
   const { isFetching, wasteDisposalMethods, protectiveItems } =
     useFetchFacilityData();
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
+  const addons = useAppSelector((state) => state.dataStore.facilityAddons);
+
+  console.log({ addons });
+
   const {
     isOpen: isLoading,
     onOpen: openLoading,
@@ -73,6 +77,7 @@ const ServicesForm: React.FC<ServicesFormProps> = ({
         powerSources: getValues("powerSources").map((item: any) => ({
           power_source: item.label,
         })),
+        features: getValues("features").map((item: any) => (item.value)),
         protectiveItems: JSON.stringify(
           (getValues("protectiveItems") as any).map((item: any) => item.label)
         ),
@@ -266,6 +271,28 @@ const ServicesForm: React.FC<ServicesFormProps> = ({
               }))}
               name="protectiveItems"
               value={defaultValues?.["protectiveItems"]}
+              isSelect
+              selectProps={{ isMulti: true }}
+            />
+          </GridItem>
+        </Grid>
+      </Stack>
+
+      <Stack spacing={6}>
+        <FormTitle>FACILITY ADDONS</FormTitle>
+        <Grid gridTemplateColumns={"repeat(12, 1fr)"} gap={4}>
+          <GridItem colSpan={12}>
+            <AuthInput
+              rules={{ required: "Addons are required" }}
+              control={control}
+              label=""
+              fontSize={"sm"}
+              data={addons.map((item) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+              name="features"
+              value={defaultValues?.["features"]}
               isSelect
               selectProps={{ isMulti: true }}
             />
