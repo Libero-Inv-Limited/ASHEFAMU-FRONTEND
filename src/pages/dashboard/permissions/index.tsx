@@ -105,6 +105,7 @@ const Permission: React.FC<PermissionProps> = () => {
     return (
       <FilterComponent
         onFilter={(e) => setFilterText(e.target.value)}
+        onClear={handleClear}
         filterText={filterText}
         onOpen={onOpen}
       />
@@ -318,6 +319,7 @@ interface FilterComponentProp {
   onFilter: (e: any) => void;
   onOpen: () => void;
   filterText: string;
+  onClear: () => void;
 }
 const FilterComponent: React.FC<FilterComponentProp> = ({
   onFilter,
