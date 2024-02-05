@@ -524,7 +524,7 @@ type FeePayload = {
   description?: string;
   status?: string;
   duration?: string;
-  facility_category?: number;
+  facility_category_id?: number;
   fee_class?: string; 
   type?: string;
 };

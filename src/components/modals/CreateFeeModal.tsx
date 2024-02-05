@@ -55,7 +55,7 @@ const CreateFeeModal = ({ onClose, isOpen, handleReloadData, data }) => {
   const typeOfFees = [
     { id: "penalty", name: "penalty" },
     { id: "fee", name: "fee" },
-  ]
+  ];
 
   const handleCreateFee = async () => {
     if (!(await trigger())) return;
@@ -65,27 +65,25 @@ const CreateFeeModal = ({ onClose, isOpen, handleReloadData, data }) => {
         ...getValues(),
         category:
           category === "custom" ? (getValues("category") as any) : category,
-        duration,
-        description: (getValues("facility_category") as any).label,
-        facility_category: (getValues("facility_category") as any).value,
+        duration:
+          category === "penalty" || category === "registration" ? "one-time" : duration,
+        description: (getValues("facility_category_id") as any).label,
+        facility_category_id: (getValues("facility_category_id") as any).value,
         type: (getValues("type") as any).value,
         fee_class: (getValues("fee_class") as any).value,
       };
+      const response = await executeCreateFee(payload, token!);
+      if (response.status === "error") throw new Error(response.message);
 
-      console.log({ payload });
+      toast({
+        status: "success",
+        title: response.message,
+      });
 
-      // const response = await executeCreateFee(payload, token!);
-      // if (response.status === "error") throw new Error(response.message);
-
-      // toast({
-      //   status: "success",
-      //   title: response.message,
-      // });
-
-      // reset();
-      // onClose();
-      // handleReloadData();
-      // dispatch(populateFees(data));
+      reset();
+      onClose();
+      handleReloadData();
+      dispatch(populateFees(data));
     } catch (error: any) {
       console.log("ERROR: ", error.message);
       toast({
@@ -162,7 +160,7 @@ const CreateFeeModal = ({ onClose, isOpen, handleReloadData, data }) => {
           control={control}
           fontSize={"sm"}
           label="Facility category"
-          name="facility_category"
+          name="facility_category_id"
           isSelect
           data={labelValueMap(facilityCategory)}
           rules={{
