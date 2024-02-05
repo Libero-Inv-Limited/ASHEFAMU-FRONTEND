@@ -89,7 +89,7 @@ const IssuePenaltyForm = (props: Props) => {
         type="textarea"
         rules={{ required: "Details is required" }}
       />
-      {penaltyResults && <Box>Amount: {penaltyResults.amount}</Box>}
+      {penaltyResults && <Box color="red">Amount: {penaltyResults.amount}</Box>}
       <CustomButton
         isLoading={isLoading}
         onClick={handleIssuePenalty}
