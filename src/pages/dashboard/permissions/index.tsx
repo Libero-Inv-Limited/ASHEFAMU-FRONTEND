@@ -3,7 +3,6 @@ import {
   Box,
   useDisclosure,
   useToast,
-  Heading,
   HStack,
   InputLeftElement,
   InputGroup,
