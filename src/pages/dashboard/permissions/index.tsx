@@ -10,7 +10,7 @@ import {
   Icon,
   Center,
   Spacer,
-  Input
+  Input,
 } from "@chakra-ui/react";
 import React from "react";
 import CustomTable from "../../../components/tables/CustomTable";
@@ -27,8 +27,8 @@ import AuthInput from "./../../../components/common/AuthInput";
 import { executeCreatePermission } from "../../../apis/permission";
 import { SimpleGrid } from "@chakra-ui/react";
 import { executeUpdatePermission } from "./../../../apis/permission";
-import { BsPlus } from 'react-icons/bs';
-import { AiOutlineSearch } from 'react-icons/ai';
+import { BsPlus } from "react-icons/bs";
+import { AiOutlineSearch } from "react-icons/ai";
 import { TEXT_GRAY } from "../../../utils/color";
 
 interface PermissionProps {}
@@ -105,12 +105,8 @@ const Permission: React.FC<PermissionProps> = () => {
     return (
       <FilterComponent
         onFilter={(e) => setFilterText(e.target.value)}
-        onClear={handleClear}
         filterText={filterText}
-        cta="Create Permission"
         onOpen={onOpen}
-        title="Create Permission"
-        isFilterable={true}
       />
     );
     //eslint-disable-next-line
@@ -320,20 +316,14 @@ export default Permission;
 
 interface FilterComponentProp {
   onFilter: (e: any) => void;
-  onClear: () => void;
   onOpen: () => void;
   filterText: string;
-  isUserFacilitiesTable?: boolean;
-  user?: string;
 }
 const FilterComponent: React.FC<FilterComponentProp> = ({
   onFilter,
   filterText,
   onOpen,
-  isUserFacilitiesTable,
-  user,
 }) => {
-  console.log({ filterText });
   return (
     <HStack
       flexWrap={"wrap"}
@@ -342,23 +332,17 @@ const FilterComponent: React.FC<FilterComponentProp> = ({
       alignItems={["flex-start", "flex-start", "center"]}
       w={"full"}
     >
-      {isUserFacilitiesTable ? (
-        <Heading fontFamily={"rubik"} fontWeight={"600"} fontSize={"md"}>
-          {user.toUpperCase()}'S FACILITIES
-        </Heading>
-      ) : (
-        <InputGroup flex={1} maxW={["full", "full", 435]}>
-          <InputLeftElement as={Center}>
-            <Icon as={AiOutlineSearch} fontSize={"24px"} color={TEXT_GRAY} />
-          </InputLeftElement>
-          <Input
-            fontSize={"sm"}
-            onChange={onFilter}
-            value={filterText}
-            placeholder="Search"
-          />
-        </InputGroup>
-      )}
+      <InputGroup flex={1} maxW={["full", "full", 435]}>
+        <InputLeftElement as={Center}>
+          <Icon as={AiOutlineSearch} fontSize={"24px"} color={TEXT_GRAY} />
+        </InputLeftElement>
+        <Input
+          fontSize={"sm"}
+          onChange={onFilter}
+          value={filterText}
+          placeholder="Search"
+        />
+      </InputGroup>
 
       <Spacer />
       <CustomButton
