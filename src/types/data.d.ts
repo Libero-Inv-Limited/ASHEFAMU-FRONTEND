@@ -331,7 +331,7 @@ type SectorCategoryType = {
 type AreaCategoryType = {
   id: string;
   name: string;
-}
+};
 
 type FacilityCategoryType = {
   id: number;
@@ -512,10 +512,10 @@ type FeeDataType = {
 };
 
 type AddonDataType = {
-  id: number,
-  name: string,
-  feature_price: string
-}
+  id: number;
+  name: string;
+  feature_price: string;
+};
 
 type FeePayload = {
   id: number;
@@ -524,6 +524,9 @@ type FeePayload = {
   description?: string;
   status?: string;
   duration?: string;
+  facility_category?: number;
+  fee_class?: string; 
+  type?: string;
 };
 
 type InvoicePayload = {
