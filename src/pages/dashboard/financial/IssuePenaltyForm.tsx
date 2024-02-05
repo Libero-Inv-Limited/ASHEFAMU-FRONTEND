@@ -15,7 +15,7 @@ interface Props {
 }
 
 const IssuePenaltyForm = (props: Props) => {
-  const { control, trigger, getValues, reset, setValue } =
+  const { control, trigger, getValues, reset } =
     useForm<PenaltyPayload>();
   const {
     isOpen: isLoading,

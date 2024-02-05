@@ -1,5 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, useDisclosure, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  useDisclosure,
+  useToast,
+  Heading,
+  HStack,
+  InputLeftElement,
+  InputGroup,
+  Icon,
+  Center,
+  Spacer,
+  Input
+} from "@chakra-ui/react";
 import React from "react";
 import CustomTable from "../../../components/tables/CustomTable";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
@@ -11,11 +23,13 @@ import ActionModal from "./../../../components/modals/ActionModal";
 import ModalComponent from "./../../../components/modals/FormModal";
 import { useForm } from "react-hook-form";
 import CustomButton from "./../../../components/common/CustomButton";
-import useFilterComponent from "./../../../hooks/useFilterComponent";
 import AuthInput from "./../../../components/common/AuthInput";
 import { executeCreatePermission } from "../../../apis/permission";
 import { SimpleGrid } from "@chakra-ui/react";
 import { executeUpdatePermission } from "./../../../apis/permission";
+import { BsPlus } from 'react-icons/bs';
+import { AiOutlineSearch } from 'react-icons/ai';
+import { TEXT_GRAY } from "../../../utils/color";
 
 interface PermissionProps {}
 const Permission: React.FC<PermissionProps> = () => {
@@ -65,7 +79,6 @@ const Permission: React.FC<PermissionProps> = () => {
   const [deletingPermission, setDeletingPermission] = React.useState<
     number | null
   >(null);
-  const { FilterComponent } = useFilterComponent();
   const [editId, setEditId] = React.useState<number | null>();
   const [editablePermission, setEditablePermission] =
     React.useState<PermissionData>(null);
@@ -79,8 +92,7 @@ const Permission: React.FC<PermissionProps> = () => {
 
   const filteredItems = data.filter(
     (item) =>
-      (item.name &&
-        item.name.toLowerCase().includes(filterText.toLowerCase()))
+      item.name && item.name.toLowerCase().includes(filterText.toLowerCase())
   );
 
   const subHeaderComponentMemo = React.useMemo(() => {
@@ -305,3 +317,57 @@ const Permission: React.FC<PermissionProps> = () => {
 };
 
 export default Permission;
+
+interface FilterComponentProp {
+  onFilter: (e: any) => void;
+  onClear: () => void;
+  onOpen: () => void;
+  filterText: string;
+  isUserFacilitiesTable?: boolean;
+  user?: string;
+}
+const FilterComponent: React.FC<FilterComponentProp> = ({
+  onFilter,
+  filterText,
+  onOpen,
+  isUserFacilitiesTable,
+  user,
+}) => {
+  console.log({ filterText });
+  return (
+    <HStack
+      flexWrap={"wrap"}
+      flexDir={["column-reverse", "column-reverse", "row"]}
+      spacing={2}
+      alignItems={["flex-start", "flex-start", "center"]}
+      w={"full"}
+    >
+      {isUserFacilitiesTable ? (
+        <Heading fontFamily={"rubik"} fontWeight={"600"} fontSize={"md"}>
+          {user.toUpperCase()}'S FACILITIES
+        </Heading>
+      ) : (
+        <InputGroup flex={1} maxW={["full", "full", 435]}>
+          <InputLeftElement as={Center}>
+            <Icon as={AiOutlineSearch} fontSize={"24px"} color={TEXT_GRAY} />
+          </InputLeftElement>
+          <Input
+            fontSize={"sm"}
+            onChange={onFilter}
+            value={filterText}
+            placeholder="Search"
+          />
+        </InputGroup>
+      )}
+
+      <Spacer />
+      <CustomButton
+        onClick={onOpen}
+        alignSelf={["flex-end", "flex-end", "unset"]}
+        leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
+      >
+        Create Permissions
+      </CustomButton>
+    </HStack>
+  );
+};
