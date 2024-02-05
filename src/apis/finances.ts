@@ -15,7 +15,7 @@ export const executeGetAllInvoices = async (
   token: string,
   page?: number,
   perPage?: number,
-  facility_id?: number,
+  facility_id?: number
 ): Promise<ResponseDataType> => {
   try {
     const options: RequestInit = {
@@ -117,6 +117,7 @@ export const executeGeneratePenalty = async (
 
 export const executeGetAllFees = async (
   token: string,
+  facilityCategory: string,
   page?: number,
   perPage?: number
 ): Promise<ResponseDataType> => {
@@ -129,7 +130,7 @@ export const executeGetAllFees = async (
       },
     };
     console.log({ page, perPage });
-    const request = await fetch(GET_ALL_FEES, options);
+    const request = await fetch(GET_ALL_FEES(facilityCategory), options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {

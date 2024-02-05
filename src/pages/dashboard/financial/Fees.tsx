@@ -20,10 +20,15 @@ import CustomButton from "./../../../components/common/CustomButton";
 import { BsPlus } from "react-icons/bs";
 import useFeeHook from "./hooks/useFeeHook";
 import { feeColumns } from "./helpers";
+import { labelValueMap } from "../../../utils/helpers";
+import useFetchFacilityData from "./../../../hooks/useFetchFacilityData";
+import CustomSelect from "./../../../components/common/CustomSelect";
 
 interface PaymentProps {}
 const Fees: React.FC<PaymentProps> = () => {
   const [editId, setEditId] = React.useState<number>();
+  const [fId, setFId] = React.useState<string>("");
+  const { facilityCategory } = useFetchFacilityData();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
 
   const {
@@ -42,7 +47,7 @@ const Fees: React.FC<PaymentProps> = () => {
     loadingData,
     handleReloadData,
   } = usePaginatedTableData((page, perPage) =>
-    executeGetAllFees(token!, page, perPage)
+    executeGetAllFees(token!, fId, page, perPage)
   );
 
   const { handleToggleStatus } = useFeeHook(
@@ -66,6 +71,10 @@ const Fees: React.FC<PaymentProps> = () => {
     setFees(data);
   }, [data]);
 
+  React.useEffect(() => {
+    handleReloadData();
+  }, [fId]);
+
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
       if (filterText) {
@@ -80,6 +89,8 @@ const Fees: React.FC<PaymentProps> = () => {
         onClear={handleClear}
         filterText={filterText}
         handleCreateFee={onOpen}
+        facilityCategory={facilityCategory}
+        setFId={setFId}
       />
     );
     // eslint-disable-next-line
@@ -125,11 +136,15 @@ interface FilterComponentProp {
   onClear: () => void;
   filterText: string;
   handleCreateFee: () => void;
+  facilityCategory: FacilityCategoryType[];
+  setFId: (value: string) => void;
 }
 const FilterComponent: React.FC<FilterComponentProp> = ({
   onFilter,
   filterText,
   handleCreateFee,
+  facilityCategory,
+  setFId,
 }) => {
   return (
     <HStack
@@ -152,13 +167,31 @@ const FilterComponent: React.FC<FilterComponentProp> = ({
       </InputGroup>
 
       <Spacer />
-      <CustomButton
-        onClick={handleCreateFee}
-        alignSelf={["flex-end", "flex-end", "unset"]}
-        leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
-      >
-        Create Fee
-      </CustomButton>
+
+      <HStack alignItems={"flex-start"} flexDir={["column", "column", "row"]}>
+        <CustomSelect
+          fontSize="sm"
+          styles={{
+            container: (style) => ({
+              ...style,
+              maxWidth: "280px",
+            }),
+          }}
+          className="custom-select"
+          placeholder="Filter fees by category"
+          options={labelValueMap(facilityCategory)}
+          onChange={(item: { label: string; value: string }) =>
+            setFId(item.value)
+          }
+        />
+        <CustomButton
+          onClick={handleCreateFee}
+          alignSelf={["flex-end", "flex-end", "unset"]}
+          leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
+        >
+          Create Fee
+        </CustomButton>
+      </HStack>
     </HStack>
   );
 };

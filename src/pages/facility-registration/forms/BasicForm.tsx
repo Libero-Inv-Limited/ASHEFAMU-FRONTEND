@@ -51,9 +51,6 @@ import {
   updateSavedFacility,
 } from "../../../store/slice/createFacility";
 import { UserIcon } from "../../../components/icons";
-import Select from "react-select";
-import { Controller } from "react-hook-form";
-
 interface BasicFormProps {
   setActiveStep: (no: any) => void;
   activeStep: number;
