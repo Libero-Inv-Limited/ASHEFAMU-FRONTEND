@@ -18,7 +18,6 @@ import { HStack } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
 import { BiEdit } from "react-icons/bi";
 import { BiTrash } from "react-icons/bi";
-import useFilterComponent from "./useFilterComponent";
 import AddUserModal from "../../../components/modals/AddUserModal";
 import { useForm } from "react-hook-form";
 import CustomButton from "./../../../components/common/CustomButton";
@@ -26,11 +25,11 @@ import useGetAllRoles from "../../../hooks/useGetAllRoles";
 import ROUTES from "./../../../utils/routeNames";
 import { useNavigate } from "react-router-dom";
 import { getSlug } from "../../../utils/helpers";
-import ActionModal from './../../../components/modals/ActionModal';
+import ActionModal from "./../../../components/modals/ActionModal";
+import FilterComponent from "./FilterComponent";
 
 interface UserProps {}
 const User: React.FC<UserProps> = () => {
-  const { FilterComponent } = useFilterComponent();
   const [editId, setEditId] = useState<number>();
   const [deleteId, setDeleteId] = useState<number | null>();
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
@@ -111,7 +110,7 @@ const User: React.FC<UserProps> = () => {
       console.log("Error:", e.meesage);
     } finally {
       closeDeleting();
-      handleReloadData()
+      handleReloadData();
     }
   };
 
@@ -213,8 +212,6 @@ const User: React.FC<UserProps> = () => {
     );
     // eslint-disable-next-line
   }, [filterText, resetPaginationToggle]);
-
-  // HANDLE CREATE USER
 
   const handleCreateUser = async () => {
     if (!(await trigger())) return;
