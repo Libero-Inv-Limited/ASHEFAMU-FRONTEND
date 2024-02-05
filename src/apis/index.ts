@@ -100,6 +100,7 @@ export const GET_ALL_INVOICES = BASE_URL + `/invoices`
 export const GET_ALL_PENALTIES = BASE_URL + `/penalties`
 export const GENERATE_BULK_INVOICES = BASE_URL + `/create-bulk-invoices`
 export const ISSUE_FACILITY_PENALTY = BASE_URL + `/issue-penalty`
+export const GET_PENALTY_ITEMS = (id: number) => BASE_URL + `/penalty-items/${id}`
 export const GET_ALL_FEES = (f_id: string) => BASE_URL + `/fees?f_category=${f_id ?? ""}`
 export const UPDATE_FEE_ENDPOINT = BASE_URL + "/fee"
 export const CREATE_FEE_ENDPOINT = BASE_URL + "/create-fee"

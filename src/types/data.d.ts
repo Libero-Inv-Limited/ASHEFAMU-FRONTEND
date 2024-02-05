@@ -546,6 +546,18 @@ type PenaltyPayload = {
   details: string;
 };
 
+type PenaltyItem = {
+  amount: number;
+  duration: string;
+  id: number;
+  name: string
+}
+
+type PenaltyItems = {
+  amount: number;
+  items: PenaltyItem[] 
+}
+
 type PenaltyDataType = {
   id: number;
   facility_id: number;

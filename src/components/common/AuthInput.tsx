@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ChangeEvent } from "react";
 import {
   Center,
   FormControl,
@@ -90,11 +91,14 @@ const AuthInput: React.FC<AuthInputProps> = ({
           className="custom-select"
           isSearchable={true}
           options={data}
-          onChange={onChange}
           isDisabled={isDisabled}
           fontSize={fontSize as any}
           {...selectProps}
           {...field}
+          onChange={(selectedOption: any) => {
+            onChange && onChange(selectedOption);
+            field.onChange(selectedOption);
+          }}
         />
         {Boolean(error) && (
           <FormErrorMessage fontSize={"xs"}>{error?.message}</FormErrorMessage>

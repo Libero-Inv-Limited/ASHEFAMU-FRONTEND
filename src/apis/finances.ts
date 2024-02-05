@@ -8,6 +8,7 @@ import {
   ISSUE_FACILITY_PENALTY,
   UPDATE_FEE_ENDPOINT,
   GET_ALL_PENALTIES,
+  GET_PENALTY_ITEMS,
 } from "./index";
 
 export const executeGetAllInvoices = async (
@@ -107,6 +108,27 @@ export const executeGeneratePenalty = async (
       },
     };
     const request = await fetch(ISSUE_FACILITY_PENALTY, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("DOCS [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
+export const executeGetPenaltyItems = async (
+  id: number,
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    };
+    const request = await fetch(GET_PENALTY_ITEMS(id), options);
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {

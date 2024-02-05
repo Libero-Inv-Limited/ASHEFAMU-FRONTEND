@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  SimpleGrid,
-  useToast,
-} from "@chakra-ui/react";
+import React from "react";
+import { SimpleGrid, useToast, Box } from "@chakra-ui/react";
 import AuthInput from "../../../components/common/AuthInput";
 import { useAppSelector } from "../../../store/hook";
 import { useForm } from "react-hook-form";
 import CustomButton from "../../../components/common/CustomButton";
 import { useDisclosure } from "@chakra-ui/react";
-import { executeGeneratePenalty } from './../../../apis/finances';
+import { executeGeneratePenalty } from "./../../../apis/finances";
+import { executeGetPenaltyItems } from "./../../../apis/finances";
 
 interface Props {
   onClose: () => void;
@@ -16,22 +15,22 @@ interface Props {
 }
 
 const IssuePenaltyForm = (props: Props) => {
-  const { control, trigger, getValues, reset } = useForm<PenaltyPayload>();
+  const { control, trigger, getValues, reset, setValue } =
+    useForm<PenaltyPayload>();
   const {
     isOpen: isLoading,
     onOpen: openLoading,
     onClose: closeLoading,
   } = useDisclosure();
   const { facilities } = useAppSelector((state) => state.dataStore);
+  const [penaltyResults, setPenaltyResults] = React.useState<PenaltyItems>();
 
- 
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
   const toast = useToast({
     position: "bottom",
     isClosable: true,
     variant: "subtle",
   });
-
 
   const handleIssuePenalty = async () => {
     if (!(await trigger())) return;
@@ -63,12 +62,19 @@ const IssuePenaltyForm = (props: Props) => {
       closeLoading();
     }
   };
+
+  const handleChange = async (e: any) => {
+    const results = await executeGetPenaltyItems(e.value, token);
+    setPenaltyResults(results.data);
+  };
+
   return (
     <SimpleGrid columns={[1]} gap={4}>
       <AuthInput
         label="Facility"
         name="facility_id"
         control={control}
+        onChange={handleChange}
         isSelect
         data={facilities.map((facility) => ({
           value: facility.id,
@@ -83,14 +89,7 @@ const IssuePenaltyForm = (props: Props) => {
         type="textarea"
         rules={{ required: "Details is required" }}
       />
-      <AuthInput
-        label="Amount"
-        name="amount"
-        type="number"
-        control={control}
-        width={"50%"}
-        rules={{ required: "Amount is required" }}
-      />
+      {penaltyResults && <Box>Amount: {penaltyResults.amount}</Box>}
       <CustomButton
         isLoading={isLoading}
         onClick={handleIssuePenalty}

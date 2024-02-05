@@ -20,7 +20,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   ...rest
 }) => {
   const theme = useTheme();
-
+  
   const customSelect: StylesConfig = {
     control: (styles) => ({
       ...styles,
