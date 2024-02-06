@@ -4,6 +4,7 @@ import { IconButton } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
 import { DARK, YELLOW } from "../../../utils/color";
 import { BiEdit } from "react-icons/bi";
+import CustomButton from "./../../../components/common/CustomButton";
 
 export const registrationData = (
   invoices: InvoiceDataType[],
@@ -17,7 +18,7 @@ export const registrationData = (
       selector: "id",
       sortable: false,
       cell: (data: InvoiceDataType) => {
-        return (
+        return data.status === "paid" ? (
           <Button
             color={DARK}
             onClick={() => setSelectedData(data)}
@@ -25,6 +26,18 @@ export const registrationData = (
             size={"sm"}
           >
             {data.id}
+          </Button>
+        ) : (
+          <Button
+            h={"30px"}
+            rounded={"4px"}
+            colorScheme="brand"
+            size={"lg"}
+            fontWeight={"500"}
+            fontSize={"14px"}
+            onClick={() => setSelectedData(data)}
+          >
+            pay now
           </Button>
         );
       },
@@ -101,9 +114,7 @@ export const registrationData = (
   ],
 });
 
-export const registrationDataTwo = (
-  invoices: InvoiceDataType[],
-) => ({
+export const registrationDataTwo = (invoices: InvoiceDataType[]) => ({
   invoices,
   columns: [
     {
@@ -112,11 +123,7 @@ export const registrationDataTwo = (
       sortable: false,
       cell: (data: InvoiceDataType) => {
         return (
-          <Button
-            color={DARK}
-            variant={"link"}
-            size={"sm"}
-          >
+          <Button color={DARK} variant={"link"} size={"sm"}>
             {data.id}
           </Button>
         );
