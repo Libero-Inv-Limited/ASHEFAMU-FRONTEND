@@ -24,8 +24,7 @@ const PaymentHistory = () => {
 
   const { data, loadingData } = useFetchInvoiceHistory(currentFacility!.id);
   const { columns } = invoiceHistoryData(data, setSelectedData);
-  const [resetPaginationToggle, setResetPaginationToggle] =
-    React.useState(false);
+
   const {
     onClose: closeLoading,
     onOpen: openLoading,
@@ -60,7 +59,6 @@ const PaymentHistory = () => {
         <CustomTable
           columns={columns as any}
           data={data}
-          paginationResetDefaultPage={resetPaginationToggle}
           progressPending={loadingData}
         />
       </Stack>
