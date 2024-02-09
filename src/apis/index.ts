@@ -98,6 +98,7 @@ export const UPDATE_DASHBOARD_CARD_ENDPOINT = BASE_URL + "/update-card-setting"
 export const READ_NOTIFICATIONS_ENDPOINT = (id: number) => BASE_URL + "/read-notification/" + id
 export const GET_ALL_INVOICES = BASE_URL + `/invoices`
 export const GET_ALL_PENALTIES = BASE_URL + `/penalties`
+export const GET_ALL_INVOICE_HISTORY = (id: number, page: number, perPage: number) => BASE_URL + `/invoice-history/${id}/${page}/${perPage}`
 export const GENERATE_BULK_INVOICES = BASE_URL + `/create-bulk-invoices`
 export const ISSUE_FACILITY_PENALTY = BASE_URL + `/issue-penalty`
 export const GET_PENALTY_ITEMS = (id: number) => BASE_URL + `/penalty-items/${id}`

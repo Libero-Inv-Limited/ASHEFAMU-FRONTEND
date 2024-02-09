@@ -4,7 +4,6 @@ import { IconButton } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
 import { DARK, YELLOW } from "../../../utils/color";
 import { BiEdit } from "react-icons/bi";
-import CustomButton from "./../../../components/common/CustomButton";
 
 export const registrationData = (
   invoices: InvoiceDataType[],
@@ -89,6 +88,22 @@ export const registrationData = (
             })}
           </Text>
         );
+      },
+      sortable: false,
+    },
+    {
+      name: "Next Payment",
+      selector: "next_payment",
+      cell: (data: InvoiceDataType) => {
+        const date =
+          data.next_payment === "0"
+            ? null
+            : new Date(+data.next_payment * 1000).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              });
+        return <Text>{date ?? "NIL"}</Text>;
       },
       sortable: false,
     },
@@ -246,6 +261,81 @@ export const penaltiesData = (invoices: PenaltyDataType[]) => ({
         return (
           <Text fontWeight={"700"} color={data.paid ? "#48A874" : "#DC2626"}>
             {data.paid ? `Paid with ${data.payment_details}` : "Unpaid"}
+          </Text>
+        );
+      },
+      sortable: false,
+    },
+  ],
+});
+
+export const invoiceHistoryData = (
+  invoices: InvoiceHistoryType[],
+  setSelectedData: (data) => void
+) => ({
+  invoices,
+  columns: [
+    {
+      name: "Invoice Id",
+      selector: "id",
+      sortable: false,
+      cell: (data: InvoiceHistoryType) => {
+        return data.payment_status === "paid" ? (
+          <Button
+            color={DARK}
+            onClick={() => setSelectedData(data)}
+            variant={"link"}
+            size={"sm"}
+          >
+            {data.id}
+          </Button>
+        ) : (
+          <Button
+            h={"30px"}
+            rounded={"4px"}
+            colorScheme="brand"
+            size={"lg"}
+            fontWeight={"500"}
+            fontSize={"14px"}
+            onClick={() => setSelectedData(data)}
+          >
+            pay now
+          </Button>
+        );
+      },
+    },
+    {
+      name: "Payment Date",
+      selector: "payment_date",
+      cell: (data: InvoiceHistoryType) => {
+        const date = new Date(data.payment_date);
+        return (
+          <Text>
+            {date.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </Text>
+        );
+      },
+      sortable: false,
+    },
+    {
+      name: "Amount Paid",
+      selector: "amount_paid",
+      sortable: true,
+    },
+    {
+      name: "Payment Status",
+      selector: "payment_status",
+      cell: (data: InvoiceHistoryType) => {
+        return (
+          <Text
+            fontWeight={"700"}
+            color={data.payment_status === "paid" ? "#48A874" : "#DC2626"}
+          >
+            {data.payment_status}
           </Text>
         );
       },

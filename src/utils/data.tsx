@@ -255,6 +255,12 @@ export const secondarySidebarContents = (contents) =>
       icon: <CardIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
       isElementIcon: true
     },
+    {
+      name: "invoice history",
+      link: `/dashboard/facilities/${name}/invoice-history`,
+      icon: <CardIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
+      isElementIcon: true
+    },
   ];
 
 // POWER SOURCES

@@ -31,7 +31,7 @@ interface InvoiceModalProps {
   isOpen: boolean;
   isLoading?: boolean;
   onClose: () => void;
-  handleAction: (name: MethodType) => void;
+  handleAction?: (name: MethodType) => void;
   handleViewInvoice: () => void;
 }
 const InvoiceModal: React.FC<InvoiceModalProps> = ({

@@ -9,6 +9,7 @@ import {
   UPDATE_FEE_ENDPOINT,
   GET_ALL_PENALTIES,
   GET_PENALTY_ITEMS,
+  GET_ALL_INVOICE_HISTORY,
 } from "./index";
 
 export const executeGetAllInvoices = async (
@@ -62,6 +63,31 @@ export const executeGetAllPenalties = async (
       },
     };
     const request = await fetch(GET_ALL_PENALTIES, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("DOCS [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+export const executeGetAllInvoiceHistory = async (
+  id: number,
+  token: string,
+  page?: number,
+  perPage?: number
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    };
+    const request = await fetch(
+      GET_ALL_INVOICE_HISTORY(id, page, perPage),
+      options
+    );
     const response = (await request.json()) satisfies ResponseDataType;
     return response;
   } catch (error: any) {
@@ -139,7 +165,7 @@ export const executeGetPenaltyItems = async (
 
 export const executeGetAllFees = async (
   token: string,
-  facilityCategory: string,
+  facilityCategory?: string,
   page?: number,
   perPage?: number
 ): Promise<ResponseDataType> => {

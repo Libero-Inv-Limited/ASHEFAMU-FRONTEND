@@ -16,14 +16,14 @@ import FacilityAnalytics from "./pages/dashboard/FacilityAnalytics";
 import FacilityNotification from "./pages/dashboard/FacilityNotification";
 import Payments from "./pages/dashboard/Payments";
 import Fees from "./pages/dashboard/financial/Fees";
-import AllPayments from "./pages/dashboard/financial/Payments"
+import AllPayments from "./pages/dashboard/financial/Payments";
 import Analytics from "./pages/dashboard/analytics";
 import Notifications from "./pages/dashboard/Notifications";
 import CreateFacility from "./pages/facility-registration/CreateFacility";
 import CreateIntent from "./pages/facility-registration/CreateIntent";
 import FacilityForm from "./pages/facility-registration/FacilityForm";
 import Landing from "./pages/home/Landing";
-import GIS from "./pages/home/GIS"
+import GIS from "./pages/home/GIS";
 import ProfilePage from "./pages/dashboard/ProfilePage";
 import Users from "./pages/dashboard/users";
 import Roles from "./pages/dashboard/roles";
@@ -40,7 +40,8 @@ import AuditAndCompliance from "./pages/dashboard/audit-compliance/index";
 import Compliance from "./pages/dashboard/audit-compliance/compliance";
 import Log from "./pages/dashboard/audit-compliance/log";
 import UserActivities from "./pages/dashboard/audit-compliance/UserActivities";
-import UserPermissions from './pages/dashboard/users/UserPermissions';
+import UserPermissions from "./pages/dashboard/users/UserPermissions";
+import InvoiceHistory from "./pages/dashboard/InvoiceHistory";
 
 export default [
   // HOME PAGE
@@ -165,6 +166,13 @@ export default [
     path: "/dashboard/facilities/:name/invoices",
     element: <Payments />,
     name: "USER FACILITIES",
+    permissions: ["super admin, admin, guest"],
+  },
+
+  {
+    path: "/dashboard/facilities/:name/invoice-history",
+    element: <InvoiceHistory />,
+    name: "Payment History",
     permissions: ["super admin, admin, guest"],
   },
 

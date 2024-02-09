@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 type InitialStateType = {
   facilities: FacilityData[],
+  currentFacility: any,
   dashboardCards: DashboardCardType[],
   fees: FeeDataType[],
   permissionCategories: string[],
@@ -10,6 +11,7 @@ type InitialStateType = {
 }
 const initialState:InitialStateType = {
   facilities: [],
+  currentFacility: null,
   dashboardCards: [],
   fees: [],
   permissionCategories: [],
@@ -23,6 +25,9 @@ const dataSlice = createSlice({
   reducers:{
     populateFacilities: (state, action) => {
       state.facilities = action.payload
+    },
+    populateCurrentFacility: (state, action) => {
+      state.currentFacility = action.payload
     },
     populateFees: (state, action) => {
       state.fees = action.payload
@@ -41,5 +46,5 @@ const dataSlice = createSlice({
 })
 
 
-export const { populateFacilities, populateDashboardCards, populateFees, populateCategories, populateFacilityAddons } = dataSlice.actions;
+export const { populateFacilities, populateDashboardCards, populateFees, populateCategories, populateFacilityAddons, populateCurrentFacility } = dataSlice.actions;
 export default dataSlice.reducer;

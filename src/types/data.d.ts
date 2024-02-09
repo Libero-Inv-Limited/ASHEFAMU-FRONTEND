@@ -525,7 +525,7 @@ type FeePayload = {
   status?: string;
   duration?: string;
   facility_category_id?: number;
-  fee_class?: string; 
+  fee_class?: string;
   type?: string;
 };
 
@@ -550,13 +550,13 @@ type PenaltyItem = {
   amount: number;
   duration: string;
   id: number;
-  name: string
-}
+  name: string;
+};
 
 type PenaltyItems = {
   amount: number;
-  items: PenaltyItem[] 
-}
+  items: PenaltyItem[];
+};
 
 type PenaltyDataType = {
   id: number;
@@ -570,6 +570,31 @@ type PenaltyDataType = {
     name: string;
     id: number;
   };
+};
+
+type InvoiceItemType = {
+  amount: number;
+  id: number;
+  duration: string;
+  name: string;
+};
+
+type InvoiceHistoryType = {
+  id: number;
+  facility_id: number;
+  invoice_id: number;
+  payment_date: string;
+  amount_paid: string;
+  payment_status: string;
+  description: string;
+  updated_at: string;
+  created_at: string;
+  invoice_items: InvoiceItemType[];
+  facilityDetail: {
+    id: number;
+    name: string;
+  };
+  description: null | string;
 };
 
 type InvoiceDataType = {
