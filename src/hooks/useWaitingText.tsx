@@ -9,7 +9,7 @@ interface IuseWaitingText {
 
 const useWaitingText = (texts: string[], timeInterval: number = 5000): IuseWaitingText => {
   const [loadingText, setLoadingText] = useState<string>(texts[0])
-  const [intervalId, setIntervalId] = useState<number>()
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>();
 
   const startLoadingText = () => {
     let index = 0

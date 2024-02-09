@@ -15,16 +15,14 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import { RED, TEXT_GRAY, YELLOW } from "../../utils/color";
+import { TEXT_GRAY } from "../../utils/color";
 import CustomButton from "../common/CustomButton";
 import { BsPlus } from "react-icons/bs";
 import CustomTable from "./CustomTable";
-import { BiTrash } from "react-icons/bi";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import ActionModal from "../modals/ActionModal";
 import { executeDeleteFacility } from "../../apis/facility";
 import { populateFacilities } from "../../store/slice/dataSlice";
-import { getSlug } from "../../utils/helpers";
 import { useAppContext } from "../../contexts/AppContext";
 import ScheduleInspectionModal from "../../pages/dashboard/audit-compliance/ScheduleInspectionModal";
 import { useForm } from "react-hook-form";
@@ -38,20 +36,16 @@ const ConductedTable = () => {
   const status = "conducted";
   const {
     data,
-    // totalRows,
-    // handlePageChange,
-    // handlePerRowsChange,
-    // loadingData,
     handleReloadData,
   } = useFetchHook(status);
   const { control, trigger, getValues, reset } = useForm<InspectionPayload>({
     mode: "onSubmit",
   });
-  const { isLoadingData, setCurrentFacility } = useAppContext();
+  const { isLoadingData } = useAppContext();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [selectedData, setSelectedData] = React.useState(null)
+  // const [selectedData, setSelectedData] = React.useState(null)
 
   const [deletingFacility, setDeletingFacility] = useState<number | null>(null);
 
@@ -112,7 +106,7 @@ const ConductedTable = () => {
       },
       {
         name: "Findings",
-        cell: (data: InspectionData) => {
+        cell: () => {
           return (
             <>
               <>
@@ -131,26 +125,26 @@ const ConductedTable = () => {
           );
         },
       },
-      {
-        name: "Results",
-        cell: (data: InspectionData) => {
-          return (
-            <>
-              <Button
-                bg="#DBE8FE"
-                color="#3B82F6"
-                borderRadius="50px"
-                fontSize="14px"
-                fontWeight="500"
-                w={"86px"}
-                onClick={() => setSelectedData(data)}
-              >
-                View
-              </Button>
-            </>
-          );
-        },
-      },
+      // {
+      //   name: "Results",
+      //   cell: (data: InspectionData) => {
+      //     return (
+      //       <>
+      //         <Button
+      //           bg="#DBE8FE"
+      //           color="#3B82F6"
+      //           borderRadius="50px"
+      //           fontSize="14px"
+      //           fontWeight="500"
+      //           w={"86px"}
+      //           // onClick={() => setSelectedData(data)}
+      //         >
+      //           View
+      //         </Button>
+      //       </>
+      //     );
+      //   },
+      // },
       {
         name: "",
         cell: (data: InspectionData) => {
