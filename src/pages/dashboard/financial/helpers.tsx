@@ -75,6 +75,14 @@ export const registrationData = (
       sortable: true,
     },
     {
+      name: "Amount",
+      selector: "facility",
+      cell: (data: InvoiceDataType) => {
+        return <Text fontWeight={600}>{data.amount}</Text>;
+      },
+      sortable: true,
+    },
+    {
       name: "Due Date",
       selector: "invoice_date",
       cell: (data: InvoiceDataType) => {
