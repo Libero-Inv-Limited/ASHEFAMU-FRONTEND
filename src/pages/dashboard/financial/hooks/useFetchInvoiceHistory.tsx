@@ -16,8 +16,6 @@ const useFetchInvoiceHistory = (id: number) => {
     executeGetAllInvoiceHistory(id, token, page, perPage)
   );
 
-  // console.log({ data }, "***********************");
-
   React.useEffect(() => {
     handleReloadData();
     //eslint-disable-next-line

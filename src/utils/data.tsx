@@ -27,9 +27,6 @@ import paypal from "../assets/paypal.png";
 import paystack from "../assets/paystack.png";
 import interswitch from "../assets/interswitch.png";
 import { FaPersonBooth } from "react-icons/fa";
-import { CardIcon, DashIcon, FileIcon, MemberIcon, NotificationIcon, UserIcon } from "../components/icons";
-
-// import { CardIcon, ChartIcon, DashIcon, FileIcon, MemberIcon, NotificationIcon, UserIcon } from "../components/icons";
 
 // PAYMENT METHODS
 export const paymentMethods = [
@@ -236,12 +233,6 @@ export const secondarySidebarContents = (contents) =>
       isElementIcon: true
       
     },
-    // {
-    //   name: "analytics",
-    //   link: `/dashboard/facilities/${name}/analytics`,
-    //   icon: <ChartIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
-    //   isElementIcon: true
-    // },
     {
       name: "notifications",
       link: `/dashboard/facilities/${name}/notifications`,

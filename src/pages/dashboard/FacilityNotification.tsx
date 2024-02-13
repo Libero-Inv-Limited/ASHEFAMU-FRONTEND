@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import {
   Box,
@@ -41,7 +42,11 @@ const FacilityNotification: React.FC<FacilityNotificationProps> = () => {
       ),
     9
   );
-  // const last = div <= perPage ? perPage : div
+
+  React.useEffect(() => {
+    handleReloadData();
+    //eslint-disable-next-line
+  }, [currentFacility]);
   return (
     <DashboardLayout>
       <Stack flexDir={["column", "column", "row"]}>

@@ -144,6 +144,12 @@ const NonProfessionalMember: React.FC<NonProfessionalMemberProps> = ({ isProfess
     resetEdit()
   }, [editingMember])
 
+  
+  React.useEffect(() => {
+    handleReloadData();
+    //eslint-disable-next-line
+  }, [currentFacility]);
+
   return (
     <Stack spacing={4}>
       <HStack justifyContent={"space-between"} flexDir={['column', 'column', 'row']} alignItems={"center"}>

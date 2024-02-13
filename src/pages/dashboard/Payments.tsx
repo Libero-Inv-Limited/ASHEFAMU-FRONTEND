@@ -29,16 +29,15 @@ import DashboardLayout from "./../../components/layouts/DashboardLayout";
 import { Stack } from "@chakra-ui/react";
 import { useAppContext } from "../../contexts/AppContext";
 import useFetchHookForAFacility from "./financial/hooks/useFetchHookForAFacility";
-import InvoiceModal from './../../components/modals/InvoiceModal';
-import { executeDownloadInvoice, executePayInvoice } from './../../apis/user';
+import InvoiceModal from "./../../components/modals/InvoiceModal";
+import { executeDownloadInvoice, executePayInvoice } from "./../../apis/user";
 
 const Payments = () => {
   const facilities = useAppSelector((state) => state.dataStore.facilities);
   const { currentFacility } = useAppContext();
   const [initialState, setInitialState] = React.useState(null);
-  const [selectedData, setSelectedData] = React.useState<InvoiceDataType | null>(
-    null
-  );
+  const [selectedData, setSelectedData] =
+    React.useState<InvoiceDataType | null>(null);
   const { data, loadingData, handleReloadData } =
     useFetchHookForAFacility(initialState);
   const [invoices, setInvoices] = React.useState<InvoiceDataType[]>(data);
@@ -91,7 +90,6 @@ const Payments = () => {
         setFilterText("");
       }
     };
-
 
     return (
       <FilterComponent
@@ -201,6 +199,11 @@ const Payments = () => {
   React.useEffect(() => {
     setInvoices(data);
   }, [data]);
+
+  React.useEffect(() => {
+    handleReloadData();
+    //eslint-disable-next-line
+  }, [currentFacility]);
 
   return (
     <DashboardLayout>

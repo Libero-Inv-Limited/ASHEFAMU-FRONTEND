@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HStack, Icon, Text, Box } from "@chakra-ui/react";
+import { HStack, Icon, Text } from "@chakra-ui/react";
 import React from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { LIGHT_BLUE, TEXT_DARK_GRAY } from "../../utils/color";
