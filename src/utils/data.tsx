@@ -119,14 +119,14 @@ export const sidebarContents = [
       {
         name: "payments",
         link: "/dashboard/all-payments",
-        icon: <DashIcon w={"25px"} h={"25px"} fill={"none"} stroke={"inherit"} />,
+        icon: `DashIcon`,
         hasStroke: true,
         isElementIcon: true
       },
       {
         name: "manage fees",
         link: "/dashboard/all-fees",
-        icon: <FileIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} stroke={"inherit"} />,
+        icon: `FileIcon`,
         hasStroke: true,
         isElementIcon: true
       }
@@ -171,29 +171,28 @@ export const sidebarContents = [
         {
           name: "inspection",
           link: "/dashboard/audit-compliance",
-          icon: <DashIcon w={"25px"} h={"25px"} fill={"none"} stroke={"inherit"} />,
+          icon:  `DashIcon`,
           hasStroke: true,
           isElementIcon: true
         },
         {
           name: "compliance",
           link: "/dashboard/audit-compliance/compliance",
-          icon: <FileIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} stroke={"inherit"} />,
+          icon: `FileIcon`,
           hasStroke: true,
           isElementIcon: true
         },
         {
           name: "log viewer",
           link: "/dashboard/audit-compliance/log-viewer",
-          icon: <MemberIcon w={"23px"} h={"15px"} color={"inherit"} fill={"inherit"} />,
+          icon: `MemberIcon`,
           isElementIcon: true
         },
         {
           name: "user activities",
           link: "/dashboard/audit-compliance/user-activities",
-          icon: <UserIcon w={"26px"} h={"26px"} color={"inherit"} fill={"inherit"} />,
+          icon: `UserIcon`,
           isElementIcon: true
-          
         }
     ]
   },
@@ -213,27 +212,27 @@ export const secondarySidebarContents = (contents) =>
     {
       name: "dashboard",
       link: `/dashboard/facilities/${name}`,
-      icon: <DashIcon w={"25px"} h={"25px"} fill={"none"} stroke={"inherit"} />,
+      icon: `DashIcon`,
       hasStroke: true,
       isElementIcon: true
     },
     {
       name: "documents",
       link: `/dashboard/facilities/${name}/documents`,
-      icon: <FileIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} stroke={"inherit"} />,
+      icon: `FileIcon`,
       hasStroke: true,
       isElementIcon: true
     },
     {
       name: "members",
       link: `/dashboard/facilities/${name}/members`,
-      icon: <MemberIcon w={"23px"} h={"15px"} color={"inherit"} fill={"inherit"} />,
+      icon: `MemberIcon`,
       isElementIcon: true
     },
     {
       name: "profile",
       link: `/dashboard/facilities/${name}/profile`,
-      icon: <UserIcon w={"26px"} h={"26px"} color={"inherit"} fill={"inherit"} />,
+      icon: `UserIcon`,
       isElementIcon: true
       
     },
@@ -246,19 +245,19 @@ export const secondarySidebarContents = (contents) =>
     {
       name: "notifications",
       link: `/dashboard/facilities/${name}/notifications`,
-      icon: <NotificationIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
+      icon: `NotificationIcon`,
       isElementIcon: true
     },
     {
       name: "invoice",
       link: `/dashboard/facilities/${name}/invoices`,
-      icon: <CardIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
+      icon: `CardIcon`,
       isElementIcon: true
     },
     {
       name: "invoice history",
       link: `/dashboard/facilities/${name}/invoice-history`,
-      icon: <CardIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />,
+      icon: `CardIcon`,
       isElementIcon: true
     },
   ];

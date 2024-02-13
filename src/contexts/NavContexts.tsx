@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const NavigationContext = createContext(undefined);
 
@@ -6,14 +6,24 @@ export const NavigationProvider = ({ children }) => {
   const [selectedPrimaryLink, setSelectedPrimaryLink] = useState(null);
   const [secondaryLinks, setSecondaryLinks] = useState([]);
 
+  useEffect(() => {
+    // Retrieve context data from sessionStorage on component mount
+    const storedSecondaryLinks = sessionStorage.getItem("secondaryLinks");
+    if (storedSecondaryLinks) {
+      setSecondaryLinks(JSON.parse(storedSecondaryLinks));
+    }
+  }, []);
+
   const updateNavigation = (primaryLink, secondaryLinks) => {
     setSelectedPrimaryLink(primaryLink);
     setSecondaryLinks(secondaryLinks);
+    sessionStorage.setItem("secondaryLinks", JSON.stringify(secondaryLinks));
   };
 
   const clearNavigation = (primaryLink) => {
     setSelectedPrimaryLink(primaryLink);
     setSecondaryLinks([]);
+    sessionStorage.removeItem("secondaryLinks");
   };
 
   const contextValue = {
@@ -29,7 +39,7 @@ export const NavigationProvider = ({ children }) => {
     </NavigationContext.Provider>
   );
 };
-//eslint-disable-next-line
+
 export const useNavigation = () => {
   const context = useContext(NavigationContext);
   if (!context) {

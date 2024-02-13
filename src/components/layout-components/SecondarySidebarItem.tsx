@@ -1,8 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HStack, Icon, Text } from "@chakra-ui/react";
+import { HStack, Icon, Text, Box } from "@chakra-ui/react";
 import React from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { LIGHT_BLUE, TEXT_DARK_GRAY } from "../../utils/color";
+import {
+  CardIcon,
+  DashIcon,
+  FileIcon,
+  MemberIcon,
+  NotificationIcon,
+  UserIcon,
+} from "../../components/icons";
 
 interface SecondarySidebarItemProps {
   name: string;
@@ -26,6 +34,40 @@ const SecondarySidebarItem: React.FC<SecondarySidebarItemProps> = ({
     (prop.name.toLowerCase() !== "dashboard" &&
       pathname.toLowerCase().endsWith(prop.link.toLowerCase()));
 
+  console.log(prop.icon);
+
+  const nameToIconMap = {
+    DashIcon: (
+      <DashIcon w={"25px"} h={"25px"} fill={"none"} stroke={"inherit"} />
+    ),
+    FileIcon: (
+      <FileIcon
+        w={"25px"}
+        h={"25px"}
+        color={"inherit"}
+        fill={"inherit"}
+        stroke={"inherit"}
+      />
+    ),
+    MemberIcon: (
+      <MemberIcon w={"23px"} h={"15px"} color={"inherit"} fill={"inherit"} />
+    ),
+    UserIcon: (
+      <UserIcon w={"26px"} h={"26px"} color={"inherit"} fill={"inherit"} />
+    ),
+    NotificationIcon: (
+      <NotificationIcon
+        w={"25px"}
+        h={"25px"}
+        color={"inherit"}
+        fill={"inherit"}
+      />
+    ),
+    CardIcon: (
+      <CardIcon w={"25px"} h={"25px"} color={"inherit"} fill={"inherit"} />
+    ),
+  };
+
   return (
     <HStack
       bg={isActive ? LIGHT_BLUE : ""}
@@ -44,7 +86,7 @@ const SecondarySidebarItem: React.FC<SecondarySidebarItemProps> = ({
       h={"40px"}
     >
       {isElementIcon ? (
-        prop.icon
+        nameToIconMap[prop.icon]
       ) : (
         <Icon as={prop.icon} color={"inherit"} fontSize={"24px"} />
       )}
