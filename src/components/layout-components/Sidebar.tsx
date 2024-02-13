@@ -43,7 +43,6 @@ const Sidebar: React.FC<SidebarProps> = ({
     );
   });
 
-  console.log({ filteredPaths });
   return (
     <Stack
       h={"full"}

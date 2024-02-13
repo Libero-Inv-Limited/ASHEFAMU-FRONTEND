@@ -16,7 +16,7 @@ import { LIGHT_GREEN, TEXT_GRAY } from "../../utils/color";
 interface SidebarItemProps {
   name: string;
   link: string;
-  icon: IconType;
+  icon: IconType | string;
   activeIcon: IconType;
   secondaryLinks?: SecondarySidebarItem[];
 }
@@ -64,11 +64,13 @@ const SidebarItem: React.FC<SidebarItemProps> = (item) => {
                 : ""
             }
           >
-            <Icon
-              as={isActive ? item.activeIcon : item.icon}
-              color={"inherit"}
-              fontSize={"24"}
-            />
+            {typeof item.icon !== "string" && (
+              <Icon
+                as={isActive ? item.activeIcon : item.icon}
+                color={"inherit"}
+                fontSize={"24"}
+              />
+            )}
           </Center>
         </Text>
       </PopoverTrigger>

@@ -27,6 +27,7 @@ import paypal from "../assets/paypal.png";
 import paystack from "../assets/paystack.png";
 import interswitch from "../assets/interswitch.png";
 import { FaPersonBooth } from "react-icons/fa";
+import { AuditIcon, AuditIconActive, PermissionIcon, PermissionIconActive, RoleIcon, RoleIconActive, UserIcon, UserIconActive } from "../components/icons";
 
 // PAYMENT METHODS
 export const paymentMethods = [
@@ -144,26 +145,26 @@ export const sidebarContents = [
   {
     name: "users",
     link: "/dashboard/users",
-    icon: IoPerson,
-    activeIcon: IoMdNotifications,
+    icon: UserIcon,
+    activeIcon: UserIconActive,
   },
   {
     name: "roles",
     link: "/dashboard/roles",
-    icon: BsPersonVcard,
-    activeIcon: BsPersonVcardFill,
+    icon: RoleIcon,
+    activeIcon: RoleIconActive,
   },
   {
     name: "permissions",
     link: "/dashboard/permissions",
-    icon: FaPersonBooth,
-    activeIcon: FaPersonBooth,
+    icon: PermissionIcon,
+    activeIcon: PermissionIconActive,
   },
   {
-    name: "audits and compliance",
+    name: "audit-compliance",
     link: "/dashboard/audit-compliance",
-    icon: BsPersonVcard,
-    activeIcon: BsPersonVcard,
+    icon: AuditIcon,
+    activeIcon: AuditIconActive,
     secondaryLinks: [
         {
           name: "inspection",
