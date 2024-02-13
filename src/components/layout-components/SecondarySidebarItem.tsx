@@ -26,8 +26,6 @@ const SecondarySidebarItem: React.FC<SecondarySidebarItemProps> = ({
     (prop.name.toLowerCase() !== "dashboard" &&
       pathname.toLowerCase().endsWith(prop.link.toLowerCase()));
 
-      console.log(param,pathname,  "*************")
-
   return (
     <HStack
       bg={isActive ? LIGHT_BLUE : ""}

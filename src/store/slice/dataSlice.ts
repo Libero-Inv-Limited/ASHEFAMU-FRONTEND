@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 type InitialStateType = {
   facilities: FacilityData[],
-  currentFacility: any,
+  currentFacility: FacilityData,
   dashboardCards: DashboardCardType[],
   fees: FeeDataType[],
   permissionCategories: string[],
@@ -11,7 +11,7 @@ type InitialStateType = {
 }
 const initialState:InitialStateType = {
   facilities: [],
-  currentFacility: null,
+  currentFacility: {} as FacilityData,
   dashboardCards: [],
   fees: [],
   permissionCategories: [],

@@ -16,10 +16,15 @@ interface SideNavigationProps {
   onClose?: () => void;
 }
 const SideNavigation: React.FC<SideNavigationProps> = ({ onClose }) => {
+  console.log({ onClose });
   const [isOpen, setIsOpen] = useState(true);
 
-  const { setCurrentFacility, openLoadingData, closeLoadingData } =
-    useAppContext();
+  const {
+    setCurrentFacility,
+    openLoadingData,
+    closeLoadingData,
+  } = useAppContext();
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -37,7 +42,6 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ onClose }) => {
     const facility = facilities.find((state) =>
       state.name?.toLowerCase().includes(name.toLocaleLowerCase())
     );
-
     // GET FACILITY
     if (!facility) {
       closeLoadingData();
@@ -54,9 +58,12 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ onClose }) => {
     dispatch(populateCurrentFacility(response.data));
     closeLoadingData();
   };
+
+
   useEffect(() => {
-    console.log("side navigation::YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYy")
+    console.log("side navigation::YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYy");
     if (!isFacility) return;
+    console.log("test navigation::YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYy");
     handleGetCurrentFacility();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param]);

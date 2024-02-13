@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
+import { useDisclosure, useToast } from "@chakra-ui/react";
 import React from "react";
 import CustomTable from "../../components/tables/CustomTable";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
@@ -25,10 +22,7 @@ const PaymentHistory = () => {
   const { data, loadingData } = useFetchInvoiceHistory(currentFacility!.id);
   const { columns } = invoiceHistoryData(data, setSelectedData);
 
-  const {
-    onClose: closeLoading,
-    onOpen: openLoading,
-  } = useDisclosure();
+  const { onClose: closeLoading, onOpen: openLoading } = useDisclosure();
 
   const toast = useToast({
     position: "bottom",

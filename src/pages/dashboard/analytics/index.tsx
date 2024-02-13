@@ -8,7 +8,6 @@ import { populateMetricStats } from "../../../store/slice/analyticSlice";
 
 interface AnalyticsProps {}
 const Analytics: React.FC<AnalyticsProps> = () => {
-
   const dispatch = useAppDispatch();
   const token = useAppSelector((state) => state.accountStore.tokenStore);
 
@@ -17,7 +16,6 @@ const Analytics: React.FC<AnalyticsProps> = () => {
     try {
       const result = await executeGetStatsMetric(token.token);
       if (result.status === "error") throw new Error(result.message);
-      console.log({ result: result.data }); 
       dispatch(populateMetricStats(result.data));
     } catch (err) {
       console.log("Error:", err.message);

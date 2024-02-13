@@ -57,7 +57,6 @@ const GIS = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data } = useFetchHook(initialState);
 
-  console.log({ data });
   const [activeMarker, setActiveMarker] = React.useState(null);
 
   const { control, trigger, getValues, reset } = useForm<GISFilters>({

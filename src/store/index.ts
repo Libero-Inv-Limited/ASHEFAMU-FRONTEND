@@ -30,7 +30,7 @@ const persistedReducer = persistReducer(
   {
     key: "root",
     storage,
-    whitelist: ["accountStore", "createFacilityStore"],
+    whitelist: ["accountStore", "createFacilityStore", "dataStore"],
   },
   appReducer
 );
