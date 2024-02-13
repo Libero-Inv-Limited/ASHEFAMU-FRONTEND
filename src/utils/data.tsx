@@ -3,10 +3,7 @@ import {
   BiSolidBarChartSquare,
   BiBarChartSquare,
 } from "react-icons/bi";
-import {
-  BsHospital,
-  BsHospitalFill,
-} from "react-icons/bs";
+import { BsHospital, BsHospitalFill } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { IoCardOutline, IoCard } from "react-icons/io5";
 import { IoMdNotifications, IoMdNotificationsOutline } from "react-icons/io";
@@ -24,7 +21,16 @@ import remita from "../assets/remita.png";
 import paypal from "../assets/paypal.png";
 import paystack from "../assets/paystack.png";
 import interswitch from "../assets/interswitch.png";
-import { AuditIcon, AuditIconActive, PermissionIcon, PermissionIconActive, RoleIcon, RoleIconActive, UserIcon, UserIconActive } from "../components/icons";
+import {
+  AuditIcon,
+  AuditIconActive,
+  PermissionIcon,
+  PermissionIconActive,
+  RoleIcon,
+  RoleIconActive,
+  NavUserIcon,
+  NavUserIconActive,
+} from "../components/icons";
 
 // PAYMENT METHODS
 export const paymentMethods = [
@@ -116,16 +122,16 @@ export const sidebarContents: SidebarContentType[] = [
         link: "/dashboard/all-payments",
         icon: `DashIcon`,
         hasStroke: true,
-        isElementIcon: true
+        isElementIcon: true,
       },
       {
         name: "manage fees",
         link: "/dashboard/all-fees",
         icon: `FileIcon`,
         hasStroke: true,
-        isElementIcon: true
-      }
-  ]
+        isElementIcon: true,
+      },
+    ],
   },
   {
     name: "analytics",
@@ -142,8 +148,8 @@ export const sidebarContents: SidebarContentType[] = [
   {
     name: "users",
     link: "/dashboard/users",
-    icon: UserIcon,
-    activeIcon: UserIconActive,
+    icon: NavUserIcon,
+    activeIcon: NavUserIconActive,
   },
   {
     name: "roles",
@@ -163,33 +169,33 @@ export const sidebarContents: SidebarContentType[] = [
     icon: AuditIcon,
     activeIcon: AuditIconActive,
     secondaryLinks: [
-        {
-          name: "inspection",
-          link: "/dashboard/audit-compliance",
-          icon:  `DashIcon`,
-          hasStroke: true,
-          isElementIcon: true
-        },
-        {
-          name: "compliance",
-          link: "/dashboard/audit-compliance/compliance",
-          icon: `FileIcon`,
-          hasStroke: true,
-          isElementIcon: true
-        },
-        {
-          name: "log viewer",
-          link: "/dashboard/audit-compliance/log-viewer",
-          icon: `MemberIcon`,
-          isElementIcon: true
-        },
-        {
-          name: "user activities",
-          link: "/dashboard/audit-compliance/user-activities",
-          icon: `UserIcon`,
-          isElementIcon: true
-        }
-    ]
+      {
+        name: "inspection",
+        link: "/dashboard/audit-compliance",
+        icon: `DashIcon`,
+        hasStroke: true,
+        isElementIcon: true,
+      },
+      {
+        name: "compliance",
+        link: "/dashboard/audit-compliance/compliance",
+        icon: `FileIcon`,
+        hasStroke: true,
+        isElementIcon: true,
+      },
+      {
+        name: "log viewer",
+        link: "/dashboard/audit-compliance/log-viewer",
+        icon: `MemberIcon`,
+        isElementIcon: true,
+      },
+      {
+        name: "user activities",
+        link: "/dashboard/audit-compliance/user-activities",
+        icon: `UserIcon`,
+        isElementIcon: true,
+      },
+    ],
   },
 ];
 
@@ -203,53 +209,52 @@ export const secondarySidebarContents = (contents) =>
     isElementIcon: content.isElementIcon,
   }));
 
-  export const facilityNavContents = (name: string) => [
-    {
-      name: "dashboard",
-      link: `/dashboard/facilities/${name}`,
-      icon: `DashIcon`,
-      hasStroke: true,
-      isElementIcon: true
-    },
-    {
-      name: "documents",
-      link: `/dashboard/facilities/${name}/documents`,
-      icon: `FileIcon`,
-      hasStroke: true,
-      isElementIcon: true
-    },
-    {
-      name: "members",
-      link: `/dashboard/facilities/${name}/members`,
-      icon: `MemberIcon`,
-      isElementIcon: true
-    },
-    {
-      name: "profile",
-      link: `/dashboard/facilities/${name}/profile`,
-      icon: `UserIcon`,
-      isElementIcon: true
-      
-    },
-    {
-      name: "notifications",
-      link: `/dashboard/facilities/${name}/notifications`,
-      icon: `NotificationIcon`,
-      isElementIcon: true
-    },
-    {
-      name: "invoice",
-      link: `/dashboard/facilities/${name}/invoices`,
-      icon: `CardIcon`,
-      isElementIcon: true
-    },
-    {
-      name: "invoice history",
-      link: `/dashboard/facilities/${name}/invoice-history`,
-      icon: `CardIcon`,
-      isElementIcon: true
-    },
-  ];
+export const facilityNavContents = (name: string) => [
+  {
+    name: "dashboard",
+    link: `/dashboard/facilities/${name}`,
+    icon: `DashIcon`,
+    hasStroke: true,
+    isElementIcon: true,
+  },
+  {
+    name: "documents",
+    link: `/dashboard/facilities/${name}/documents`,
+    icon: `FileIcon`,
+    hasStroke: true,
+    isElementIcon: true,
+  },
+  {
+    name: "members",
+    link: `/dashboard/facilities/${name}/members`,
+    icon: `MemberIcon`,
+    isElementIcon: true,
+  },
+  {
+    name: "profile",
+    link: `/dashboard/facilities/${name}/profile`,
+    icon: `UserIcon`,
+    isElementIcon: true,
+  },
+  {
+    name: "notifications",
+    link: `/dashboard/facilities/${name}/notifications`,
+    icon: `NotificationIcon`,
+    isElementIcon: true,
+  },
+  {
+    name: "invoice",
+    link: `/dashboard/facilities/${name}/invoices`,
+    icon: `CardIcon`,
+    isElementIcon: true,
+  },
+  {
+    name: "invoice history",
+    link: `/dashboard/facilities/${name}/invoice-history`,
+    icon: `CardIcon`,
+    isElementIcon: true,
+  },
+];
 
 // POWER SOURCES
 export const powerSources = [
