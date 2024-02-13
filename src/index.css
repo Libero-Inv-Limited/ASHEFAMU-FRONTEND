@@ -12,6 +12,12 @@ button.gm-ui-hover-effect{
   display: none !important;
 }
 
+/* .map {
+  width: calc(100vw - 18px);
+  height: calc(100vh - 18px);
+  border: 1px solid black;
+} */
+
 
 
 @media (min-width: 640px) {

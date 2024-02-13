@@ -38,13 +38,15 @@ import useFetchHook from "./hooks/useFetchHook";
 import { calculateBoundingBox, formatTimeRange } from "../../utils/helpers";
 import { FiMapPin } from "react-icons/fi";
 import { AiOutlineClockCircle } from "react-icons/ai";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import Map from "./Map";
 
 const center = { lat: 6.104541, lng: 7.00192 };
 const distance = 1200000000;
 
 const GIS = () => {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "",
+    googleMapsApiKey: "AIzaSyB2a8zhc_1LmMerhLFdDO8FpWyJE_W75Xc",
   });
 
   const [initialState, setInitialState] = React.useState<
@@ -63,10 +65,7 @@ const GIS = () => {
     mode: "onSubmit",
   });
 
-  const {
-    onClose: closeLoading,
-    onOpen: openLoading,
-  } = useDisclosure();
+  const { onClose: closeLoading, onOpen: openLoading } = useDisclosure();
 
   const toast = useToast({
     position: "bottom",
@@ -146,15 +145,14 @@ const GIS = () => {
         </Heading>
       </div>
       <Box position="absolute" h="100%" w="100%" left={0} top={20} px={8}>
-        <HStack justifyContent="space-between">
+        <HStack justifyContent="space-between" zIndex={2}>
           <Autocomplete
             setSelectedFacility={setSelectedFacility}
             selectedFacility={selectedFacility}
           />
-
           <CustomButton onClick={onOpen}>Filter</CustomButton>
         </HStack>
-        {isLoaded ? (
+        {/* {isLoaded ? (
           <GoogleMap
             center={center}
             zoom={10}
@@ -179,7 +177,11 @@ const GIS = () => {
               </MarkerF>
             ))}
           </GoogleMap>
-        ) : null}
+        ) : null} */}
+        {markers && (
+          <Map markers={markers} setSelectedFacility={setSelectedFacility} />
+        )}
+
         <DrawerComponent
           size="xs"
           isOpen={Boolean(selectedFacility)}
@@ -269,6 +271,10 @@ const DrawerBox = ({ data }) => {
   );
 };
 
+
+
+
+
 const CustomTooltip = ({ data, setSelectedFacility }) => {
   return (
     <Box width={"240px"} p={4}>
@@ -316,6 +322,5 @@ const CustomTooltip = ({ data, setSelectedFacility }) => {
     </Box>
   );
 };
-
 // eslint-disable-next-line
 export default GIS;

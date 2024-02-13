@@ -106,6 +106,13 @@ type OneFacilityDataType = {
   qr_code: string;
   letter_of_intent: string;
   enable_documentation: boolean;
+  createdBy: {
+    email: string;
+    firstname: string;
+    id: number;
+    lastname: string;
+    username: string
+  };
   documents: {
     id: number;
     facility_id: number;
@@ -595,6 +602,12 @@ type InvoiceHistoryType = {
     name: string;
   };
   description: null | string;
+};
+
+type MarkerDataType = {
+  position: { lat: number; lng: number };
+  name: FacilityData;
+  id: number;
 };
 
 type InvoiceDataType = {
