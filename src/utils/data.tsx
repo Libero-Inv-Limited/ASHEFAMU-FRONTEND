@@ -6,11 +6,9 @@ import {
 import {
   BsHospital,
   BsHospitalFill,
-  BsPersonVcard,
-  BsPersonVcardFill,
 } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
-import { IoCardOutline, IoCard, IoPerson } from "react-icons/io5";
+import { IoCardOutline, IoCard } from "react-icons/io5";
 import { IoMdNotifications, IoMdNotificationsOutline } from "react-icons/io";
 import {
   RiFacebookFill,
@@ -26,7 +24,6 @@ import remita from "../assets/remita.png";
 import paypal from "../assets/paypal.png";
 import paystack from "../assets/paystack.png";
 import interswitch from "../assets/interswitch.png";
-import { FaPersonBooth } from "react-icons/fa";
 import { AuditIcon, AuditIconActive, PermissionIcon, PermissionIconActive, RoleIcon, RoleIconActive, UserIcon, UserIconActive } from "../components/icons";
 
 // PAYMENT METHODS
@@ -95,7 +92,7 @@ export const generalBuildingTypes = [
 ];
 
 // SIDEBAR CONTENTS
-export const sidebarContents = [
+export const sidebarContents: SidebarContentType[] = [
   {
     name: "dashboard",
     link: "/dashboard",

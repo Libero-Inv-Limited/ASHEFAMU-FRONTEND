@@ -18,27 +18,20 @@ import {
 } from "@chakra-ui/react";
 import {
   useJsApiLoader,
-  GoogleMap,
-  MarkerF,
-  InfoWindowF,
 } from "@react-google-maps/api";
 import Autocomplete from "./AutoComplete";
-import { BuildingIcon } from "../../components/icons";
 import { DARK, RED } from "../../utils/color";
 import { BookIcon } from "../../components/icons";
 import DrawerComponent from "./../common/Drawer";
 import CustomButton from "./../common/CustomButton";
 import { MdOutlinePhoneEnabled } from "react-icons/md";
 import { TEXT_DARK_GRAY } from "./../../utils/color";
-import { FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { BiFilter } from "react-icons/bi";
 import FilterForm from "../../pages/home/GISFilterForm";
 import { useForm } from "react-hook-form";
 import useFetchHook from "./hooks/useFetchHook";
-import { calculateBoundingBox, formatTimeRange } from "../../utils/helpers";
-import { FiMapPin } from "react-icons/fi";
-import { AiOutlineClockCircle } from "react-icons/ai";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { calculateBoundingBox } from "../../utils/helpers";
 import Map from "./Map";
 
 const center = { lat: 6.104541, lng: 7.00192 };
@@ -59,8 +52,6 @@ const GIS = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data } = useFetchHook(initialState);
 
-  const [activeMarker, setActiveMarker] = React.useState(null);
-
   const { control, trigger, getValues, reset } = useForm<GISFilters>({
     mode: "onSubmit",
   });
@@ -73,12 +64,12 @@ const GIS = () => {
     variant: "subtle",
   });
 
-  const handleActiveMarker = (marker) => {
-    if (marker === activeMarker) {
-      return;
-    }
-    setActiveMarker(marker);
-  };
+  // const handleActiveMarker = (marker) => {
+  //   if (marker === activeMarker) {
+  //     return;
+  //   }
+  //   setActiveMarker(marker);
+  // };
 
   const handleFilters = async () => {
     if (!(await trigger())) return;
@@ -271,56 +262,4 @@ const DrawerBox = ({ data }) => {
   );
 };
 
-
-
-
-
-const CustomTooltip = ({ data, setSelectedFacility }) => {
-  return (
-    <Box width={"240px"} p={4}>
-      <Heading color={DARK} fontWeight={"600"} fontSize={"14px"} mb={4}>
-        {data.name}
-      </Heading>
-      <Stack alignItems={"flex-start"} bg={"white"} gap={4}>
-        <HStack>
-          <Icon as={BuildingIcon} />{" "}
-          <Text fontSize={"12px"} fontWeight={"400"} color={TEXT_DARK_GRAY}>
-            {data.categorySelection.category.name}
-          </Text>
-        </HStack>
-        <HStack>
-          <Icon as={FiMapPin} />{" "}
-          <Text fontSize={"12px"} fontWeight={"400"} color={TEXT_DARK_GRAY}>
-            {data.address}
-          </Text>
-        </HStack>
-        <HStack>
-          <Icon as={AiOutlineClockCircle} />{" "}
-          <Text fontSize={"12px"} fontWeight={"400"} color={TEXT_DARK_GRAY}>
-            {formatTimeRange(data.operationDetails)}
-          </Text>
-        </HStack>
-        <HStack>
-          <Icon as={FaPhoneAlt} />{" "}
-          <Text fontSize={"12px"} fontWeight={"400"} color={TEXT_DARK_GRAY}>
-            {data.facility_phone}
-          </Text>
-        </HStack>
-        <CustomButton
-          variant={"outline"}
-          w={"full"}
-          rounded={"full"}
-          fontSize={"md"}
-          fontWeight={"600"}
-          colorScheme="#C9CFD8"
-          display={["none", "none", "flex"]}
-          onClick={() => setSelectedFacility(data)}
-        >
-          See More
-        </CustomButton>
-      </Stack>
-    </Box>
-  );
-};
-// eslint-disable-next-line
 export default GIS;

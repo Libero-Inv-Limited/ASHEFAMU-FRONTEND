@@ -111,7 +111,7 @@ type OneFacilityDataType = {
     firstname: string;
     id: number;
     lastname: string;
-    username: string
+    username: string;
   };
   documents: {
     id: number;
@@ -275,9 +275,17 @@ type UserData = {
 type SecondarySidebarItem = {
   name: string;
   link: string;
-  icon: JSX.Element;
+  icon: IconType | string;
   hasStroke?: boolean;
   isElementIcon: boolean;
+};
+
+type SidebarContentType = {
+  name: string;
+  link: string;
+  icon: IconType | string;
+  activeIcon: IconType | string;
+  secondaryLinks?: SecondarySidebarItem[]
 };
 
 type Permission = {
