@@ -161,6 +161,11 @@ export const registrationDataTwo = (invoices: InvoiceDataType[]) => ({
       sortable: true,
     },
     {
+      name: "amount",
+      selector: "amount",
+      sortable: true,
+    },
+    {
       name: "Date Sent",
       selector: "invoice_date",
       cell: (data: InvoiceDataType) => {
