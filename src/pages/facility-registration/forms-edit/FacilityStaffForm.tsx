@@ -76,7 +76,6 @@ const FacilityStaffForm: React.FC<FacilityStaffFormProps> = ({ activeStep, setAc
         const mainKey = +key.split("-")[1]
         return { non_prof_staff_complement_id: mainKey, value }
       })
-      // console.log("MAPPED VAL:", mappedValue)
       const nonProfPayload:NonProfessionStaff = {
         facility_id: +facilityId!,
         complements: mappedValue

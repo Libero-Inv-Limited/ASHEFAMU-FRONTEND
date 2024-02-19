@@ -39,7 +39,6 @@ const DocumentCard: React.FC<DocumentCardProps> = ({ name }) => {
   });
   const token = useAppSelector((state) => state.accountStore.tokenStore?.token);
   const fileExtension = name.split(".").pop().toLowerCase();
-  console.log({ fileExtension });
 
   const extensionToImage = {
     pdf: pdfImage, // Change to the actual image file for PDF
