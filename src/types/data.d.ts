@@ -79,6 +79,111 @@ type FacilityData = {
     };
   };
 };
+interface FacilityQRData {
+  id: number;
+  name: string;
+  cac_number: string;
+  multiple_branch: boolean;
+  facility_phone: string;
+  address: string;
+  closest_landmark: string;
+  local_gov_area: string;
+  local_council_dev_area: string;
+  building_type: string;
+  gps_cordinates: string;
+  any_other_use_of_premises: string;
+  created_at: string;
+  updated_at: string;
+  documents: Document[];
+  operationDetails: OperationDetails;
+  proprietor: Proprietor[];
+  staffs: Staff[];
+  status: FacilityStatus;
+  categorySelection: CategorySelection;
+}
+
+interface Document {
+  id: number;
+  facility_id: number;
+  name: string;
+  type: string;
+  status: string;
+}
+
+interface OperationDetails {
+  id: number;
+  facility_id: number;
+  opening_time: string;
+  closing_time: string;
+  date_of_establishment: string;
+  provides_ambulance_services: boolean;
+  provides_emergency_services: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Proprietor {
+  id: number;
+  facility_id: number;
+  name: string;
+  address: string;
+  occupation: string;
+  nationality: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Staff {
+  id: number;
+  facility_id: number;
+  complement: string;
+  employment_type: string;
+  fullname: string;
+  address: string;
+  basic_qualification: string;
+  institution_attended: string;
+  year_of_qualification: string;
+  registration_number: string;
+  post_graduate_qualification: string;
+  post_institution_attended: string;
+  post_year_of_qualification: string;
+  post_registration_number: string;
+  updated_at: string;
+  created_at: string;
+}
+
+interface FacilityStatus {
+  facility_id: number;
+  status: string;
+  approval_date: string | null;
+  rejection_date: string | null;
+  rejection_reason: string | null;
+  approved_by: number;
+}
+
+interface CategorySelection {
+  id: number;
+  facility_id: number;
+  facility_category_id: number;
+  category: {
+    id: number;
+    name: string;
+  };
+}
+
+interface FeatureAddon {
+  feature_addon_item: number;
+  facility_id: number;
+  featureItem: {
+    name: string;
+    id: number;
+  };
+}
+
+interface FacilityDataResponse {
+  facility: Facility;
+}
+
 
 type OneFacilityDataType = {
   id: number;

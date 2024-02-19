@@ -42,6 +42,7 @@ import Log from "./pages/dashboard/audit-compliance/log";
 import UserActivities from "./pages/dashboard/audit-compliance/UserActivities";
 import UserPermissions from "./pages/dashboard/users/UserPermissions";
 import InvoiceHistory from "./pages/dashboard/InvoiceHistory";
+import Facility from './pages/home/Facility';
 
 export default [
   // HOME PAGE
@@ -49,6 +50,13 @@ export default [
     path: "/",
     element: <Landing />,
     name: "Landing",
+    // permissions: ["admin", "super admin", "user"]
+  },
+
+  {
+    path: "/facility/:id",
+    element: <Facility />,
+    name: "Facility Detail",
     // permissions: ["admin", "super admin", "user"]
   },
 

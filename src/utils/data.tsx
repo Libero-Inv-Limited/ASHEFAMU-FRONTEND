@@ -876,3 +876,63 @@ export const paymentData = [
     status: "unpaid",
   },
 ];
+
+export const facility_details = {
+  "id": 7,
+  "cac_number": "yuyu-799-bm",
+  "multiple_branch": 1,
+  "facility_phone": "+2347043456787",
+  "address": "any",
+  "closest_landmark": "unizik",
+  "local_gov_area": "Awka South",
+  "local_council_dev_area": "Awka South div",
+  "building_type": "any",
+  "gps_cordinates": "xyz",
+  "any_other_use_of_premises": "Nothing ",
+  "created_at": "2023-09-29T21:08:38.000+01:00",
+  "updated_at": "2023-09-29T21:08:38.000+01:00",
+  "name": "Dummy facility xyz",
+  "user_id": 1,
+  "documents": [],
+  "operationDetails": {
+      "id": 2,
+      "facility_id": 7,
+      "opening_time": "08:30:00",
+      "closing_time": "18:00:00",
+      "date_of_establishment": "2023-09-28T23:00:00.000Z",
+      "provides_ambulance_services": 0,
+      "provides_emergency_services": 0,
+      "created_at": "2023-09-29T21:08:38.000+01:00",
+      "updated_at": "2023-09-29T21:08:38.000+01:00"
+  },
+  "proprietor": [
+      {
+          "id": 2,
+          "facility_id": 7,
+          "name": "mike",
+          "address": "okiro street",
+          "occupation": "Cleaner",
+          "nationality": "Nigerian",
+          "created_at": "2023-09-29T21:03:56.000+01:00",
+          "updated_at": "2023-09-29T21:03:56.000+01:00"
+      }
+  ],
+  "staffs": [],
+  "status": {
+      "facility_id": 7,
+      "status": "approved",
+      "approval_date": "2023-09-29T20:12:23.000Z",
+      "rejection_date": null,
+      "rejection_reason": null,
+      "approved_by": 1
+  },
+  "categorySelection": {
+      "id": 2,
+      "facility_id": 7,
+      "facility_category_id": 1,
+      "category": {
+          "id": 1,
+          "name": "Hospital"
+      }
+  }
+}
