@@ -18,6 +18,8 @@ import { executeUpdateFee } from "../../apis/finances";
 import { useAppSelector } from "../../store/hook";
 import { useAppDispatch } from "./../../store/hook";
 import { populateFees } from "../../store/slice/dataSlice";
+import { labelValueMap } from "../../utils/helpers";
+import useFetchFacilityData from "../../hooks/useFetchFacilityData";
 
 const FeeModal = ({ onClose, isOpen, editId, handleReloadData }) => {
   const [duration, setDuration] = React.useState<string>("monthly");
@@ -26,8 +28,9 @@ const FeeModal = ({ onClose, isOpen, editId, handleReloadData }) => {
   const token = useAppSelector((state) => state.accountStore.tokenStore!.token);
   const fees = useAppSelector((state) => state.dataStore.fees);
   const feeData = fees.find((fee) => fee.id === editId);
+  const { facilityCategory } = useFetchFacilityData();
   const { control, trigger, getValues, reset, setValue } =
-    useForm<FeeDataType>();
+    useForm<FeePayload>();
   const {
     isOpen: isLoading,
     onOpen: openLoading,
@@ -38,6 +41,17 @@ const FeeModal = ({ onClose, isOpen, editId, handleReloadData }) => {
     isClosable: true,
     variant: "subtle",
   });
+
+  const classOfFees = [
+    { id: "urban", name: "urban" },
+    { id: "rural", name: "rural" },
+    { id: "main", name: "main" },
+  ];
+
+  const typeOfFees = [
+    { id: "penalty", name: "penalty" },
+    { id: "fee", name: "fee" },
+  ];
 
   const handleCheckboxChange = (value: string) => {
     setDuration(value);
@@ -70,6 +84,9 @@ const FeeModal = ({ onClose, isOpen, editId, handleReloadData }) => {
         description: getValues("description"),
         duration,
         status: isChecked ? "active" : "inactive",
+        fee_class: (getValues("fee_class") as any).value,
+        facility_category_id: (getValues("facility_category_id") as any).value,
+        type: (getValues("type") as any).value,
       };
       const response = await executeUpdateFee(payload, token!);
       if (response.status === "error") throw new Error(response.message);
@@ -113,11 +130,63 @@ const FeeModal = ({ onClose, isOpen, editId, handleReloadData }) => {
             value={feeData.category}
           />
           <AuthInput
+            control={control}
+            fontSize={"sm"}
+            label="Facility category"
+            name="facility_category_id"
+            value={
+              labelValueMap(facilityCategory).find(
+                (item) => Number(item.value) === feeData!.facility_category_id
+              ) as any
+            }
+            isSelect
+            data={labelValueMap(facilityCategory)}
+            rules={{
+              required: "Facility category is required",
+            }}
+          />
+          <AuthInput
             name="description"
             label="Description"
             control={control}
             rules={{ required: "Description is required" }}
             value={feeData.description}
+          />
+          <AuthInput
+            labelStyles={{
+              fontWeight: "500",
+            }}
+            name="fee_class"
+            control={control}
+            isSelect
+            label="Fee Class"
+            data={labelValueMap<AreaCategoryType>(classOfFees)}
+            value={
+              labelValueMap(classOfFees).find(
+                (item) => item.value === feeData!.fee_class!
+              ) as any
+            }
+            rules={{
+              required: "Fee class is required",
+            }}
+          />
+          <AuthInput
+            labelStyles={{
+              fontWeight: "500",
+            }}
+            name="type"
+            control={control}
+            isSelect
+            label="Fee Type"
+            value={
+              labelValueMap(typeOfFees).find(
+                (item) => item.value === feeData!.type!
+              ) as any
+            }
+            data={labelValueMap<AreaCategoryType>(typeOfFees)}
+            rules={{
+              required: "Fee type is required",
+            }}
           />
           <AuthInput
             name="amount"

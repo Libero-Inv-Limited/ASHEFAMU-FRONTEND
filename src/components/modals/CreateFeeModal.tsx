@@ -196,7 +196,7 @@ const CreateFeeModal = ({ onClose, isOpen, handleReloadData, data }) => {
           label="Fee Type"
           data={labelValueMap<AreaCategoryType>(typeOfFees)}
           rules={{
-            required: "Fee class is required",
+            required: "Fee type is required",
           }}
         />
         <Box mb={4}>

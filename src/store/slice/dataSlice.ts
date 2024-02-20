@@ -5,7 +5,7 @@ type InitialStateType = {
   facilities: FacilityData[],
   currentFacility: FacilityData,
   dashboardCards: DashboardCardType[],
-  fees: FeeDataType[],
+  fees: FeePayload[],
   permissionCategories: string[],
   facilityAddons: AddonDataType[]
 }
