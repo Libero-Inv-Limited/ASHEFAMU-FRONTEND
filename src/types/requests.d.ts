@@ -155,6 +155,16 @@ type InspectionData = {
   created_at: string;
 };
 
+type SettingsData = {
+  id: number;
+  name: string;
+  value: string;
+  input_type: string;
+  slug: string;
+  created_At: string;
+  updated_at: string;
+};
+
 type ScheduleData = {
   id: number;
   facility_id: number;
@@ -170,7 +180,15 @@ type UpdatePassword = {
   user_id: number;
 };
 
+type DocumentData = {
+  id: number;
+  name: string;
+  compulsory: boolean;
+  status: string;
+  updated_at: string;
+  created_at: string;
+};
 
 type UpdateDashboardCard = {
-  card_records: DashboardCardType[]
-}
+  card_records: DashboardCardType[];
+};

@@ -83,6 +83,9 @@ export const GET_FACILITY_REGISTRATION = BASE_URL + "/facility-registration";
 export const VERIFY_FACILITY_QR = (id: string) => BASE_URL + `/verify-facility-qr/${id}`;
 export const GET_STATS_METRICS = BASE_URL + "/static-metric";
 
+// SETTINGS ENDPOINT
+export const GET_SETTINGS = BASE_URL + "/settings"
+
 // OTHERS
 export const GET_NOTIFICATIONS_ENDPOINT = BASE_URL + "/get-notifications";
 export const GET_USERS_ENDPOINT = (page: number, perPage: number) =>

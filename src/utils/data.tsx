@@ -30,6 +30,8 @@ import {
   RoleIconActive,
   NavUserIcon,
   NavUserIconActive,
+  SettingsIcon,
+  SettingsIconActive,
 } from "../components/icons";
 
 // PAYMENT METHODS
@@ -196,6 +198,12 @@ export const sidebarContents: SidebarContentType[] = [
         isElementIcon: true,
       },
     ],
+  },
+  {
+    name: "settings",
+    link: "/dashboard/settings",
+    icon: SettingsIcon,
+    activeIcon: SettingsIconActive,
   },
 ];
 

@@ -42,7 +42,8 @@ import Log from "./pages/dashboard/audit-compliance/log";
 import UserActivities from "./pages/dashboard/audit-compliance/UserActivities";
 import UserPermissions from "./pages/dashboard/users/UserPermissions";
 import InvoiceHistory from "./pages/dashboard/InvoiceHistory";
-import Facility from './pages/home/Facility';
+import Facility from "./pages/home/Facility";
+import Settings from "./pages/dashboard/settings";
 
 export default [
   // HOME PAGE
@@ -351,6 +352,15 @@ export default [
     path: "/dashboard/permissions/create-permission",
     element: <CreatePermission />,
     name: "Create Permission",
+    permissions: ["super admin"],
+  },
+
+  // settings
+
+  {
+    path: "/dashboard/settings",
+    element: <Settings />,
+    name: "settings",
     permissions: ["super admin"],
   },
 ];
