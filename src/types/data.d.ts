@@ -462,6 +462,11 @@ type FacilityCategoryType = {
   created_at: string;
 };
 
+type DocumentPayload = {
+  name: string;
+  compulsory: string;
+}
+
 type WasteDisposalType = {
   id: number;
   name: string;

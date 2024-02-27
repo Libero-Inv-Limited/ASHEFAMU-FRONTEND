@@ -27,12 +27,12 @@ export const executeUpdateSettings = async (
 ): Promise<ResponseDataType> => {
   try {
     const payload = { setting: data };
-    // console.log(payload, "************8");
     const options: RequestInit = {
       method: "PATCH",
       body: JSON.stringify(payload),
       headers: {
-        Authorization: `Bearer ${token}`,
+        "Authorization": `Bearer ${token}`,
+        "Content-Type":  `application/json`
       },
     };
     const request = await fetch(UPDATE_SETTINGS, options);
@@ -43,5 +43,6 @@ export const executeUpdateSettings = async (
     return { message: error.message, status: "error" } as ResponseDataType;
   }
 };
+
 
 // {{BASE_URL}}/static-metric

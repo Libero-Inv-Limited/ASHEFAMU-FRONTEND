@@ -25,6 +25,8 @@ export const GET_ALL_FACILITY_CATEGORIES =
   BASE_URL + "/all-facility-categories";
 export const GET_ALL_GIS_FACILITIES = BASE_URL + "/facility-gis";
 
+export const CREATE_REQUIRED_DOCUMENT = BASE_URL + "/create-required-doc";
+
 export const DELETE_FACILITY_DOCUMENT_ENDPOINT = BASE_URL + "/remove-document";
 export const DELETE_FACILITY_ENDPOINT = BASE_URL + "/remove-facility";
 export const DELETE_PROPRIETOR_ENDPOINT = BASE_URL + "/remove-proprietor";
@@ -80,12 +82,13 @@ export const NON_COMP_LIST_ENDPOINT = BASE_URL + "/non-prof-staff-complements";
 
 // STATISTICS ENDPOINT
 export const GET_FACILITY_REGISTRATION = BASE_URL + "/facility-registration";
-export const VERIFY_FACILITY_QR = (id: string) => BASE_URL + `/verify-facility-qr/${id}`;
+export const VERIFY_FACILITY_QR = (id: string) =>
+  BASE_URL + `/verify-facility-qr/${id}`;
 export const GET_STATS_METRICS = BASE_URL + "/static-metric";
 
 // SETTINGS ENDPOINT
-export const GET_SETTINGS = BASE_URL + "/settings"
-export const UPDATE_SETTINGS = BASE_URL + "/setting"
+export const GET_SETTINGS = BASE_URL + "/settings";
+export const UPDATE_SETTINGS = BASE_URL + "/setting";
 
 // OTHERS
 export const GET_NOTIFICATIONS_ENDPOINT = BASE_URL + "/get-notifications";

@@ -23,6 +23,7 @@ import {
   UPDATE_FACILITY_STATUS_ENDPOINT,
   SEARCH_ALL_FACILITIES_ENDPOINT,
   GET_FACILITY_ADDONS_ENDPOINT,
+  CREATE_REQUIRED_DOCUMENT,
 } from ".";
 import { log } from "../utils/helpers";
 import { GET_ALL_FACILITY_CATEGORIES } from "./index";
@@ -206,6 +207,30 @@ export const executeUploadFacilityDocs = async (
     return { message: error.message, status: "error" } as ResponseDataType;
   }
 };
+
+export const  executeCreateRequiredDocument = async (
+  data: DocumentPayload,
+  token: string
+): Promise<ResponseDataType> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    };
+    const request = await fetch(CREATE_REQUIRED_DOCUMENT, options);
+    const response = (await request.json()) satisfies ResponseDataType;
+    return response;
+  } catch (error: any) {
+    log("FACILITY SERVICE [ERROR]:", error.message);
+    return { message: error.message, status: "error" } as ResponseDataType;
+  }
+};
+
 
 export const executeAddProfessional = async (
   data: ProfessionStaff,

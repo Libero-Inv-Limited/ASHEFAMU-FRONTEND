@@ -17,6 +17,7 @@ import {
   IconButton,
   Icon,
   useToast,
+  useDisclosure,
 } from "@chakra-ui/react";
 import AuthInput from "../../../components/common/AuthInput";
 import { useForm } from "react-hook-form";
@@ -25,12 +26,21 @@ import CustomButton from "../../../components/common/CustomButton";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { LuFileBarChart2 } from "react-icons/lu";
 import { executeGetRequiredDocs } from "../../../apis/facilityData";
+import CreateDocumentModal from "./CreateDocumentModal";
+import { executeCreateRequiredDocument } from "../../../apis/facility";
 
 interface AnalyticsProps {}
 const Settings: React.FC<AnalyticsProps> = () => {
   const token = useAppSelector((state) => state.accountStore.tokenStore.token);
   const [settings, setSettings] = React.useState<SettingsData[]>();
   const [documents, setDocuments] = React.useState<DocumentData[]>();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isLoading,
+    onOpen: openLoading,
+    onClose: closeLoading,
+  } = useDisclosure();
+
   const [search] = useSearchParams();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -51,7 +61,7 @@ const Settings: React.FC<AnalyticsProps> = () => {
     variant: "subtle",
   });
 
-  const { control, trigger } = useForm();
+  const { control, trigger, getValues } = useForm<DocumentPayload>();
 
   const handleGetSettings = async () => {
     if (!token) return;
@@ -101,10 +111,7 @@ const Settings: React.FC<AnalyticsProps> = () => {
         slug: setting.slug,
         value: setting.value,
       }));
-      const updateSettingsData = await executeUpdateSettings(
-        payload,
-        token!
-      );
+      const updateSettingsData = await executeUpdateSettings(payload, token!);
       if (updateSettingsData.status === "error")
         throw new Error(updateSettingsData.message);
 
@@ -118,6 +125,36 @@ const Settings: React.FC<AnalyticsProps> = () => {
         status: "error",
         title: error.message,
       });
+    }
+  };
+
+  const handleCreateDoc = async () => {
+    if (!(await trigger())) return;
+    try {
+      openLoading();
+      const payload: DocumentPayload = {
+        ...getValues(),
+        compulsory: (getValues("compulsory") as any).value,
+      };
+      const response = await executeCreateRequiredDocument(payload, token!);
+      if (response.status === "error") throw new Error(response.message);
+
+      toast({
+        status: "success",
+        title: response.message,
+      });
+
+      // reset();
+      onClose();
+      // handleReloadData();
+    } catch (error: any) {
+      console.log("ERROR: ", error.message);
+      toast({
+        status: "error",
+        title: error.message,
+      });
+    } finally {
+      closeLoading();
     }
   };
 
@@ -218,15 +255,17 @@ const Settings: React.FC<AnalyticsProps> = () => {
             </>
           ) : (
             <>
+              <CustomButton
+                onClick={onOpen}
+                alignSelf={["unset", "flex-end", "flex-end"]}
+                size="md"
+              >
+                Create Required Document
+              </CustomButton>
               <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                 {documents.map((item, idx) => (
-                  <GridItem
-                    colSpan={[12, 12, 6]}
-                    key={idx}
-                    // display={"flex"}
-                    mb={4}
-                  >
-                    <FormLabel htmlFor="email-alerts" mb="0">
+                  <GridItem colSpan={[12, 12, 12]} key={idx} mb={4}>
+                    <FormLabel htmlFor="email-alerts" mb="0" fontWeight={400}>
                       {item.name}
                     </FormLabel>
                     <Switch
@@ -250,6 +289,14 @@ const Settings: React.FC<AnalyticsProps> = () => {
           )}
         </Stack>
       )}
+
+      <CreateDocumentModal
+        isOpen={isOpen}
+        isLoading={isLoading}
+        onClose={onClose}
+        control={control}
+        handleCreateDoc={handleCreateDoc}
+      />
     </DashboardLayout>
   );
 };
