@@ -43,6 +43,36 @@ const Sidebar: React.FC<SidebarProps> = ({
     );
   });
 
+  const userPermissions = useAppSelector(
+    (state) => state.accountStore.user.permissions
+  );
+
+  console.log({ userPermissions, sidebarContents });
+
+  const filteredPathss = sidebarContents.filter((item) => {
+    // Check if the item belongs to a category that corresponds to user permissions
+    if (
+      item.name === "dashboard" ||
+      item.name === "facilities" ||
+      item.name === "payments" ||
+      item.name === "analytics" ||
+      item.name === "notifications" ||
+      item.name === "users" ||
+      item.name === "roles" ||
+      item.name === "permissions" ||
+      item.name === "settings"
+    ) {
+      // Loop through permissions to find any permission related to this category
+      return userPermissions.some((permission) =>
+        permission.toLowerCase().includes(item.name.toLowerCase())
+      );
+    }
+    // If the item is not related to user management, include it in the filteredPaths
+    return true;
+  });
+
+  console.log({ filteredPaths });
+
   return (
     <Stack
       h={"full"}

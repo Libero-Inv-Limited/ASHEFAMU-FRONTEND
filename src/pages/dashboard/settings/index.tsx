@@ -95,79 +95,77 @@ const Settings: React.FC<AnalyticsProps> = () => {
   };
 
   const handleSubmit = async () => {
-    
     if (!(await trigger())) return false;
     try {
       const payload = settings.map((setting) => ({
         slug: setting.slug,
         value: setting.value,
       }));
-      const updateSettingsData = await executeUpdateSettings({setting: payload}, token!);
+      const updateSettingsData = await executeUpdateSettings(
+        payload,
+        token!
+      );
       if (updateSettingsData.status === "error")
         throw new Error(updateSettingsData.message);
-  
+
       // SHOW MESSAGE
       toast({
         title: updateSettingsData.message,
         status: "success",
       });
-    }
-    catch (error) {
+    } catch (error) {
       toast({
         status: "error",
-        title: error.message
-      })
+        title: error.message,
+      });
     }
-    }
-    
+  };
 
-  console.log({ documents });
-
-  if (settings && documents) {
-    return (
-      <DashboardLayout>
-        <HStack justifyContent="space-between" mb={8}>
-          <ButtonGroup
-            w={"full"}
-            maxW={"400px"}
-            p={1}
-            bg={"white"}
-            rounded={"sm"}
+  return (
+    <DashboardLayout>
+      <HStack justifyContent="space-between" mb={8}>
+        <ButtonGroup
+          w={"full"}
+          maxW={"400px"}
+          p={1}
+          bg={"white"}
+          rounded={"sm"}
+        >
+          <CustomButton
+            colorScheme={activeTab === "scheduled" ? "primary" : "gray"}
+            onClick={handleTabChange}
+            bg={activeTab === "settings" ? "primary.500" : "white"}
+            color={activeTab === "settings" ? "white" : DARK}
+            textTransform={"capitalize"}
+            flex={1}
+            variant={"solid"}
           >
-            <CustomButton
-              colorScheme={activeTab === "scheduled" ? "primary" : "gray"}
-              onClick={handleTabChange}
-              bg={activeTab === "settings" ? "primary.500" : "white"}
-              color={activeTab === "settings" ? "white" : DARK}
-              textTransform={"capitalize"}
-              flex={1}
-              variant={"solid"}
-            >
-              settings
-            </CustomButton>
-            <CustomButton
-              colorScheme={activeTab === "documents" ? "primary" : "gray"}
-              onClick={handleTabChange}
-              bg={activeTab === "documents" ? "primary.500" : "white"}
-              color={activeTab === "documents" ? "white" : DARK}
-              textTransform={"capitalize"}
-              flex={1}
-            >
-              documents
-            </CustomButton>
-          </ButtonGroup>
-          <ButtonGroup maxW={"400px"} p={1} rounded={"sm"}>
-            <IconButton
-              aria-label="result-btn"
-              icon={<Icon as={LuFileBarChart2} color={"primary.500"} />}
-              w={"40px"}
-              h={"40px"}
-              bg={"#DBE8FE"}
-              rounded={"full"}
-              _hover={{ bg: "#DBE8FE" }}
-            />
-          </ButtonGroup>
-        </HStack>
+            settings
+          </CustomButton>
+          <CustomButton
+            colorScheme={activeTab === "documents" ? "primary" : "gray"}
+            onClick={handleTabChange}
+            bg={activeTab === "documents" ? "primary.500" : "white"}
+            color={activeTab === "documents" ? "white" : DARK}
+            textTransform={"capitalize"}
+            flex={1}
+          >
+            documents
+          </CustomButton>
+        </ButtonGroup>
+        <ButtonGroup maxW={"400px"} p={1} rounded={"sm"}>
+          <IconButton
+            aria-label="result-btn"
+            icon={<Icon as={LuFileBarChart2} color={"primary.500"} />}
+            w={"40px"}
+            h={"40px"}
+            bg={"#DBE8FE"}
+            rounded={"full"}
+            _hover={{ bg: "#DBE8FE" }}
+          />
+        </ButtonGroup>
+      </HStack>
+      {settings && documents && (
         <Stack spacing={"8"} bg={"white"} p={6}>
           {activeTab === "settings" ? (
             <>
@@ -251,9 +249,9 @@ const Settings: React.FC<AnalyticsProps> = () => {
             </>
           )}
         </Stack>
-      </DashboardLayout>
-    );
-  }
+      )}
+    </DashboardLayout>
+  );
 };
 
 export default Settings;

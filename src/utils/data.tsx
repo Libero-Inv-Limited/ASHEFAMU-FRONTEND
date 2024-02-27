@@ -944,3 +944,445 @@ export const facility_details = {
       }
   }
 }
+
+
+export const permissions = [
+  {
+      "id": 132,
+      "name": "Modal Product test",
+      "description": "Testing Zone Delete functionalitydddddds",
+      "category": "Data Entry"
+  },
+  {
+      "id": 127,
+      "name": "Monitor User Activity",
+      "description": "",
+      "category": "Security and Access Control"
+  },
+  {
+      "id": 126,
+      "name": "Access Logs",
+      "description": "",
+      "category": "Security and Access Control"
+  },
+  {
+      "id": 125,
+      "name": "Password Policy Management",
+      "description": "",
+      "category": "System Configuration"
+  },
+  {
+      "id": 124,
+      "name": "Security Configuration",
+      "description": "",
+      "category": "System Configuration"
+  },
+  {
+      "id": 123,
+      "name": "System Maintenance",
+      "description": "",
+      "category": "System Configuration"
+  },
+  {
+      "id": 122,
+      "name": "Manage System Preferences",
+      "description": "",
+      "category": "System Configuration"
+  },
+  {
+      "id": 121,
+      "name": "Configure System Settings",
+      "description": "",
+      "category": "System Configuration"
+  },
+  {
+      "id": 120,
+      "name": "Data Import/Export",
+      "description": "",
+      "category": "Data Entry"
+  },
+  {
+      "id": 119,
+      "name": "Update Facility Data",
+      "description": "",
+      "category": "Data Entry"
+  },
+  {
+      "id": 118,
+      "name": "Enter and Update Staff Data",
+      "description": "",
+      "category": "Data Entry"
+  },
+  {
+      "id": 117,
+      "name": "View Analytics",
+      "description": "",
+      "category": "Report and Analysis"
+  },
+  {
+      "id": 116,
+      "name": "Create Custom Reports",
+      "description": "",
+      "category": "Report and Analysis"
+  },
+  {
+      "id": 115,
+      "name": "Access Performance Analytics",
+      "description": "",
+      "category": "Report and Analysis"
+  },
+  {
+      "id": 114,
+      "name": "Generate Various Reports",
+      "description": "",
+      "category": "Report and Analysis"
+  },
+  {
+      "id": 113,
+      "name": "Access External Systems",
+      "description": "",
+      "category": "External Integrations"
+  },
+  {
+      "id": 112,
+      "name": "Manage Integration Settings",
+      "description": "",
+      "category": "External Integrations"
+  },
+  {
+      "id": 111,
+      "name": "Configure External Integrations",
+      "description": "",
+      "category": "External Integrations"
+  },
+  {
+      "id": 110,
+      "name": "Manage Notifications",
+      "description": "",
+      "category": "Customer Support"
+  },
+  {
+      "id": 109,
+      "name": "Receive Notifications",
+      "description": "",
+      "category": "Customer Support"
+  },
+  {
+      "id": 108,
+      "name": "Send Notifications",
+      "description": "",
+      "category": "Customer Support"
+  },
+  {
+      "id": 107,
+      "name": "Access Customer Support",
+      "description": "",
+      "category": "Customer Support"
+  },
+  {
+      "id": 106,
+      "name": "Provide User Support",
+      "description": "",
+      "category": "Customer Support"
+  },
+  {
+      "id": 105,
+      "name": "Resolve User Issues",
+      "description": "",
+      "category": "Customer Support"
+  },
+  {
+      "id": 104,
+      "name": "Respond to User Inquiries",
+      "description": "",
+      "category": "Customer Support"
+  },
+  {
+      "id": 103,
+      "name": "Manage Knowledge Base Categories",
+      "description": "",
+      "category": "Knowledgebase Management"
+  },
+  {
+      "id": 102,
+      "name": "View Knowledge Base Articles",
+      "description": "",
+      "category": "Knowledgebase Management"
+  },
+  {
+      "id": 101,
+      "name": "Delete Knowledge Base Articles",
+      "description": "",
+      "category": "Knowledgebase Management"
+  },
+  {
+      "id": 100,
+      "name": "Edit Knowledge Base Articles",
+      "description": "",
+      "category": "Knowledgebase Management"
+  },
+  {
+      "id": 99,
+      "name": "Create Knowledge Base Articles",
+      "description": "",
+      "category": "Knowledgebase Management"
+  },
+  {
+      "id": 98,
+      "name": "Compliance Monitoring",
+      "description": "",
+      "category": "Audit and Compliance"
+  },
+  {
+      "id": 97,
+      "name": "Access Audit Trails",
+      "description": "",
+      "category": "Audit and Compliance"
+  },
+  {
+      "id": 96,
+      "name": "Generate Compliance Reports",
+      "description": "",
+      "category": "Audit and Compliance"
+  },
+  {
+      "id": 95,
+      "name": "Conduct Inspections",
+      "description": "",
+      "category": "Audit and Compliance"
+  },
+  {
+      "id": 94,
+      "name": "Monitor User Activities",
+      "description": "",
+      "category": "Audit and Compliance"
+  },
+  {
+      "id": 93,
+      "name": "Access System Logs",
+      "description": "",
+      "category": "Audit and Compliance"
+  },
+  {
+      "id": 92,
+      "name": "Billing Permissions",
+      "description": "",
+      "category": "Financial Management"
+  },
+  {
+      "id": 91,
+      "name": "Financial Reporting",
+      "description": "",
+      "category": "Financial Management"
+  },
+  {
+      "id": 90,
+      "name": "Manage Fees",
+      "description": "",
+      "category": "Financial Management"
+  },
+  {
+      "id": 89,
+      "name": "Track Payments",
+      "description": "",
+      "category": "Financial Management"
+  },
+  {
+      "id": 88,
+      "name": "Generate Invoices",
+      "description": "",
+      "category": "Financial Management"
+  },
+  {
+      "id": 87,
+      "name": "Manage Facility Status",
+      "description": "",
+      "category": "Facility Management"
+  },
+  {
+      "id": 86,
+      "name": "Generate Facility Reports",
+      "description": "",
+      "category": "Facility Management"
+  },
+  {
+      "id": 85,
+      "name": "Manage Facility Resources",
+      "description": "",
+      "category": "Facility Management"
+  },
+  {
+      "id": 84,
+      "name": "Manage Facility Services",
+      "description": "",
+      "category": "Facility Management"
+  },
+  {
+      "id": 83,
+      "name": "Manage Facility Staff",
+      "description": "",
+      "category": "Facility Management"
+  },
+  {
+      "id": 82,
+      "name": "Approve/Reject Facility",
+      "description": "",
+      "category": "Facility Management"
+  },
+  {
+      "id": 81,
+      "name": "View Facility Details",
+      "description": "",
+      "category": "Facility Management"
+  },
+  {
+      "id": 80,
+      "name": "Delete Facility",
+      "description": "",
+      "category": "Facility Management"
+  },
+  {
+      "id": 79,
+      "name": "Edit Facility Details",
+      "description": "",
+      "category": "Facility Management"
+  },
+  {
+      "id": 78,
+      "name": "Create Facility",
+      "description": "",
+      "category": "Facility Management"
+  },
+  {
+      "id": 77,
+      "name": "Assign Permission",
+      "description": "",
+      "category": "Permission Management"
+  },
+  {
+      "id": 76,
+      "name": "View Permission Details",
+      "description": "",
+      "category": "Permission Management"
+  },
+  {
+      "id": 75,
+      "name": "Delete Permission",
+      "description": "",
+      "category": "Permission Management"
+  },
+  {
+      "id": 74,
+      "name": "Edit Permission Details",
+      "description": "",
+      "category": "Permission Management"
+  },
+  {
+      "id": 73,
+      "name": "Create Permission",
+      "description": "",
+      "category": "Permission Management"
+  },
+  {
+      "id": 72,
+      "name": "Manage Role Status",
+      "description": "",
+      "category": "Role Management"
+  },
+  {
+      "id": 71,
+      "name": "View Role Permissions",
+      "description": "",
+      "category": "Role Management"
+  },
+  {
+      "id": 70,
+      "name": "Assign Permissions to Role",
+      "description": "",
+      "category": "Role Management"
+  },
+  {
+      "id": 69,
+      "name": "Assign Role to User",
+      "description": "",
+      "category": "Role Management"
+  },
+  {
+      "id": 68,
+      "name": "View Role Details",
+      "description": "",
+      "category": "Role Management"
+  },
+  {
+      "id": 67,
+      "name": "Delete Role",
+      "description": "",
+      "category": "Role Management"
+  },
+  {
+      "id": 66,
+      "name": "Edit Role Permissions",
+      "description": "",
+      "category": "Role Management"
+  },
+  {
+      "id": 65,
+      "name": "Create Role",
+      "description": "",
+      "category": "Role Management"
+  },
+  {
+      "id": 64,
+      "name": "User Login Access",
+      "description": "",
+      "category": "User Management"
+  },
+  {
+      "id": 63,
+      "name": "Assign User to Facility",
+      "description": "",
+      "category": "User Management"
+  },
+  {
+      "id": 62,
+      "name": "Activate/Deactivate User",
+      "description": "",
+      "category": "User Management"
+  },
+  {
+      "id": 61,
+      "name": "Reset User Password",
+      "description": "",
+      "category": "User Management"
+  },
+  {
+      "id": 60,
+      "name": "Change User Roles",
+      "description": "",
+      "category": "User Management"
+  },
+  {
+      "id": 59,
+      "name": "View User Details",
+      "description": "",
+      "category": "User Management"
+  },
+  {
+      "id": 58,
+      "name": "Delete User",
+      "description": "",
+      "category": "User Management"
+  },
+  {
+      "id": 57,
+      "name": "Update User Information",
+      "description": "",
+      "category": "User Management"
+  },
+  {
+      "id": 56,
+      "name": "Create User",
+      "description": "",
+      "category": "User Management"
+  }
+] 

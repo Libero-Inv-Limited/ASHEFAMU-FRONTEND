@@ -22,13 +22,15 @@ export const executeGetSettings = async (
 };
 
 export const executeUpdateSettings = async (
-  data: {setting: SettingUpdatePayload[]},
+  data: SettingUpdatePayload[],
   token: string
 ): Promise<ResponseDataType> => {
   try {
+    const payload = { setting: data };
+    // console.log(payload, "************8");
     const options: RequestInit = {
       method: "PATCH",
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
       headers: {
         Authorization: `Bearer ${token}`,
       },
