@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { TEXT_GRAY } from "../../utils/color";
 import CustomButton from "./CustomButton";
 import { BsPlus } from "react-icons/bs";
+import { checkPermission } from "../../utils/helpers";
+import { useAppSelector } from "../../store/hook";
 
 interface FilterComponentProp {
   onFilter: (e: any) => void;
@@ -29,6 +31,9 @@ export const FilterComponentTwo: React.FC<FilterComponentProp> = ({
   actionRoute,
 }) => {
   const navigate = useNavigate();
+  const userPermissions = useAppSelector(
+    (state) => state.accountStore.user.permissions
+  );
   return (
     <HStack
       flexWrap={"wrap"}
@@ -50,13 +55,15 @@ export const FilterComponentTwo: React.FC<FilterComponentProp> = ({
       </InputGroup>
 
       <Spacer />
-      <CustomButton
-        onClick={() => navigate(actionRoute)}
-        alignSelf={["flex-end", "flex-end", "unset"]}
-        leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
-      >
-        {buttonLabel}
-      </CustomButton>
+      {checkPermission(userPermissions, "Create role") && (
+        <CustomButton
+          onClick={() => navigate(actionRoute)}
+          alignSelf={["flex-end", "flex-end", "unset"]}
+          leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
+        >
+          {buttonLabel}
+        </CustomButton>
+      )}
     </HStack>
   );
 };

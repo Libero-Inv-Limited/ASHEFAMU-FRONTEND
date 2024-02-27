@@ -8,7 +8,6 @@ import {
   InputGroup,
   Icon,
   Center,
-  Spacer,
   Input,
 } from "@chakra-ui/react";
 import React from "react";
@@ -26,7 +25,6 @@ import AuthInput from "./../../../components/common/AuthInput";
 import { executeCreatePermission } from "../../../apis/permission";
 import { SimpleGrid } from "@chakra-ui/react";
 import { executeUpdatePermission } from "./../../../apis/permission";
-import { BsPlus } from "react-icons/bs";
 import { AiOutlineSearch } from "react-icons/ai";
 import { TEXT_GRAY } from "../../../utils/color";
 
@@ -325,6 +323,7 @@ const FilterComponent: React.FC<FilterComponentProp> = ({
   filterText,
   onOpen,
 }) => {
+  console.log({ onOpen });
   return (
     <HStack
       flexWrap={"wrap"}
@@ -345,14 +344,14 @@ const FilterComponent: React.FC<FilterComponentProp> = ({
         />
       </InputGroup>
 
-      <Spacer />
-      <CustomButton
+      {/* <Spacer /> */}
+      {/* <CustomButton
         onClick={onOpen}
         alignSelf={["flex-end", "flex-end", "unset"]}
         leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
       >
         Create Permissions
-      </CustomButton>
+      </CustomButton> */}
     </HStack>
   );
 };

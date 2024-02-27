@@ -32,8 +32,6 @@ const Sidebar: React.FC<SidebarProps> = ({
     (state) => state.accountStore.user.permissions
   );
 
-  console.log({ userPermissions, sidebarContents });
-
   const filteredPaths = sidebarContents.filter((item) => {
     if (
       item.name === "audit" ||
@@ -45,9 +43,15 @@ const Sidebar: React.FC<SidebarProps> = ({
       item.name === "settings"
     ) {
       return userPermissions.some((permission) => {
-        return item.name === "users"
-          ? permission.toLowerCase().includes("create user")
-          : permission.toLowerCase().includes(item.name.toLowerCase());
+        if (item.name === "users") {
+          return (
+            permission.toLowerCase().includes("create user") ||
+            permission.toLowerCase().includes("delete user") ||
+            permission.toLowerCase().includes("update user")
+          );
+        } else {
+          return permission.toLowerCase().includes(item.name.toLowerCase());
+        }
       });
     }
     return true;

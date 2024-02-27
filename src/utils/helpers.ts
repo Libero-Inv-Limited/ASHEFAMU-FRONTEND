@@ -109,6 +109,15 @@ export const handleConvertCSVToArray = (text: string) => {
   return data;
 };
 
+export const checkPermission = (
+  userPermissions: string[],
+  searchString: string
+) => {
+  return userPermissions.some((permission) =>
+    permission.toLowerCase().includes(searchString.toLowerCase())
+  );
+};
+
 // HUMAN REDABLE DATE
 export const humanReadableDate = (isoTimestamp: string) => {
   const parsedTimestamp = dayjs(isoTimestamp);
@@ -126,7 +135,6 @@ export const formatNigerianPhoneNumber = (inputNumber: string) => {
   const formattedNumber = `+234${cleanedNumber}`;
   return formattedNumber;
 };
-
 
 export const calculateBoundingBox = (
   centerLatitude: number,
@@ -152,14 +160,13 @@ export const calculateBoundingBox = (
   };
 };
 
-
 export const formatTimeRange = (facilityData) => {
   const { opening_time, closing_time } = facilityData;
 
   const formatTime = (time) => {
-    const [hours, minutes] = time.split(':');
+    const [hours, minutes] = time.split(":");
     const formattedHours = parseInt(hours, 10) % 12 || 12;
-    const period = parseInt(hours, 10) < 12 ? 'AM' : 'PM';
+    const period = parseInt(hours, 10) < 12 ? "AM" : "PM";
 
     return `${formattedHours}:${minutes} ${period}`;
   };
@@ -168,5 +175,4 @@ export const formatTimeRange = (facilityData) => {
   const formattedClosingTime = formatTime(closing_time);
 
   return `${formattedOpeningTime} - ${formattedClosingTime}`;
-}
-
+};

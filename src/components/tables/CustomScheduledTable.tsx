@@ -32,11 +32,13 @@ import {
 } from "../../apis/audit";
 import useFetchHook from "./../../pages/dashboard/audit-compliance/hooks/useFetchHook";
 import SubmitInspectionModal from "./../../pages/dashboard/audit-compliance/SubmitInspectionModal";
+import { checkPermission } from "../../utils/helpers";
 
 const CustomScheduledTable = () => {
   const facilities = useAppSelector((state) => state.dataStore.facilities);
   const status = "upcoming";
   const { data, loadingData, handleReloadData } = useFetchHook(status);
+
   const [inspectionId, setInspectionId] = React.useState(null);
   const { control, trigger, getValues, reset } = useForm<InspectionPayload>({
     mode: "onSubmit",
@@ -133,11 +135,7 @@ const CustomScheduledTable = () => {
                 isLoading={item.id === deletingFacility && isLoading}
                 onClick={() => setInspectionId(item.id! as number)}
                 icon={
-                  <Icon
-                    fontSize={"xl"}
-                    as={AiOutlineFileText}
-                    color={YELLOW}
-                  />
+                  <Icon fontSize={"xl"} as={AiOutlineFileText} color={YELLOW} />
                 }
               />
             </HStack>
@@ -316,6 +314,9 @@ const FilterComponent: React.FC<FilterComponentProp> = ({
   filterText,
   handleScheduleInspection,
 }) => {
+  const userPermissions = useAppSelector(
+    (state) => state.accountStore.user.permissions
+  );
   return (
     <HStack
       flexWrap={"wrap"}
@@ -337,13 +338,15 @@ const FilterComponent: React.FC<FilterComponentProp> = ({
       </InputGroup>
 
       <Spacer />
-      <CustomButton
-        onClick={handleScheduleInspection}
-        alignSelf={["flex-end", "flex-end", "unset"]}
-        leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
-      >
-        Schedule Inspection
-      </CustomButton>
+      {checkPermission(userPermissions, "Create Custom Reports") && (
+        <CustomButton
+          onClick={handleScheduleInspection}
+          alignSelf={["flex-end", "flex-end", "unset"]}
+          leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
+        >
+          Schedule Inspection
+        </CustomButton>
+      )}
     </HStack>
   );
 };

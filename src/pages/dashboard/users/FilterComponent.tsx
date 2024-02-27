@@ -15,6 +15,8 @@ import {
 import CustomButton from "../../../components/common/CustomButton";
 import { AiOutlineSearch } from "react-icons/ai";
 import { TEXT_GRAY } from "../../../utils/color";
+import { useAppSelector } from "../../../store/hook";
+import { checkPermission } from "../../../utils/helpers";
 interface FilterComponentProp {
   onFilter: (e: any) => void;
   onClear: () => void;
@@ -30,7 +32,10 @@ const FilterComponent: React.FC<FilterComponentProp> = ({
   isUserFacilitiesTable,
   user,
 }) => {
-  console.log({ filterText });
+  const userPermissions = useAppSelector(
+    (state) => state.accountStore.user.permissions
+  );
+
   return (
     <HStack
       flexWrap={"wrap"}
@@ -58,13 +63,15 @@ const FilterComponent: React.FC<FilterComponentProp> = ({
       )}
 
       <Spacer />
-      <CustomButton
-        onClick={onOpen}
-        alignSelf={["flex-end", "flex-end", "unset"]}
-        leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
-      >
-        {isUserFacilitiesTable ? "Assign a facility" : "Create user"}
-      </CustomButton>
+      {checkPermission(userPermissions, "Create User") && (
+        <CustomButton
+          onClick={onOpen}
+          alignSelf={["flex-end", "flex-end", "unset"]}
+          leftIcon={<Icon fontSize={"24px"} as={BsPlus} />}
+        >
+          {isUserFacilitiesTable ? "Assign a facility" : "Create user"}
+        </CustomButton>
+      )}
     </HStack>
   );
 };
