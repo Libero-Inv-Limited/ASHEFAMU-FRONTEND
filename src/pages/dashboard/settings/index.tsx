@@ -2,7 +2,10 @@
 import React from "react";
 import { useAppSelector } from "../../../store/hook";
 import DashboardLayout from "../../../components/layouts/DashboardLayout";
-import { executeGetSettings } from "../../../apis/settings";
+import {
+  executeGetSettings,
+  executeUpdateSettings,
+} from "../../../apis/settings";
 import {
   Stack,
   Grid,
@@ -13,6 +16,7 @@ import {
   ButtonGroup,
   IconButton,
   Icon,
+  useToast,
 } from "@chakra-ui/react";
 import AuthInput from "../../../components/common/AuthInput";
 import { useForm } from "react-hook-form";
@@ -41,7 +45,13 @@ const Settings: React.FC<AnalyticsProps> = () => {
     const text = event.target.innerHTML?.split(" ")[0].toLowerCase();
     navigate(`${pathname}?tab=${text}`);
   };
-  const { control, trigger, getValues } = useForm();
+  const toast = useToast({
+    position: "bottom",
+    isClosable: true,
+    variant: "subtle",
+  });
+
+  const { control, trigger } = useForm();
 
   const handleGetSettings = async () => {
     if (!token) return;
@@ -84,9 +94,32 @@ const Settings: React.FC<AnalyticsProps> = () => {
     setDocuments(updatedDocuments);
   };
 
-  const handleSubmit = () => {
-    console.log({ settings, getValues, trigger });
-  };
+  const handleSubmit = async () => {
+    
+    if (!(await trigger())) return false;
+    try {
+      const payload = settings.map((setting) => ({
+        slug: setting.slug,
+        value: setting.value,
+      }));
+      const updateSettingsData = await executeUpdateSettings({setting: payload}, token!);
+      if (updateSettingsData.status === "error")
+        throw new Error(updateSettingsData.message);
+  
+      // SHOW MESSAGE
+      toast({
+        title: updateSettingsData.message,
+        status: "success",
+      });
+    }
+    catch (error) {
+      toast({
+        status: "error",
+        title: error.message
+      })
+    }
+    }
+    
 
   console.log({ documents });
 

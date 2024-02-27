@@ -115,6 +115,11 @@ type ResponseDataType = {
   code?: number;
 };
 
+type SettingUpdatePayload = {
+  slug: string;
+  value: string
+}
+
 type NotificationRequest = {
   source: "user" | "facility" | "all";
   facility_id?: number;

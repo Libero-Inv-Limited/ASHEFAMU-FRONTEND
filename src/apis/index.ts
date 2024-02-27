@@ -85,6 +85,7 @@ export const GET_STATS_METRICS = BASE_URL + "/static-metric";
 
 // SETTINGS ENDPOINT
 export const GET_SETTINGS = BASE_URL + "/settings"
+export const UPDATE_SETTINGS = BASE_URL + "/setting"
 
 // OTHERS
 export const GET_NOTIFICATIONS_ENDPOINT = BASE_URL + "/get-notifications";
