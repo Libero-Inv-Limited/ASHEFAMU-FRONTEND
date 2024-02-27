@@ -166,7 +166,7 @@ export const sidebarContents: SidebarContentType[] = [
     activeIcon: PermissionIconActive,
   },
   {
-    name: "audit-compliance",
+    name: "audit",
     link: "/dashboard/audit-compliance",
     icon: AuditIcon,
     activeIcon: AuditIconActive,
