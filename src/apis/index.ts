@@ -27,6 +27,8 @@ export const GET_ALL_GIS_FACILITIES = BASE_URL + "/facility-gis";
 
 export const CREATE_REQUIRED_DOCUMENT = BASE_URL + "/create-required-doc";
 
+export const TOGGLE_DOCUMENT_ENDPOINT =  BASE_URL + "/update-required-doc"
+
 export const DELETE_FACILITY_DOCUMENT_ENDPOINT = BASE_URL + "/remove-document";
 export const DELETE_FACILITY_ENDPOINT = BASE_URL + "/remove-facility";
 export const DELETE_PROPRIETOR_ENDPOINT = BASE_URL + "/remove-proprietor";

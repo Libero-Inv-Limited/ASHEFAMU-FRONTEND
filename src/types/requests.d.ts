@@ -190,8 +190,8 @@ type DocumentData = {
   name: string;
   compulsory: boolean;
   status: string;
-  updated_at: string;
-  created_at: string;
+  updated_at?: string;
+  created_at?: string;
 };
 
 type UpdateDashboardCard = {

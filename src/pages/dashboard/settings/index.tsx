@@ -27,7 +27,10 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { LuFileBarChart2 } from "react-icons/lu";
 import { executeGetRequiredDocs } from "../../../apis/facilityData";
 import CreateDocumentModal from "./CreateDocumentModal";
-import { executeCreateRequiredDocument } from "../../../apis/facility";
+import {
+  executeCreateRequiredDocument,
+  executeToggleDocumentStatus,
+} from "../../../apis/facility";
 
 interface AnalyticsProps {}
 const Settings: React.FC<AnalyticsProps> = () => {
@@ -88,7 +91,7 @@ const Settings: React.FC<AnalyticsProps> = () => {
   React.useEffect(() => {
     handleGetSettings();
     handleGetRequiredDoduments();
-  }, []);
+  }, [documents]);
 
   const handleUpdateSetting = (id: number, newValue: string) => {
     const updatedSettings = settings.map((setting) =>
@@ -97,9 +100,18 @@ const Settings: React.FC<AnalyticsProps> = () => {
     setSettings(updatedSettings);
   };
 
-  const handleUpdateDocuments = (id: number, newStatus: string) => {
+  const handleUpdateDocuments = async (id: number, status: string) => {
+    const doc: DocumentData = documents.find((doc) => doc.id === id);
+    const response = await executeToggleDocumentStatus(
+      { ...doc, status },
+      token
+    );
+    toast({
+      status: response.status,
+      title: response.message,
+    });
     const updatedDocuments = documents.map((doc) =>
-      doc.id === id ? { ...doc, status: newStatus } : doc
+      doc.id === id ? { ...doc, status } : doc
     );
     setDocuments(updatedDocuments);
   };
