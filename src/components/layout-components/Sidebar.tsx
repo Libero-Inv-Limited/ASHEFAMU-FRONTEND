@@ -37,6 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       item.name === "audit" ||
       item.name === "payments" ||
       item.name === "notifications" ||
+      item.name === "analytics" ||
       item.name === "users" ||
       item.name === "roles" ||
       item.name === "permissions" ||
@@ -49,6 +50,8 @@ const Sidebar: React.FC<SidebarProps> = ({
             permission.toLowerCase().includes("delete user") ||
             permission.toLowerCase().includes("update user")
           );
+        } else if (item.name === "settings") {
+          return permission.toLowerCase().includes("configure system setting");
         } else {
           return permission.toLowerCase().includes(item.name.toLowerCase());
         }
